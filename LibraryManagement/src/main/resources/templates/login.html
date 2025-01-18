@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="/css/login.css">
+	<title>Login</title>
+</head>
+<body>
+	<h2>Login</h2>
+	
+	<form action="/login" method="post">
+		<div class="input-group">
+			<label for="username">Username</label>
+			<input type="text" id="username" name="username" required="required">
+		</div>
+		
+		<div class="input-group">
+			<label for="password">Password</label>
+			<input type="text" id="password" name="password" required="required">
+		</div>
+		
+		<div class="input-group">
+			<button type="submit">Login</button>
+		</div>
+		
+		<!-- Bắt lỗi tài khoản -->
+		<div class="error-message" th:if="${error != null}">
+    		<p th:text="${error}"></p>
+		</div>
+	</form>
+</body>
+</html>
