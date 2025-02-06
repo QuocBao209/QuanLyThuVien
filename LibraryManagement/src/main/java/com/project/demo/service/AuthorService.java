@@ -18,4 +18,12 @@ public class AuthorService {
     public void transferData(List<Author> authors) {
         authorRepository.saveAll(authors);
     }
+
+    public Author findByName(String authorName) {
+        return authorRepository.findByName(authorName).orElse(null);  // Kiểm tra nếu tác giả đã tồn tại
+    }
+
+    public Author saveAuthor(Author author) {
+        return authorRepository.save(author);  // Lưu tác giả mới
+    }
 }
