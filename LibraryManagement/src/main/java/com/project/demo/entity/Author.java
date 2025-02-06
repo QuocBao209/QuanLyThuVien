@@ -12,4 +12,10 @@ public class Author {
     private Long authorId;
 
     private String authorName;
+
+    // Optional: Override toString() for better output representation
+    @Override
+    public String toString() {
+        return authorName;
+    }
 }
