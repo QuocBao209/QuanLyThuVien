@@ -2,6 +2,7 @@ package com.project.demo.service;
 
 import com.project.demo.entity.User;
 import com.project.demo.repository.UserRepository;
+import com.project.demo.security.BCryptUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,19 +22,38 @@ public class UserService {
 
     // Lưu tất cả người dùng vào cơ sở dữ liệu
     public void transferData(List<User> users) {
+        users.forEach(user -> {
+            if (!isPasswordHashed(user.getPassword())) {
+                user.setPassword(BCryptUtil.hashPassword(user.getPassword()));
+            }
+        });
         userRepository.saveAll(users);
     }
 
+    // Phương thức kiểm tra mật khẩu đã được mã hóa hay chưa
+    private boolean isPasswordHashed(String password) {
+        return password != null && password.startsWith("$2a$");
+    }
+
+
     // Đăng ký người dùng mới
     public User registerUser(User user) {
-        return userRepository.save(user);  // Lưu thông tin người dùng vào cơ sở dữ liệu
+        user.setPassword(BCryptUtil.hashPassword(user.getPassword()));
+        return userRepository.save(user);
     }
+
+    // Xác thực người dùng khi đăng nhập
     public boolean authenticateUser(String username, String password) {
         Optional<User> userOptional = userRepository.findByUsername(username);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            return user.getPassword().equals(password);
+            return BCryptUtil.checkPassword(password, user.getPassword());
         }
         return false;
     }
+    // Kiểm tra xem username đã tồn tại trong database chưa
+    public boolean existsByUsername(String username) {
+        return userRepository.findByUsername(username).isPresent();
+    }
+
 }

@@ -5,7 +5,7 @@ import lombok.*;
 
 @Entity
 @Table(name = "Book")
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@Data
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,4 +22,10 @@ public class Book {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    // Optional: Override toString() for better output representation
+    @Override
+    public String toString() {
+        return bookName + " by " + (author != null ? author.getAuthorName() : "Unknown Author");
+    }
 }
