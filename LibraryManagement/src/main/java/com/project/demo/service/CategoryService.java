@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 @Service
 public class CategoryService {
@@ -19,18 +19,27 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
-    // Lưu tất cả thể loại vào cơ sở dữ liệu
+    // Lưu danh sách thể loại vào cơ sở dữ liệu
     public void transferData(List<Category> categories) {
-        categoryRepository.saveAll(categories);
+        if (categories != null && !categories.isEmpty()) {
+            categoryRepository.saveAll(categories);
+        }
     }
 
-    // Kiểm tra xem thể loại đã tồn tại trong cơ sở dữ liệu chưa
+    // Tìm thể loại theo tên
     public Category findByName(String categoryName) {
-        return categoryRepository.findByName(categoryName).orElse(null); // Giả sử có phương thức này trong repository
+        return categoryRepository.findByCategoryName(categoryName).orElse(null); // Đổi thành findByCategoryName
     }
 
-    // Lưu thể loại vào cơ sở dữ liệu
+    // Lưu thể loại vào cơ sở dữ liệu, tránh trùng lặp
     public Category saveCategory(Category category) {
-        return categoryRepository.save(category);
+        if (category == null || category.getCategoryName() == null || category.getCategoryName().isBlank()) {
+            throw new IllegalArgumentException("Tên thể loại không được để trống!");
+        }
+
+        // Kiểm tra xem thể loại đã tồn tại chưa
+        Category existingCategory = findByName(category.getCategoryName());
+        return Objects.requireNonNullElseGet(existingCategory, () -> categoryRepository.save(category)); // Nếu có rồi, trả về luôn
+
     }
 }
