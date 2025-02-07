@@ -7,5 +7,5 @@ import java.util.Optional;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
-    Optional<Category> findByName(String name);  // Tìm thể loại theo tên
+    Optional<Category> findByCategoryName(String categoryName);  // Đổi thành findByCategoryName
 }

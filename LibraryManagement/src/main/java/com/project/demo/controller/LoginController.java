@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 public class LoginController {
@@ -28,7 +27,7 @@ public class LoginController {
 		ModelAndView modelAndView = new ModelAndView();
 
 		if (userService.authenticateUser(username, password)) {
-			modelAndView.setView(new RedirectView("/admin"));
+			modelAndView.setViewName("admin");
 		} else {
 			modelAndView.addObject("error", "Invalid username or password");
 			modelAndView.setViewName("login"); // Nếu đăng nhập thất bại

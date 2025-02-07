@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "Borrow_Return")
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@Data
 public class Borrow_Return {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

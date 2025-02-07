@@ -7,5 +7,5 @@ import java.util.Optional;
 
 @Repository
 public interface AuthorRepository extends JpaRepository<Author, Long> {
-    Optional<Author> findByName(String name);  // Tìm tác giả theo tên
+    Optional<Author> findByAuthorName(String authorName);  // Đổi thành findByAuthorName
 }
