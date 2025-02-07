@@ -1,13 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Homepage</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="/css/home.css">
+	<title>Thư viện điện tử</title>
 </head>
 <body>
-
-	<form action="/home" method="post">
-		<h1>Welcome to Library</h1>
-	</form>
+	<nav class="nav-menu">
+		<ul>
+			<li><a href="/home">Trang chủ</a></li>
+			<li><a href="/documents">Tài liệu</a></li>
+			<li><a href="/introduction">Giới thiệu</a></li>
+		</ul>
+	</nav>
+	
+	<nav class="nav-right">
+			<form action="/login" method="post">
+				<button class="login-btn">Đăng nhập</button>
+			</form>
+		</nav>
 </body>
 </html>
