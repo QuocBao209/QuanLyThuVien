@@ -1,47 +1,114 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thêm Thông Tin Sách</title>
-    <link rel="stylesheet" href="/css/login.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Thêm jQuery -->
+    <title>Dashboard</title>
 </head>
 <body>
-
-<h2>Thêm Thông Tin Sách</h2>
-
-<div class="form-container">
-    <form action="/submit-book-info" method="post">
-        <div class="form-group">
-            <label for="author">Tên Tác Giả:</label>
-            <input type="text" id="author" name="author" placeholder="Nhập tên tác giả" required>
-        </div>
-
-        <div class="form-group">
-            <label for="book-title">Tên Sách:</label>
-            <input type="text" id="book-title" name="book-title" placeholder="Nhập tên sách" required>
-        </div>
-
-        <div class="form-group">
-            <label for="quantity">Số Lượng:</label>
-            <input type="number" id="quantity" name="quantity" placeholder="Nhập số lượng sách" min="0" required>
-        </div>
-
-        <div class="form-group">
-            <label for="category">Thể Loại:</label>
-            <input type="text" id="category" name="category" placeholder="Nhập thể loại sách" required>
-        </div>
-
-        <div class="form-group">
-            <label for="release-year">Năm Phát Hành:</label>
-            <input type="number" id="release-year" name="release-year" placeholder="Nhập năm phát hành" required>
-        </div>
-
-        <div class="form-group">
-            <button type="submit">Thêm Sách</button>
-        </div>
-    </form>
+<div class="sidebar">
+	<h2>Menu</h2>
+	<div>
+		<input type="checkbox" id="menu1" class="toggle-menu">
+		<label for="menu1" class="menu-item">
+			<i class="fa-solid fa-book"></i> Quản lý sách
+			<i class="fa-solid fa-chevron-down ms-auto"></i>
+		</label>
+		
+		<div class="submenu">
+			<a href="/book-list">Danh sách thư viện</a>
+			<a href="#" onclick="loadForm('add-book', event)">Thêm sách</a>
+			<a href="#">Cập nhật thông tin</a>
+		</div>
+	</div>
+	
+	<div>
+    	<input type="checkbox" id="menu2" class="toggle-menu">
+    	<label for="menu2" class="menu-item">
+        	<i class="fa-solid fa-user"></i> Quản lý độc giả
+        	<i class="fa-solid fa-chevron-down"></i>
+    	</label>
+    	<div class="submenu">
+	        <a href="#">Danh sách độc giả</a>
+	        <a href="#">Xóa tài khoản</a>
+    	</div>
+	</div>
+	
+	<div>
+		<input type="checkbox" id="menu3" class="toggle-menu">
+		<label for="menu3" class="menu-item">
+			<i class="fa-solid fa-employee"></i> Quản lý nhân viên
+			<i class="fa-solid fa-chevron-down"></i>
+		</label>
+		<div class="submenu">
+			<a href="#">Danh sách nhân viên</a>
+			<a href="#">Thêm nhân viên</a>
+		</div>
+	</div>
+	
+	<div>
+		<input type="checkbox" id="menu4" class="toggle-menu">
+		<label for="menu4" class="menu-item">
+			<i class="fa-solid fa-employee"></i> Quản lý dịch vụ
+			<i class="fa-solid fa-chevron-down"></i>
+		</label>
+		<div class="submenu">
+			<a href="#">Sách đang mượn</a>
+			<a href="#">Sách đã trả</a>
+			<a href="#">Quá hạn</a>
+		</div>
+	</div>
+	
+	<div>
+		<input type="checkbox" id="menu5" class="toggle-menu">
+		<label for="menu5" class="menu-item">
+			<i class="fa-solid fa-employee"></i> Quản lý danh mục
+			<i class="fa-solid fa-chevron-down"></i>
+		</label>
+		<div class="submenu">
+			<a href="#">Danh sách danh mục</a>
+			<a href="#">Thêm danh mục</a>
+		</div>
+	</div>
+	
+	<div>
+		<input type="checkbox" id="menu6" class="toggle-menu">
+		<label for="menu6" class="menu-item">
+			<i class="fa-solid fa-sign-out-alt"></i> Hỗ trợ
+			<i class="fa-solid fa-chevron-down"></i>
+		</label>
+		<div class="submenu">
+			<a href="/login">Đăng xuất</a>
+			<a href="#">Đổi mật khẩu</a>
+		</div>
+	</div>
+	
+</div>	
+	
+	<!-- Khu vực chứa nội dung form bên cạnh sidebar -->
+<div id="content-container" class="content-container">
+    <!-- Nội dung form sẽ được chèn vào đây -->
 </div>
+
+<script>
+        function loadForm(formName, event) {
+        	event.preventDefault(); // Ngừng hành động mặc định của thẻ <a>
+            
+            // Thay đổi URL mà không reload lại trang
+            window.history.pushState(null, '', '/admin/' + formName); 
+            
+            $.ajax({
+                url: '/admin/' + formName,  // Gửi yêu cầu đến URL của controller
+                type: 'GET',
+                success: function(data) {
+                    // Chèn nội dung form vào trong content-container
+                    $('#content-container').html(data);
+                }
+            });
+        }
+</script>
 
 </body>
 </html>
