@@ -6,20 +6,31 @@ import com.project.demo.entity.Category;
 import com.project.demo.service.AuthorService;
 import com.project.demo.service.BookService;
 import com.project.demo.service.CategoryService;
+
+import ch.qos.logback.core.model.Model;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Optional;
 
 @Controller
+@RequestMapping("/admin")
 public class BookController {
 
     @Autowired private BookService bookService;
     @Autowired private AuthorService authorService;
     @Autowired private CategoryService categoryService;
+    
+    @GetMapping("/add-book")
+    public String getAddBookForm() {
+        return "addBook"; // Đây là đường dẫn đến file JSP/Thymeleaf cho form thêm sách
+    }
 
     @PostMapping("/submit-book-info")
     public ModelAndView submitBookInfo(@RequestParam("author") String authorName,
