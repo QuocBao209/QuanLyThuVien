@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/addBook.css">
+    
+    <title>Thêm sách</title>
+</head>
+<body>
+	<div id="form-container">
+    <h2>Thêm sách</h2>
+    <form action="/admin/add-book" method="post">
+        <div class="input-group">
+            <label for="title">Tên sách</label>
+            <input type="text" id="title" name="title" required="required">
+        </div>
+        <div class="input-group">
+            <label for="author">Tác giả</label>
+            <input type="text" id="author" name="author" required="required">
+        </div>
+        <div class="input-group">
+            <button type="submit">Thêm sách</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
