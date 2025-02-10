@@ -18,7 +18,7 @@
 		</label>
 		
 		<div class="submenu">
-			<a href="/book-list">Danh sách thư viện</a>
+			<a href="#" onclick="loadForm('book-list', event)">Danh sách thư viện</a>
 			<a href="#" onclick="loadForm('add-book', event)">Thêm sách</a>
 			<a href="#">Cập nhật thông tin</a>
 		</div>
@@ -108,6 +108,14 @@
                 }
             });
         }
+     // Kiểm tra khi tải lại trang
+        $(document).ready(function() {
+            let currentPath = window.location.pathname; // Lấy đường dẫn hiện tại
+            if (currentPath.startsWith("/admin/")) {
+                let formName = currentPath.replace("/admin/", ""); // Lấy tên form từ URL
+                loadForm(formName, new Event("")); // Gọi lại hàm loadForm để tải nội dung
+            }
+        });
 </script>
 
 </body>

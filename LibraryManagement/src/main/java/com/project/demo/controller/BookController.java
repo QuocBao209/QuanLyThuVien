@@ -77,4 +77,8 @@ public class BookController {
         modelAndView.setViewName("success"); // chưa làm nốt làm lun đi m
         return modelAndView;
     }
+    @GetMapping("/book-list")
+    public String getBookListForm() {
+        return "bookList";
+    }
 }
