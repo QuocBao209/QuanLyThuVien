@@ -8,13 +8,17 @@ import com.project.demo.service.BookService;
 import com.project.demo.service.CategoryService;
 
 import ch.qos.logback.core.model.Model;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.support.HttpRequestHandlerServlet;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Optional;
@@ -32,7 +36,24 @@ public class BookController {
         ModelAndView modelAndView = new ModelAndView("addBook");
         return modelAndView;
     }
-
+    
+    @PostMapping("/add-book")
+    
+    public ModelAndView addBook(@RequestParam("title") String title,
+					    		@RequestParam("author") String author,
+					            @RequestParam("quantity") int amount,
+					            @RequestParam("type") String typeName,
+					            @RequestParam("release-year") int publishYear) {
+    	System.out.println(title);
+    	System.out.println(author);
+    	System.out.println(amount);
+    	System.out.println(typeName);
+    	System.out.println(publishYear);
+    	
+    	ModelAndView modelAndView = new ModelAndView("addBook");
+        return modelAndView;
+    }
+    
     @PostMapping("/submit-book-info")
     public ModelAndView submitBookInfo(@RequestParam("author") String authorName,
                                        @RequestParam("book-title") String bookName,
@@ -61,7 +82,7 @@ public class BookController {
         Optional<Book> existingBook = bookService.findByBookNameAndAuthor(bookName, author);
         if (existingBook.isPresent()) {
             modelAndView.addObject("message", "Sách đã tồn tại!");
-            modelAndView.setViewName("error"); //chưa làm có gì làm dùm
+            modelAndView.setViewName("error"); 
             return modelAndView;
         }
 
@@ -75,7 +96,7 @@ public class BookController {
         bookService.saveBook(book);
 
         modelAndView.addObject("message", "Thêm sách thành công!");
-        modelAndView.setViewName("success"); // chưa làm nốt làm lun đi m
+        modelAndView.setViewName("success"); 
         return modelAndView;
     }
 }

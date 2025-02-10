@@ -67,10 +67,10 @@
 <!-- Form thêm sách -->
 <div id="form-container">
     <h2>Thêm sách</h2>
-    <form action="/admin/add-book" method="post">
+    <form action="/admin/submit-book-info" method="post">
         <div class="input-group">
-            <label for="title">Tên sách:</label>
-            <input type="text" id="title" name="title" placeholder="Nhập tên sách" required="required">
+            <label for="book-title">Tên sách:</label>
+            <input type="text" id="book-title" name="book-title" placeholder="Nhập tên sách" required="required">
         </div>
         
         <div class="input-group">
@@ -84,8 +84,8 @@
         </div>
         
         <div class="input-group">
-        	<label for="type">Thể loại</label>
-        	<select id="type" name="type">
+        	<label for="category">Thể loại</label>
+        	<select id="category" name="category">
         		<option value="trinhtham">Trinh thám</option>
         		<option value="kinhte">Kinh tế</option>
         		<option value="congnghe">Công nghệ</option>
