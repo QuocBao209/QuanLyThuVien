@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/admin.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Thêm jQuery -->
     <title>Dashboard</title>
 </head>
 <body>
@@ -18,8 +17,10 @@
 		</label>
 		
 		<div class="submenu">
-			<a href="#" onclick="loadForm('book-list', event)">Danh sách thư viện</a>
-			<a href="#" onclick="loadForm('add-book', event)">Thêm sách</a>
+
+			<a href="/admin/book-list">Danh sách thư viện</a>
+			<a href="/admin/add-book">Thêm sách</a>
+
 			<a href="#">Cập nhật thông tin</a>
 		</div>
 	</div>
@@ -32,25 +33,13 @@
     	</label>
     	<div class="submenu">
 	        <a href="#">Danh sách độc giả</a>
-	        <a href="#">Xóa tài khoản</a>
+	        <a href="#">Danh sách vi phạm</a>
     	</div>
 	</div>
 	
 	<div>
 		<input type="checkbox" id="menu3" class="toggle-menu">
 		<label for="menu3" class="menu-item">
-			<i class="fa-solid fa-employee"></i> Quản lý nhân viên
-			<i class="fa-solid fa-chevron-down"></i>
-		</label>
-		<div class="submenu">
-			<a href="#">Danh sách nhân viên</a>
-			<a href="#">Thêm nhân viên</a>
-		</div>
-	</div>
-	
-	<div>
-		<input type="checkbox" id="menu4" class="toggle-menu">
-		<label for="menu4" class="menu-item">
 			<i class="fa-solid fa-employee"></i> Quản lý dịch vụ
 			<i class="fa-solid fa-chevron-down"></i>
 		</label>
@@ -62,20 +51,8 @@
 	</div>
 	
 	<div>
-		<input type="checkbox" id="menu5" class="toggle-menu">
-		<label for="menu5" class="menu-item">
-			<i class="fa-solid fa-employee"></i> Quản lý danh mục
-			<i class="fa-solid fa-chevron-down"></i>
-		</label>
-		<div class="submenu">
-			<a href="#">Danh sách danh mục</a>
-			<a href="#">Thêm danh mục</a>
-		</div>
-	</div>
-	
-	<div>
-		<input type="checkbox" id="menu6" class="toggle-menu">
-		<label for="menu6" class="menu-item">
+		<input type="checkbox" id="menu4" class="toggle-menu">
+		<label for="menu4" class="menu-item">
 			<i class="fa-solid fa-sign-out-alt"></i> Hỗ trợ
 			<i class="fa-solid fa-chevron-down"></i>
 		</label>
@@ -86,37 +63,13 @@
 	</div>
 	
 </div>	
+
 	
 	<!-- Khu vực chứa nội dung form bên cạnh sidebar -->
 <div id="content-container" class="content-container">
     <!-- Nội dung form sẽ được chèn vào đây -->
 </div>
 
-<script>
-        function loadForm(formName, event) {
-        	event.preventDefault(); // Ngừng hành động mặc định của thẻ <a>
-            
-            // Thay đổi URL mà không reload lại trang
-            window.history.pushState(null, '', '/admin/' + formName); 
-            
-            $.ajax({
-                url: '/admin/' + formName,  // Gửi yêu cầu đến URL của controller
-                type: 'GET',
-                success: function(data) {
-                    // Chèn nội dung form vào trong content-container
-                    $('#content-container').html(data);
-                }
-            });
-        }
-     // Kiểm tra khi tải lại trang
-        $(document).ready(function() {
-            let currentPath = window.location.pathname; // Lấy đường dẫn hiện tại
-            if (currentPath.startsWith("/admin/")) {
-                let formName = currentPath.replace("/admin/", ""); // Lấy tên form từ URL
-                loadForm(formName, new Event("")); // Gọi lại hàm loadForm để tải nội dung
-            }
-        });
-</script>
 
 </body>
 </html>

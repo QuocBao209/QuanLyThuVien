@@ -1,0 +1,152 @@
+/* Form thêm sách */
+body {
+	font-family: Arial, sans-serif;
+	display: flex;
+	flex-direction: column;
+	align-content: center;
+	align-items: center;
+	justify-content: center;
+	height: 100vh;
+	background-color: #E3F2FD;
+	margin-left: 250px;
+}
+
+h2 {
+	text-align: center;
+	font-family: sans-serif;
+	color: #212121;
+}
+
+#form-container {
+	background: #FAFAFA;
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	width: 300px;
+	align-items: center;
+	width: 500px;
+	
+}
+
+.input-group {
+	margin-bottom: 15px;
+	padding: 0 10px 0 0;
+	display: flex;
+	flex-direction: column;
+	font-family: sans-serif;
+}
+
+label {
+	font-family: Arial, sans-serif;
+	margin-bottom: 5px;
+	font-weight: bold;
+	display: block;
+	color: #212121;
+}
+
+input {
+	width: 100%;
+	padding: 8px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	font-size: 14px;
+}
+
+input:focus {
+    border: 2px solid #666; 
+    outline: none; 
+}
+
+select {
+	width: 103%;
+	padding: 8px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	font-size: 14px;
+	font-family: sans-serif;
+}
+
+button {
+	width: 100%;
+	padding: 10px;
+	background-color: #28a745;
+	color: #00ff00;
+	border: none;
+	border-radius: 5px;
+	font-size: 16px;
+	cursor: pointer;
+}
+
+button:hover {
+	background-color: #218838; 
+}
+
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background: #2C3E50; 
+    padding: 0 15px 0 15px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    overflow-y: auto;
+}
+
+.sidebar h2 {
+    text-align: center;
+    color: #ECF0F1; 
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #34495E;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 5px;
+    color: white;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+.menu-item:hover {
+    background: #1ABC9C;
+}
+
+.menu-item i {
+    margin-right: 10px;
+}
+
+.submenu {
+    display: none;
+    padding-left: 20px;
+    margin-top: 5px;
+}
+
+.submenu a {
+    display: block;
+    color: #BDC3C7; 
+    text-decoration: none;
+    padding: 8px 0;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
+.submenu a:hover {
+    color: #1ABC9C;
+}
+
+.toggle-menu {
+    display: none;
+}
+
+.toggle-menu:checked + .menu-item + .submenu {
+    display: block;
+}

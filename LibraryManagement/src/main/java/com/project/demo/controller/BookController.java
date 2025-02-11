@@ -28,8 +28,9 @@ public class BookController {
     @Autowired private CategoryService categoryService;
     
     @GetMapping("/add-book")
-    public String getAddBookForm() {
-        return "addBook"; // Đây là đường dẫn đến file JSP/Thymeleaf cho form thêm sách
+    public ModelAndView getAddBookForm() {
+        ModelAndView modelAndView = new ModelAndView("addBook");
+        return modelAndView;
     }
 
     @PostMapping("/submit-book-info")
