@@ -1,8 +1,7 @@
-/* Form thêm sách */
 body {
 	font-family: Arial, sans-serif;
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
 	align-content: center;
 	align-items: center;
 	justify-content: center;
@@ -11,6 +10,7 @@ body {
 	margin-left: 250px;
 }
 
+/* Form thêm sách */
 h2 {
 	text-align: center;
 	font-family: sans-serif;
@@ -25,7 +25,6 @@ h2 {
 	width: 300px;
 	align-items: center;
 	width: 500px;
-	
 }
 
 .input-group {

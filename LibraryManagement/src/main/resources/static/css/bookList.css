@@ -1,18 +1,28 @@
 body {
+	display: flex;
+	flex-direction: row;
+	align-content: center;
+	align-items: center;
+	justify-content: center;
+	height: 100vh;
     font-family: Arial, sans-serif;
-    background-color: #f1f1f1;
+    background-color: #E3F2FD;
     margin: 0;
     padding: 0;
 }
 
+/* Form danh sách */
 .container {
-    width: 95%;
-    margin: 20px auto;
-    background: white;
+    width: 1500px;
+    height: 100vh;
+    margin-left: 270px;
+    background-color: #E3F2FD;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
+    align-content: center;
+    align-items: center;
 }
 
 h2 {
@@ -47,4 +57,72 @@ th {
 
 tr:hover {
     background: #f1f1f1;
+}
+
+/*Sidebar */
+.sidebar {
+    width: 250px;
+    background: #2C3E50; 
+    padding: 15px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    overflow-y: auto;
+}
+
+.sidebar h2 {
+    text-align: center;
+    color: #ECF0F1; 
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #34495E;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 5px;
+    color: white;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+.menu-item:hover {
+    background: #1ABC9C;
+}
+
+.menu-item i {
+    margin-right: 10px;
+}
+
+.submenu {
+    display: none;
+    padding-left: 20px;
+    margin-top: 5px;
+}
+
+.submenu a {
+    display: block;
+    color: #BDC3C7; 
+    text-decoration: none;
+    padding: 8px 0;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
+.submenu a:hover {
+    color: #1ABC9C;
+}
+
+.toggle-menu {
+    display: none;
+}
+
+.toggle-menu:checked + .menu-item + .submenu {
+    display: block;
 }
