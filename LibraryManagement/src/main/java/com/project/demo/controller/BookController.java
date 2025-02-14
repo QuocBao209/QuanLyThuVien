@@ -11,10 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.context.support.HttpRequestHandlerServlet;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -28,30 +26,30 @@ public class BookController {
     @Autowired private BookService bookService;
     @Autowired private AuthorService authorService;
     @Autowired private CategoryService categoryService;
-    
+
+    // Hiển thị form thêm sách
     @GetMapping("/add-book")
     public ModelAndView getAddBookForm() {
-        ModelAndView modelAndView = new ModelAndView("addBook");
-        return modelAndView;
-    }
-    
-    @PostMapping("/add-book")
-    
-    public ModelAndView addBook(@RequestParam("title") String title,
-					    		@RequestParam("author") String author,
-					            @RequestParam("quantity") int amount,
-					            @RequestParam("type") String typeName,
-					            @RequestParam("release-year") int publishYear) {
-    	System.out.println(title);
-    	System.out.println(author);
-    	System.out.println(amount);
-    	System.out.println(typeName);
-    	System.out.println(publishYear);
-    	
-    	ModelAndView modelAndView = new ModelAndView("addBook");
-        return modelAndView;
+        return new ModelAndView("addBook");
     }
 
+    // Xử lý thêm sách (tạm thời chỉ in ra console)
+    @PostMapping("/add-book")
+    public ModelAndView addBook(@RequestParam("title") String title,
+                                @RequestParam("author") String author,
+                                @RequestParam("quantity") int amount,
+                                @RequestParam("type") String typeName,
+                                @RequestParam("release-year") int publishYear) {
+        System.out.println(title);
+        System.out.println(author);
+        System.out.println(amount);
+        System.out.println(typeName);
+        System.out.println(publishYear);
+
+        return new ModelAndView("addBook");
+    }
+
+    // Xử lý lưu sách vào database
     @PostMapping("/submit-book-info")
     public ModelAndView submitBookInfo(@RequestParam("author") String authorName,
                                        @RequestParam("book-title") String bookName,
@@ -108,6 +106,14 @@ public class BookController {
             modelAndView.setViewName("error");
         }
 
+        return modelAndView;
+    }
+
+    // Hiển thị danh sách sách từ database
+    @GetMapping("/book-list")
+    public ModelAndView showBookListForm() {
+        ModelAndView modelAndView = new ModelAndView("bookList");
+        modelAndView.addObject("books", bookService.getBooks()); // Lấy danh sách sách từ database
         return modelAndView;
     }
 }
