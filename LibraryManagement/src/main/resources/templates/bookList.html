@@ -7,278 +7,235 @@
     <link rel="stylesheet" href="/css/bookList.css">
 </head>
 <body>
+	<div class="sidebar">
+		<h2>Menu</h2>
+		<div>
+			<input type="checkbox" id="menu1" class="toggle-menu">
+			<label for="menu1" class="menu-item">
+				<i class="fa-solid fa-book"></i> Quản lý sách
+				<i class="fa-solid fa-chevron-down ms-auto"></i>
+			</label>
+			
+			<div class="submenu">
+	
+				<a href="/admin/book-list">Danh sách thư viện</a>
+				<a href="/admin/add-book">Thêm sách</a>
+	
+				<a href="#">Cập nhật thông tin</a>
+			</div>
+		</div>
+		
+		<div>
+	    	<input type="checkbox" id="menu2" class="toggle-menu">
+	    	<label for="menu2" class="menu-item">
+	        	<i class="fa-solid fa-user"></i> Quản lý độc giả
+	        	<i class="fa-solid fa-chevron-down"></i>
+	    	</label>
+	    	<div class="submenu">
+		        <a href="#">Danh sách độc giả</a>
+		        <a href="#">Danh sách vi phạm</a>
+	    	</div>
+		</div>
+		
+		<div>
+			<input type="checkbox" id="menu3" class="toggle-menu">
+			<label for="menu3" class="menu-item">
+				<i class="fa-solid fa-employee"></i> Quản lý dịch vụ
+				<i class="fa-solid fa-chevron-down"></i>
+			</label>
+			<div class="submenu">
+				<a href="#">Sách đang mượn</a>
+				<a href="#">Sách đã trả</a>
+				<a href="#">Quá hạn</a>
+			</div>
+		</div>
+		
+		<div>
+			<input type="checkbox" id="menu4" class="toggle-menu">
+			<label for="menu4" class="menu-item">
+				<i class="fa-solid fa-sign-out-alt"></i> Hỗ trợ
+				<i class="fa-solid fa-chevron-down"></i>
+			</label>
+			<div class="submenu">
+				<a href="/login">Đăng xuất</a>
+				<a href="#">Đổi mật khẩu</a>
+			</div>
+		</div>
+		
+	</div>	
 
     <div class="container">
         <h2>Danh sách thư viện</h2>
         <table>
             <thead>
                 <tr>
-                	<th>STT</th>
                     <th>ID</th>
                     <th>Tên sách</th>
                     <th>Tác giả</th>
-                    <th>Số lượng</th>
-                    <th>Năm xuất bản</th>
                     <th>Thể loại</th>
                 </tr>
             </thead>
             <tbody id="data-table">
                 <tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr>
   				<tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr><tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr><tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr><tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr><tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr><tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr><tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr><tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr><tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr><tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr><tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr><tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr><tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr><tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr><tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr><tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr><tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr><tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr><tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr><tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr><tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr><tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr><tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr><tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr><tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr><tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr><tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr><tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr><tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr><tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr><tr>
-				    <td>1</td>
 				    <td>12aa</td>
 				    <td>Germany</td>
 				    <td>Helson</td>
-				    <td>15</td>
-				    <td>2012</td>
 				    <td>Tài liệu</td>
   				</tr>
             </tbody>

@@ -99,8 +99,4 @@ public class BookController {
         modelAndView.setViewName("success"); 
         return modelAndView;
     }
-    @GetMapping("/book-list")
-    public String getBookListForm() {
-        return "bookList";
-    }
 }
