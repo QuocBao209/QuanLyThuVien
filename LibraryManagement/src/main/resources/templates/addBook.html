@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/addBook.css">
-    
-    <title>Thêm sách</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Thêm sách</title>
+	<link rel="stylesheet" href="/css/addBook.css">
 </head>
 <body>
+
 <!-- Sidebar -->
 <div class="sidebar">
 	<h2>Menu</h2>
@@ -17,26 +17,25 @@
 			<i class="fa-solid fa-book"></i> Quản lý sách
 			<i class="fa-solid fa-chevron-down ms-auto"></i>
 		</label>
-		
 		<div class="submenu">
 			<a href="#">Danh sách thư viện</a>
 			<a href="/admin/add-book">Thêm sách</a>
 			<a href="#">Cập nhật thông tin</a>
 		</div>
 	</div>
-	
+
 	<div>
-    	<input type="checkbox" id="menu2" class="toggle-menu">
-    	<label for="menu2" class="menu-item">
-        	<i class="fa-solid fa-user"></i> Quản lý độc giả
-        	<i class="fa-solid fa-chevron-down"></i>
-    	</label>
-    	<div class="submenu">
-	        <a href="#">Danh sách độc giả</a>
-	        <a href="#">Danh sách vi phạm</a>
-    	</div>
+		<input type="checkbox" id="menu2" class="toggle-menu">
+		<label for="menu2" class="menu-item">
+			<i class="fa-solid fa-user"></i> Quản lý độc giả
+			<i class="fa-solid fa-chevron-down"></i>
+		</label>
+		<div class="submenu">
+			<a href="#">Danh sách độc giả</a>
+			<a href="#">Danh sách vi phạm</a>
+		</div>
 	</div>
-	
+
 	<div>
 		<input type="checkbox" id="menu3" class="toggle-menu">
 		<label for="menu3" class="menu-item">
@@ -49,7 +48,7 @@
 			<a href="#">Quá hạn</a>
 		</div>
 	</div>
-	
+
 	<div>
 		<input type="checkbox" id="menu4" class="toggle-menu">
 		<label for="menu4" class="menu-item">
@@ -61,47 +60,52 @@
 			<a href="#">Đổi mật khẩu</a>
 		</div>
 	</div>
-	
-</div>	
+</div>
 
 <!-- Form thêm sách -->
 <div id="form-container">
-    <h2>Thêm sách</h2>
-    <form action="/admin/submit-book-info" method="post">
-        <div class="input-group">
-            <label for="book-title">Tên sách:</label>
-            <input type="text" id="book-title" name="book-title" placeholder="Nhập tên sách" required="required">
-        </div>
-        
-        <div class="input-group">
-            <label for="author">Tác giả:</label>
-            <input type="text" id="author" name="author" placeholder="Nhập tên tác giả" required="required">
-        </div>
-        
-        <div class="input-group">
-        	<label for="quantity">Số lượng:</label>
-        	<input type="number" id="quantity" name="quantity" placeholder="Nhập số lượng sách" min="0" required>
-        </div>
-        
-        <div class="input-group">
-        	<label for="category">Thể loại</label>
-        	<select id="category" name="category">
-        		<option value="trinhtham">Trinh thám</option>
-        		<option value="kinhte">Kinh tế</option>
-        		<option value="congnghe">Công nghệ</option>
-        		<option value="mythuat">Mỹ thuật</option>
-        	</select>
-        </div>
-        
-        <div class="input-group">
-            <label for="release-year">Năm Phát Hành:</label>
-            <input type="number" id="release-year" name="release-year" min="1900" max="2025" step="1" placeholder="Nhập năm phát hành" required>
-        </div>
-        
-        <div class="input-group">
-            <button type="submit">Thêm sách</button>
-        </div>
-    </form>
+	<h2>Thêm sách</h2>
+	<form action="/admin/submit-book-info" method="post" enctype="multipart/form-data">
+		<div class="input-group">
+			<label for="book-title">Tên sách:</label>
+			<input type="text" id="book-title" name="book-title" placeholder="Nhập tên sách" required>
+		</div>
+
+		<div class="input-group">
+			<label for="author">Tác giả:</label>
+			<input type="text" id="author" name="author" placeholder="Nhập tên tác giả" required>
+		</div>
+
+		<div class="input-group">
+			<label for="quantity">Số lượng:</label>
+			<input type="number" id="quantity" name="quantity" placeholder="Nhập số lượng sách" min="1" required>
+		</div>
+
+		<div class="input-group">
+			<label for="category">Thể loại:</label>
+			<select id="category" name="category">
+				<option value="trinhtham">Trinh thám</option>
+				<option value="kinhte">Kinh tế</option>
+				<option value="congnghe">Công nghệ</option>
+				<option value="mythuat">Mỹ thuật</option>
+			</select>
+		</div>
+
+		<div class="input-group">
+			<label for="release-year">Năm Phát Hành:</label>
+			<input type="number" id="release-year" name="release-year" min="1900" max="2025" step="1" placeholder="Nhập năm phát hành" required>
+		</div>
+
+		<!-- Upload ảnh sách -->
+		<div class="input-group">
+			<label for="book-image">Ảnh bìa sách:</label>
+			<input type="file" id="book-image" name="book-image" accept="image/*" required>
+		</div>
+
+		<div class="input-group">
+			<button type="submit">Thêm sách</button>
+		</div>
+	</form>
 </div>
 
 </body>

@@ -15,6 +15,9 @@ public class Book {
     private int amount;
     private int publishYear;
 
+    @Lob
+    private byte[] bookImage; // Lưu ảnh trực tiếp
+
     @ManyToOne
     @JoinColumn(name = "author_id")
     private Author author;
@@ -23,7 +26,6 @@ public class Book {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    // Optional: Override toString() for better output representation
     @Override
     public String toString() {
         return bookName + " by " + (author != null ? author.getAuthorName() : "Unknown Author");
