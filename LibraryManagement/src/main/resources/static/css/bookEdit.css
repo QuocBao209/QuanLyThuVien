@@ -1,91 +1,92 @@
 body {
+	font-family: Arial, sans-serif;
 	display: flex;
 	flex-direction: row;
 	align-content: center;
 	align-items: center;
 	justify-content: center;
 	height: 100vh;
-    font-family: Arial, sans-serif;
-    background-color: #E3F2FD;
-    margin: 0;
-    padding: 0;
+	background-color: #E3F2FD;
+	margin-left: 250px;
 }
 
-/* Form danh sách */
-.container {
-    width: 1500px;
-    height: 100vh;
-    margin-left: 270px;
-    background-color: #E3F2FD;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    overflow-y: auto;
-    align-content: center;
-    align-items: center;
-}
-
+/* Form thêm sách */
 h2 {
-    text-align: center;
-    color: #000000;
+	text-align: center;
+	font-family: sans-serif;
+	color: #212121;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
+#form-container {
+	background: #FAFAFA;
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	width: 300px;
+	align-items: center;
+	width: 500px;
 }
 
-table, th, td {
-  border: 1px solid #000000;
-  border-collapse: collapse;
+.input-group {
+	margin-bottom: 15px;
+	padding: 0 10px 0 0;
+	display: flex;
+	flex-direction: column;
+	font-family: sans-serif;
 }
 
-td {
-    padding: 10px;
-    text-align: left;
-    color: #000000;
-    text-align: center;
+label {
+	font-family: Arial, sans-serif;
+	margin-bottom: 5px;
+	font-weight: bold;
+	display: block;
+	color: #212121;
 }
 
-th {
-    background: #acd6ff;
-    color: #000000;
-    padding: 10px;
-    text-align: center;
+input {
+	width: 100%;
+	padding: 8px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	font-size: 14px;
 }
 
-tr:hover {
-    background: #f1f1f1;
+input:focus {
+    border: 2px solid #666; 
+    outline: none; 
 }
 
-.btn {
-    display: inline-block;
-    padding: 6px 12px;
-    text-decoration: none;
-    border-radius: 4px;
-    color: white;
-    font-size: 14px;
+select {
+	width: 103%;
+	padding: 8px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	font-size: 14px;
+	font-family: sans-serif;
 }
 
-.btn-edit {
-    background-color: #28a745;
+button {
+	width: 100%;
+	padding: 10px;
+	background-color: #28a745;
+	color: #00ff00;
+	border: none;
+	border-radius: 5px;
+	font-size: 16px;
+	cursor: pointer;
 }
 
-.btn-remove {
-    background-color: #007bff;
-}
-
-.btn:hover {
-    opacity: 0.8;
+button:hover {
+	background-color: #218838; 
 }
 
 
-/*Sidebar */
+/* Sidebar */
 .sidebar {
     width: 250px;
+    height: 100vh;
     background: #2C3E50; 
-    padding: 15px;
+    padding: 0 15px 0 15px;
     height: 100vh;
     position: fixed;
     left: 0;

@@ -10,6 +10,7 @@ import com.project.demo.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,12 +41,6 @@ public class BookController {
                                 @RequestParam("quantity") int amount,
                                 @RequestParam("type") String typeName,
                                 @RequestParam("release-year") int publishYear) {
-        System.out.println(title);
-        System.out.println(author);
-        System.out.println(amount);
-        System.out.println(typeName);
-        System.out.println(publishYear);
-
         return new ModelAndView("addBook");
     }
 
@@ -95,12 +90,14 @@ public class BookController {
             // Xử lý ảnh sách
             if (!bookImage.isEmpty()) {
                 book.setBookImage(bookImage.getBytes()); // Lưu ảnh vào database
+            } else {
+                book.setBookImage(existingBook.get().getBookImage());
             }
 
             bookService.saveBook(book);
 
             modelAndView.addObject("message", "Thêm sách thành công!");
-            modelAndView.setViewName("success");
+            modelAndView.setViewName("bookList");
         } catch (IOException e) {
             modelAndView.addObject("message", "Lỗi khi xử lý ảnh!");
             modelAndView.setViewName("error");
@@ -114,6 +111,16 @@ public class BookController {
     public ModelAndView showBookListForm() {
         ModelAndView modelAndView = new ModelAndView("bookList");
         modelAndView.addObject("books", bookService.getBooks()); // Lấy danh sách sách từ database
+        return modelAndView;
+    }
+    
+    // Thao tác sửa thông tin
+    @GetMapping("/edit-book/{id}")
+    public ModelAndView showBookEditForm(@PathVariable Long id) {
+    	ModelAndView modelAndView = new ModelAndView("bookEdit");
+    	Book book = bookService.getBookById(id);
+    	modelAndView.addObject("categories", categoryService.getCategories());
+    	modelAndView.addObject("book", book); // Thêm sách vào model
         return modelAndView;
     }
 }

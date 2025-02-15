@@ -18,7 +18,7 @@
 			<i class="fa-solid fa-chevron-down ms-auto"></i>
 		</label>
 		<div class="submenu">
-			<a href="#">Danh sách thư viện</a>
+			<a href="/admin/book-list">Danh sách thư viện</a>
 			<a href="/admin/add-book">Thêm sách</a>
 			<a href="#">Cập nhật thông tin</a>
 		</div>
@@ -78,22 +78,22 @@
 
 		<div class="input-group">
 			<label for="quantity">Số lượng:</label>
-			<input type="number" id="quantity" name="quantity" placeholder="Nhập số lượng sách" min="1" required>
+			<input type="number" id="amount" name="amount" placeholder="Nhập số lượng sách" min="1" required>
 		</div>
 
 		<div class="input-group">
 			<label for="category">Thể loại:</label>
 			<select id="category" name="category">
-				<option value="trinhtham">Trinh thám</option>
-				<option value="kinhte">Kinh tế</option>
-				<option value="congnghe">Công nghệ</option>
-				<option value="mythuat">Mỹ thuật</option>
+				<option value="Trinh thám">Trinh thám</option>
+				<option value="Kinh tế">Kinh tế</option>
+				<option value="Công nghệ">Công nghệ</option>
+				<option value="Mỹ thuật">Mỹ thuật</option>
 			</select>
 		</div>
 
 		<div class="input-group">
-			<label for="release-year">Năm Phát Hành:</label>
-			<input type="number" id="release-year" name="release-year" min="1900" max="2025" step="1" placeholder="Nhập năm phát hành" required>
+			<label for="publish-year">Năm Phát Hành:</label>
+			<input type="number" id="publish-year" name="publish-year" min="1900" max="2025" step="1" placeholder="Nhập năm phát hành" required>
 		</div>
 
 		<!-- Upload ảnh sách -->

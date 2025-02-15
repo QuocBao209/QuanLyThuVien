@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Sửa thông tin sách</title>
+	<link rel="stylesheet" href="/css/bookEdit.css">
+</head>
+<body>
+<!-- Sidebar -->
+<div class="sidebar">
+		<h2>Menu</h2>
+		<div>
+			<input type="checkbox" id="menu1" class="toggle-menu">
+			<label for="menu1" class="menu-item">
+				<i class="fa-solid fa-book"></i> Quản lý sách
+				<i class="fa-solid fa-chevron-down ms-auto"></i>
+			</label>
+			
+			<div class="submenu">
+	
+				<a href="/admin/book-list">Danh sách thư viện</a>
+				<a href="/admin/add-book">Thêm sách</a>
+	
+				<a href="#">Cập nhật thông tin</a>
+			</div>
+		</div>
+		
+		<div>
+	    	<input type="checkbox" id="menu2" class="toggle-menu">
+	    	<label for="menu2" class="menu-item">
+	        	<i class="fa-solid fa-user"></i> Quản lý độc giả
+	        	<i class="fa-solid fa-chevron-down"></i>
+	    	</label>
+	    	<div class="submenu">
+		        <a href="#">Danh sách độc giả</a>
+		        <a href="#">Danh sách vi phạm</a>
+	    	</div>
+		</div>
+		
+		<div>
+			<input type="checkbox" id="menu3" class="toggle-menu">
+			<label for="menu3" class="menu-item">
+				<i class="fa-solid fa-employee"></i> Quản lý dịch vụ
+				<i class="fa-solid fa-chevron-down"></i>
+			</label>
+			<div class="submenu">
+				<a href="#">Sách đang mượn</a>
+				<a href="#">Sách đã trả</a>
+				<a href="#">Quá hạn</a>
+			</div>
+		</div>
+		
+		<div>
+			<input type="checkbox" id="menu4" class="toggle-menu">
+			<label for="menu4" class="menu-item">
+				<i class="fa-solid fa-sign-out-alt"></i> Hỗ trợ
+				<i class="fa-solid fa-chevron-down"></i>
+			</label>
+			<div class="submenu">
+				<a href="/login">Đăng xuất</a>
+				<a href="#">Đổi mật khẩu</a>
+			</div>
+		</div>
+	</div>
+
+<!-- Form sửa thông tin sách -->
+<div id="form-container">
+	<h2>Sửa thông tin sách</h2>
+	<form th:action="@{/admin/submit-book-info}" method="post" enctype="multipart/form-data">
+		<input type="hidden" name="bookId" th:value="${book.bookId}">
+		
+		<div class="input-group">
+			<label for="book-title">Tên sách:</label>
+			<input type="text" id="book-title" name="book-title" placeholder="Nhập tên sách" 
+				th:value="${book.bookName}" required>
+			
+		</div>
+		
+		<div class="input-group">
+            <label for="author">Tác giả:</label>
+            <input type="text" id="author" name="author" placeholder="Nhập tên tác giả"
+                   th:value="${book.author.authorName}" required>
+        </div>
+
+        <div class="input-group">
+            <label for="quantity">Số lượng:</label>
+            <input type="number" id="amount" name="amount" placeholder="Nhập số lượng sách" min="1"
+                   th:value="${book.amount}" required>
+        </div>
+
+        <div class="input-group">
+            <label for="category">Thể loại:</label>
+            <select id="category" name="category">
+                <option th:each="cat:${categories}" th:value="${cat.categoryName}"
+                        th:text="${cat.categoryName}" th:selected="${cat.categoryName == book.category.categoryName}">
+                </option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="publish-year">Năm Phát Hành:</label>
+            <input type="number" id="publish-year" name="publish-year" min="1900" max="2025" step="1"
+                   th:value="${book.publishYear}" required>
+        </div>
+
+        <!-- 
+        <div class="input-group">
+            <label>Ảnh bìa hiện tại:</label>
+            <img th:src="@{/images/{imageName}(imageName=${book.imageName})}" alt="Ảnh bìa sách" width="150px">
+        </div>
+        
+        Sửa xong phần ảnh thì bỏ comment
+         --> 
+
+        <div class="input-group">
+            <label for="book-image">Thay đổi ảnh bìa:</label>
+            <input type="file" id="book-image" name="book-image" accept="image/*">
+        </div>
+
+        <div class="input-group">
+            <button type="submit">Cập nhật</button>
+        </div>
+	</form>
+</div>
+</body>
+</html>

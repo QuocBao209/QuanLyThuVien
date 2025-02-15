@@ -70,17 +70,27 @@
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th></th>
                     <th>Tên sách</th>
                     <th>Tác giả</th>
                     <th>Thể loại</th>
+                    <th>Sửa</th>
+                    <th>Xóa</th>
                 </tr>
             </thead>
 			<tbody>
 			<tr th:each="book : ${books}">
 				<td th:text="${book.bookId}"></td>
+				<td></td>
 				<td th:text="${book.bookName}"></td>
 				<td th:text="${book.author.authorName}"></td>
 				<td th:text="${book.category.categoryName}"></td>
+				<td>
+					<a th:href="@{/admin/edit-book/{id}(id=${book.bookId})}" class="btn btn-edit">Sửa</a>
+				</td> 
+				<td>
+					<a th:href="@{/admin/book-detail/{id}(id=${book.bookId})}" class="btn btn-remove">Xóa</a>
+				</td> 
 			</tr>
 			</tbody>
 		</table>
