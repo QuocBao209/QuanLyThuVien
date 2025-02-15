@@ -46,13 +46,14 @@ public class BookController {
 
     // Xử lý lưu sách vào database
     @PostMapping("/submit-book-info")
-    public ModelAndView submitBookInfo(@RequestParam("author") String authorName,
+    public ModelAndView submitBookInfo(@RequestParam(value="book-id", required = false) Long bookId,
+    								   @RequestParam("author") String authorName,
                                        @RequestParam("book-title") String bookName,
                                        @RequestParam("quantity") int amount,
                                        @RequestParam("category") String categoryName,
                                        @RequestParam("release-year") int publishYear,
                                        @RequestParam("book-image") MultipartFile bookImage) {
-        ModelAndView modelAndView = new ModelAndView();
+        ModelAndView modelAndView = new ModelAndView("redirect:/admin/book-list");	
 
         try {
             // Kiểm tra hoặc thêm mới Author
@@ -70,17 +71,28 @@ public class BookController {
                 newCategory.setCategoryName(categoryName);
                 return categoryService.saveCategory(newCategory);
             });
-
-            // Kiểm tra nếu sách đã tồn tại
-            Optional<Book> existingBook = bookService.findByBookNameAndAuthor(bookName, author);
-            if (existingBook.isPresent()) {
-                modelAndView.addObject("message", "Sách đã tồn tại!");
-                modelAndView.setViewName("error");
-                return modelAndView;
+            
+            Book book;
+            if (bookId != null) {
+            	// Tìm sách theo id để cập nhật
+            	book = bookService.getBookById(bookId);
+            	if (book == null) {
+            		modelAndView.addObject("message", "Sách không tồn tại!");
+            		modelAndView.setViewName("error");
+            		return modelAndView;
+            	}
+            } else {
+            	// Kiểm tra nếu sách đã tồn tại
+                Optional<Book> existingBook = bookService.findByBookNameAndAuthor(bookName, author);
+                if (existingBook.isPresent()) {
+                    modelAndView.addObject("message", "Sách đã tồn tại!");
+                    modelAndView.setViewName("error");
+                    return modelAndView;
+                }
+                book = new Book(); // Tạo sách mới
             }
 
-            // Tạo và lưu mới sách
-            Book book = new Book();
+            // Cập nhật thông tin sách
             book.setBookName(bookName);
             book.setAmount(amount);
             book.setPublishYear(publishYear);
@@ -90,8 +102,6 @@ public class BookController {
             // Xử lý ảnh sách
             if (!bookImage.isEmpty()) {
                 book.setBookImage(bookImage.getBytes()); // Lưu ảnh vào database
-            } else {
-                book.setBookImage(existingBook.get().getBookImage());
             }
 
             bookService.saveBook(book);
