@@ -25,13 +25,23 @@ public class BookService {
     public Optional<Book> findByBookNameAndAuthor(String bookName, Author author) {
         return bookRepository.findByBookNameAndAuthor(bookName, author);
     }
-    
+
     public Book getBookById(Long id) {
         return bookRepository.findById(id).orElse(null);
     }
 
     public void saveBook(Book book) {
         bookRepository.save(book);
+    }
+
+    public void updateBook(Book book) {
+        if (bookRepository.existsById(book.getBookId())) {
+            bookRepository.save(book);
+        }
+    }
+
+    public void deleteBook(Long id) {
+        bookRepository.deleteById(id);
     }
 
     public void transferData(List<Book> books) {
