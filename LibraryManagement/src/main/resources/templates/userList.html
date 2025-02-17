@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý tài khoản</title>
-    <link rel="stylesheet" href="/css/bookList.css">
+    <title>Danh sách độc giả</title>
+    <link rel="stylesheet" href="/css/userList.css">
 </head>
 <body>
+	<!-- Sidebar -->
 	<div class="sidebar">
 		<h2>Menu</h2>
 		<div>
@@ -60,44 +61,47 @@
 			</div>
 		</div>
 		
-	</div>	
+	</div>
 
-    <div class="container">
-        <h2>Danh sách thư viện</h2>
-        
-        <div class="search-container">
-			<input type="text" id="searchInput" placeholder="Nhập tên sách hoặc tên tác giả ...">
+	<!-- Danh sách độc giả -->
+	<div class="container">
+		<h2>Danh sách độc giả</h2>
+		
+		<div class="search-container">
+			<input type="text" id="searchInput" placeholder="Nhập tên hoặc email độc giả ...">
 			<button class="search-btn">🔍 Tìm kiếm</button>
 		</div>
-        
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Ảnh</th>
-                    <th>Tên sách</th>
-                    <th>Tác giả</th>
-                    <th>Thể loại</th>
-                    <th>Sửa</th>
-                    <th>Xóa</th>
-                </tr>
-            </thead>
+		
+		<table>
+			<thead>
+				<tr>
+					<th>ID</th>
+                    <th>Họ Tên</th>
+                    <th>Email</th>
+                    <th>Ngày Đăng Ký</th>
+                    <th>Sách Đang Mượn</th>
+                    <th>Trạng Thái</th>
+                    <th>Hành Động</th>
+				</tr>
+			</thead>
 			<tbody>
-			<tr th:each="book : ${books}">
-				<td th:text="${book.bookId}"></td>
-				<td></td>
-				<td th:text="${book.bookName}"></td>
-				<td th:text="${book.author.authorName}"></td>
-				<td th:text="${book.category.categoryName}"></td>
-				<td>
-					<a th:href="@{/admin/edit-book/{id}(id=${book.bookId})}" class="btn btn-edit">Sửa</a>
-				</td> 
-				<td>
-					<a th:href="@{/admin/delete-book/{id}(id=${book.bookId})}" class="btn btn-remove">Xóa</a>
-				</td> 
-			</tr>
+				<tr th:each="user : ${users}">
+					<td th:text=${user.userId}></td>
+					<td th:text=${user.name}></td>
+					<td th:text=${user.email}></td>
+					<td th:text=${user.phone}></td>
+					<td>
+						<span th:class="${reader.status == 'active' ? 'status-active' : 'status-inactive'}"
+                              th:text="${reader.status == 'active' ? 'Hoạt động' : 'Khóa'}">
+                        </span>
+					</td>
+					<td>
+                        <button class="edit-btn">✏️</button>
+                        <button class="delete-btn">🗑️</button>
+                    </td>
+				</tr>
 			</tbody>
 		</table>
-    </div>
+	</div>
 </body>
 </html>

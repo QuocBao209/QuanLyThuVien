@@ -35,4 +35,9 @@ public class LoginController {
 
 		return modelAndView;
 	}
+	
+	@GetMapping("/login/forget-password")
+	public String forgetPasswordForm() {
+		return "forgetPassword";
+	}
 }

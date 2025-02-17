@@ -1,25 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Register</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký</title>
+    <link rel="stylesheet" href="/css/register.css">
 </head>
 <body>
-<h2>Register</h2>
+<h2>Đăng ký</h2>
 
 <form action="/register" method="post">
     <div class="input-group">
-        <label for="cmt">CMT</label>
+        <label for="cmt">Chứng Minh Thư</label>
         <input type="text" id="cmt" name="cmt" required="required">
     </div>
 
     <div class="input-group">
-        <label for="name">Name</label>
+        <label for="name">Họ và Tên</label>
         <input type="text" id="name" name="name" required="required">
     </div>
 
     <div class="input-group">
-        <label for="phone">Phone</label>
+        <label for="phone">Số điện thoại</label>
         <input type="text" id="phone" name="phone" required="required">
     </div>
 
@@ -29,17 +31,17 @@
     </div>
 
     <div class="input-group">
-        <label for="username">Username</label>
+        <label for="username">Tên tài khoản</label>
         <input type="text" id="username" name="username" required="required">
     </div>
 
     <div class="input-group">
-        <label for="password">Password</label>
+        <label for="password">Mật khẩu</label>
         <input type="password" id="password" name="password" required="required">
     </div>
 
     <div class="input-group">
-        <button type="submit">Register</button>
+        <button type="submit">Đăng ký</button>
     </div>
 </form>
 

@@ -1,33 +1,30 @@
+@charset "UTF-8";
+/* Tổng quan */
 body {
-	display: flex;
-	flex-direction: row;
-	align-content: center;
-	align-items: center;
-	justify-content: center;
-	height: 100vh;
     font-family: Arial, sans-serif;
-    background-color: #E3F2FD;
-    margin: 0;
-    padding: 0;
-}
-
-/* Form danh sách */
-.container {
-    width: 1500px;
-    height: 100vh;
-    margin-left: 270px;
-    background-color: #E3F2FD;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    overflow-y: auto;
-    align-content: center;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
     align-items: center;
+    flex-direction: column;
+    padding: 20px;
 }
 
+/* Container */
+.container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 800px;
+    margin-left: 200px;
+}
+
+/* Tiêu đề */
 h2 {
     text-align: center;
-    color: #000000;
+    margin-bottom: 15px;
 }
 
 /* Ô tìm kiếm */
@@ -38,7 +35,7 @@ h2 {
 }
 
 .search-container input {
-    width: 40%;
+    width: 80%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -47,8 +44,6 @@ h2 {
 
 .search-btn {
     padding: 10px;
-    margin-right: 500px;
-    margin-left: 20px;
     background-color: #007bff;
     color: white;
     border: none;
@@ -61,62 +56,67 @@ h2 {
     background-color: #0056b3;
 }
 
+/* Bảng danh sách */
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
-table, th, td {
-  border: 1px solid #000000;
-  border-collapse: collapse;
-}
-
-td {
+table th, table td {
     padding: 10px;
-    text-align: left;
-    color: #000000;
+    border: 1px solid #ddd;
     text-align: center;
 }
 
-th {
-    background: #acd6ff;
-    color: #000000;
-    padding: 10px;
-    text-align: center;
-}
-
-tr:hover {
-    background: #f1f1f1;
-}
-
-.btn {
-    display: inline-block;
-    padding: 6px 12px;
-    text-decoration: none;
-    border-radius: 4px;
-    color: white;
-    font-size: 14px;
-}
-
-.btn-edit {
-    background-color: #28a745;
-}
-
-.btn-remove {
+table th {
     background-color: #007bff;
+    color: white;
 }
 
-.btn:hover {
-    opacity: 0.8;
+/* Trạng thái */
+.status-active {
+    color: green;
+    font-weight: bold;
 }
 
+.status-inactive {
+    color: red;
+    font-weight: bold;
+}
 
-/*Sidebar */
+/* Nút chỉnh sửa và xóa */
+.edit-btn, .delete-btn {
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.edit-btn {
+    background-color: #ffc107;
+    color: black;
+}
+
+.delete-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: #e0a800;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}
+
+/* Sidebar */
 .sidebar {
     width: 250px;
+    height: 100vh;
     background: #2C3E50; 
-    padding: 15px;
+    padding: 0 15px 0 15px;
     height: 100vh;
     position: fixed;
     left: 0;

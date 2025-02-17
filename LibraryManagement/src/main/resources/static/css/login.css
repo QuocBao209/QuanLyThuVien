@@ -84,7 +84,7 @@ button {
 }
 
 button:hover {
-    background-color: #218838;
+    background-color: #008000;
 }
 
 .error-message {
@@ -93,17 +93,18 @@ button:hover {
     margin-top: 10px;
 }
 
-.create-account {
-    text-align: center;
+.account-actions {
+    text-align: left;
     margin-top: 15px;
 }
 
-.create-account a {
+.account-actions a {
     color: #007bff;
     text-decoration: none;
     font-weight: bold;
 }
 
-.create-account a:hover {
+.account-actions a:hover {
     text-decoration: underline;
 }
+
