@@ -85,11 +85,11 @@
 
 		<div class="input-group">
 			<label for="category">Thể loại:</label>
-			<select id="category" name="category">
-				<option value="Trinh thám">Trinh thám</option>
-				<option value="Kinh tế">Kinh tế</option>
-				<option value="Công nghệ">Công nghệ</option>
-				<option value="Mỹ thuật">Mỹ thuật</option>
+			<select id="category" name="category" required>
+			    <option value="">Chọn thể loại</option>
+			    <th:block th:each="category : ${categories}">
+			        <option th:value="${category.name}" th:text="${category.name}"></option>
+			    </th:block>
 			</select>
 		</div>
 

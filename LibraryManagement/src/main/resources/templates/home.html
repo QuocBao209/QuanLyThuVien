@@ -7,18 +7,55 @@
 	<title>Thư viện điện tử</title>
 </head>
 <body>
-	<nav class="nav-menu">
-		<ul>
-			<li><a href="/home">Trang chủ</a></li>
-			<li><a href="/documents">Tài liệu</a></li>
-			<li><a href="/introduction">Giới thiệu</a></li>
-		</ul>
-	</nav>
-	
-	<nav class="nav-right">
-			<form action="/login" method="post">
-				<button class="login-btn">Đăng nhập</button>
-			</form>
+	<header>
+		<div class="logo">📚 Thư viện Điện tử</div>
+		<nav>
+			<ul>
+				<li><a href="/home">Trang chủ</a></li>
+				<li><a href="#">Thư viện</a></li>
+				<li><a href="#">Tài khoản</a></li>
+				<li><a href="#">Liên hệ</a></li>
+			</ul>
 		</nav>
+		<input type="text" placeholder="Tìm kiếm sách ..." class="search-bar">
+	</header>
+	
+	<!-- Hero Section -->
+	<section class="hero">
+		<h1>Chào mừng đến với Thư viện Điện Tử</h1>
+		<p>Khám phá hàng ngàn đầu sách miễn phí mọi lúc, mọi nơi</p>
+		<button class="cta-btn">Tìm kiếm sách ngay</button>
+	</section>
+	
+	<!-- Danh mục sách nổi bật -->
+    <section class="book-categories">
+        <h2>Sách Nổi Bật</h2>
+        <div class="book-list">
+		    <form action="/home/book-selection" method="post">
+		        <button class="book" name="bookType" value="Sách mới nhất">📖 Sách mới nhất</button>
+		    </form>
+		    <form action="/book-selection" method="post">
+		        <button class="book" name="bookType" value="Sách đọc nhiều">📘 Sách đọc nhiều</button>
+		    </form>
+		    <form action="/home/book-filter" method="post">
+		        <button class="book" name="bookType" value="Sách theo chủ đề">📙 Sách theo chủ đề</button>
+		    </form>
+		</div>
+    </section>
+
+    <!-- Góc độc giả -->
+    <section class="reader-corner">
+        <h2>Góc độc giả</h2>
+        <p>Cảm nhận và đánh giá từ độc giả</p>
+        <div class="reviews">
+            <div class="review">“Thư viện tuyệt vời, nhiều sách hay!” - An</div>
+            <div class="review">“Tìm kiếm dễ dàng, giao diện đẹp!” - Bình</div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Thư viện Điện tử. Mọi quyền được bảo lưu.</p>
+    </footer>
 </body>
 </html>

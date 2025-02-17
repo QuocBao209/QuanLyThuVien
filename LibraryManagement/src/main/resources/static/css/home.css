@@ -1,0 +1,164 @@
+/* Reset CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f8f9fa;
+    color: #333;
+    text-align: center;
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #007bff;
+    color: white;
+    padding: 15px 50px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+.search-bar {
+    padding: 8px;
+    width: 250px;
+    border: none;
+    border-radius: 4px;
+}
+
+/* Hero Section */
+.hero {
+    background: url('/images/library-banner.jpg') no-repeat center center/cover;
+    color: white;
+    padding: 60px 20px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5); /* Thêm hiệu ứng đổ bóng cho chữ */
+}
+
+.hero h1 {
+    font-size: 48px; /* Tăng kích thước chữ */
+    margin-bottom: 20px;
+    font-weight: bold; /* Làm đậm chữ */
+    text-transform: uppercase; /* Chữ in hoa để tạo sự nổi bật */
+    letter-spacing: 2px; /* Tăng khoảng cách giữa các chữ */
+    text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.7); /* Thêm hiệu ứng đổ bóng cho h1 */
+}
+
+.hero p {
+    font-size: 22px; /* Tăng kích thước chữ */
+    margin-bottom: 20px;
+    line-height: 1.6; /* Tăng khoảng cách dòng để dễ đọc */
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5); /* Thêm hiệu ứng đổ bóng cho p */
+    font-style: italic; /* Thêm kiểu chữ nghiêng cho phần mô tả */
+}
+
+
+.cta-btn {
+    padding: 12px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.cta-btn:hover {
+    background-color: #218838;
+}
+
+/* Book Categories */
+.book-categories {
+    margin: 40px 0;
+}
+
+.book-categories h2 {
+	margin-bottom: 20px;
+}
+
+.book-list {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.book-list {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.book {
+    background-color: #fff;
+    padding: 15px 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-size: 18px;
+    cursor: pointer; /* Con trỏ chuột kiểu pointer */
+    border: none; /* Loại bỏ viền mặc định của button */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Thêm hiệu ứng chuyển động và đổ bóng */
+}
+
+.book:hover {
+    transform: translateY(-5px); /* Hiệu ứng nhấc lên khi hover */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Thêm bóng đổ khi hover */
+}
+
+.book:active {
+    transform: translateY(2px); /* Hiệu ứng khi nhấn */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Giảm bóng đổ khi nhấn */
+}
+
+/* Reader Corner */
+.reader-corner {
+    background-color: #f1f1f1;
+    padding: 30px 20px;
+}
+
+.reviews {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.review {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Footer */
+footer {
+    background-color: #007bff;
+    color: white;
+    padding: 15px;
+    margin-top: 20px;
+}

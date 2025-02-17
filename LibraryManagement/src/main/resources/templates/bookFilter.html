@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="/css/bookFilter.css">
+	<title>Sách theo chủ đề</title>
+</head>
+<body>
+	<header>
+		<div class="logo">📚 Thư viện Điện tử</div>
+		<nav>
+			<ul>
+				<li><a href="/home">Trang chủ</a></li>
+				<li><a href="#">Thư viện</a></li>
+				<li><a href="#">Tài khoản</a></li>
+				<li><a href="#">Liên hệ</a></li>
+			</ul>
+		</nav>
+		<input type="text" placeholder="Tìm kiếm sách ..." class="search-bar">
+	</header>
+	
+	<div id="main-container">
+		<!-- Filter -->
+		<div id="filter-container">
+			<h3>Lọc theo chủ đề</h3>
+			<form action="/book-filter" method="get">
+				<div class="category-filter">
+					<div th:each="category : ${categories}">
+						<label>
+							<input type="checkbox" name="categoryName" value="[[${category.categoryName}]]">
+							[[${category.categoryName}]]
+						</label>
+					</div>
+				</div>
+				
+				<h3>Chọn khoảng thời gian</h3>
+				<div class="time-filter">
+					<label>
+	                    <input type="checkbox" name="timeFilter" value="1999-2004">
+	                    1999 - 2004
+	                </label>
+	                <label>
+	                    <input type="checkbox" name="timeFilter" value="2005-2010">
+	                    2005 - 2010
+	                </label>
+	                <label>
+	                    <input type="checkbox" name="timeFilter" value="2011-2015">
+	                    2011 - 2015
+	                </label>
+	                <label>
+	                    <input type="checkbox" name="timeFilter" value="2016-2020">
+	                    2016 - 2020
+	                </label>
+	                
+	                <button type="submit">Tìm kiếm</button>
+				</div>
+			</form>
+		</div>
+		
+		<!-- Khu vực hiện kết quả -->
+    <div class="book-results">
+        <h2>Danh sách sách tìm được</h2>
+        <div class="book-list" th:if="${books != null}">
+            <div th:each="book : ${books}" class="book-item">
+                <img th:src="@{${book.imageUrl}}" alt="book image">
+                <h4 th:text="${book.title}"></h4>
+                <p th:text="${book.author}"></p>
+            </div>
+        </div>
+    </div>
+		
+	</div>
+</body>
+</html>

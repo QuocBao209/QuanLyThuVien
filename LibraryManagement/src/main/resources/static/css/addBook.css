@@ -57,12 +57,23 @@ input:focus {
 }
 
 select {
-	width: 103%;
-	padding: 8px;
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	font-size: 14px;
-	font-family: sans-serif;
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    font-family: sans-serif;
+    background-color: #ffffff; /* Màu nền trắng cho select box */
+    transition: border-color 0.3s ease; /* Thêm hiệu ứng cho viền */
+}
+
+select:focus {
+    border-color: #28a745; /* Màu viền khi focus vào */
+    outline: none; /* Loại bỏ outline mặc định */
+}
+
+.input-group select {
+    font-family: Arial, sans-serif; /* Đảm bảo font trong select giống với input */
 }
 
 button {
