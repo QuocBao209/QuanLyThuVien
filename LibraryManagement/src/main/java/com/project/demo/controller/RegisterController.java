@@ -23,7 +23,7 @@ public class RegisterController {
 
     // Xử lý đăng ký người dùng mới
     @PostMapping("/register")
-    public ModelAndView processRegister(@RequestParam("cmnd") String cmnd,
+    public ModelAndView processRegister(@RequestParam("cmt") String cmt,
                                         @RequestParam("name") String name,
                                         @RequestParam("phone") String phone,
                                         @RequestParam("email") String email,
@@ -40,7 +40,7 @@ public class RegisterController {
 
         // Tạo đối tượng User từ form đăng ký
         User newUser = new User();
-        newUser.setCmt(cmnd);
+        newUser.setCmt(cmt);
         newUser.setName(name);
         newUser.setPhone(phone);
         newUser.setEmail(email);

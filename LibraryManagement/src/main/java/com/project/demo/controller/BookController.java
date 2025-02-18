@@ -31,7 +31,9 @@ public class BookController {
     // Hiển thị form thêm sách
     @GetMapping("/add-book")
     public ModelAndView getAddBookForm() {
-        return new ModelAndView("addBook");
+        ModelAndView modelAndView = new ModelAndView("addBook");
+        modelAndView.addObject("categories", categoryService.getCategories());
+        return modelAndView;
     }
 
     // Xử lý lưu sách vào database
@@ -139,54 +141,6 @@ public class BookController {
         }
         modelAndView.addObject("categories", categoryService.getCategories());
         modelAndView.addObject("book", book);
-        return modelAndView;
-    }
-
-    // Xử lý cập nhật sách
-    @PostMapping("/update-book/{id}")
-    public ModelAndView updateBook(@PathVariable Long id,
-                                   @RequestParam("book-title") String bookName,
-                                   @RequestParam("amount") int amount,
-                                   @RequestParam("category") String categoryName,
-                                   @RequestParam("publish-year") int publishYear,
-                                   @RequestParam("book-image") MultipartFile bookImage) {
-        ModelAndView modelAndView = new ModelAndView();
-
-        try {
-            Book book = bookService.getBookById(id);
-            if (book == null) {
-                modelAndView.addObject("message", "Không tìm thấy sách!");
-                modelAndView.setViewName("error");
-                return modelAndView;
-            }
-
-            book.setBookName(bookName);
-            book.setAmount(amount);
-            book.setPublishYear(publishYear);
-            book.setCategory(categoryService.findByName(categoryName));
-
-            if (!bookImage.isEmpty()) {
-                if (!ALLOWED_IMAGE_TYPES.contains(bookImage.getContentType())) {
-                    modelAndView.addObject("message", "Chỉ chấp nhận ảnh JPG, PNG hoặc GIF!");
-                    modelAndView.setViewName("error");
-                    return modelAndView;
-                }
-                if (bookImage.getSize() > MAX_IMAGE_SIZE) {
-                    modelAndView.addObject("message", "Ảnh quá lớn! Kích thước tối đa là 5MB.");
-                    modelAndView.setViewName("error");
-                    return modelAndView;
-                }
-                book.setBookImage(bookImage.getBytes());
-            }
-
-            bookService.saveBook(book);
-            modelAndView.addObject("message", "Cập nhật sách thành công!");
-            modelAndView.setViewName("redirect:/admin/book-list");
-        } catch (IOException e) {
-            modelAndView.addObject("message", "Lỗi khi xử lý ảnh!");
-            modelAndView.setViewName("error");
-        }
-
         return modelAndView;
     }
 

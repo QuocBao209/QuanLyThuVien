@@ -26,6 +26,10 @@ public class CategoryService {
         }
     }
 
+    public List<Category> getAllCategories() {
+        return categoryRepository.findAll();
+    }
+
     // Tìm thể loại theo tên
     public Category findByName(String categoryName) {
         return categoryRepository.findByCategoryName(categoryName).orElse(null); // Đổi thành findByCategoryName

@@ -86,12 +86,13 @@
 		<div class="input-group">
 			<label for="category">Thể loại:</label>
 			<select id="category" name="category" required>
-			    <option value="">Chọn thể loại</option>
-			    <th:block th:each="category : ${categories}">
-			        <option th:value="${category.name}" th:text="${category.name}"></option>
-			    </th:block>
+				<option value="">Chọn thể loại</option>
+				<th:block th:each="category : ${categories}">
+					<option th:value="${category.getCategoryId()}" th:text="${category.getCategoryName()}"></option>
+				</th:block>
 			</select>
 		</div>
+
 
 		<div class="input-group">
 			<label for="publish-year">Năm Phát Hành:</label>

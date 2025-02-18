@@ -43,14 +43,14 @@ public class UserService {
     }
 
     // Xác thực người dùng khi đăng nhập
-    public boolean authenticateUser(String username, String password) {
+    public Optional<User> authenticateUser(String username, String password) {
         Optional<User> userOptional = userRepository.findByUsername(username);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            return BCryptUtil.checkPassword(password, user.getPassword());
+        if (userOptional.isPresent() && BCryptUtil.checkPassword(password, userOptional.get().getPassword())) {
+            return userOptional; // Trả về user nếu xác thực thành công
         }
-        return false;
+        return Optional.empty(); // Trả về Optional rỗng nếu không hợp lệ
     }
+
     // Kiểm tra xem username đã tồn tại trong database chưa
     public boolean existsByUsername(String username) {
         return userRepository.findByUsername(username).isPresent();
