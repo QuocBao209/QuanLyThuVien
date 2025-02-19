@@ -31,13 +31,13 @@
     <section class="book-categories">
         <h2>Sách Nổi Bật</h2>
         <div class="book-list">
-		    <form action="/home/book-selection" method="post">
+		    <form action="/home/book-selection" method="get">
 		        <button class="book" name="bookType" value="Sách mới nhất">📖 Sách mới nhất</button>
 		    </form>
-		    <form action="/book-selection" method="post">
+		    <form action="/home/book-selection" method="get">
 		        <button class="book" name="bookType" value="Sách đọc nhiều">📘 Sách đọc nhiều</button>
 		    </form>
-		    <form action="/home/book-filter" method="post">
+		    <form action="/home/book-filter" method="get">
 		        <button class="book" name="bookType" value="Sách theo chủ đề">📙 Sách theo chủ đề</button>
 		    </form>
 		</div>
