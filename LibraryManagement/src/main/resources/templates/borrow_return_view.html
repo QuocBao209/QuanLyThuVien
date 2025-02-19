@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/borrow_return_view.css">
+    <title>Danh sách mượn/trả</title>
+</head>
+<body>
+	<!-- Sidebar -->
+	<div class="sidebar">
+	<h2>Menu</h2>
+	<div>
+		<input type="checkbox" id="menu1" class="toggle-menu">
+		<label for="menu1" class="menu-item">
+			<i class="fa-solid fa-book"></i> Quản lý sách
+			<i class="fa-solid fa-chevron-down ms-auto"></i>
+		</label>
+		
+		<div class="submenu">
+
+			<a href="/admin/book-list">Danh sách thư viện</a>
+			<a href="/admin/add-book">Thêm sách</a>
+		</div>
+	</div>
+	
+	<div>
+    	<input type="checkbox" id="menu2" class="toggle-menu">
+    	<label for="menu2" class="menu-item">
+        	<i class="fa-solid fa-user"></i> Quản lý độc giả
+        	<i class="fa-solid fa-chevron-down"></i>
+    	</label>
+    	<div class="submenu">
+	        <a href="/admin/user-list">Danh sách độc giả</a>
+	        <a href="/admin/list">Danh sách vi phạm</a>
+    	</div>
+	</div>
+	
+	<div>
+		<input type="checkbox" id="menu3" class="toggle-menu">
+		<label for="menu3" class="menu-item">
+			<i class="fa-solid fa-employee"></i> Quản lý dịch vụ
+			<i class="fa-solid fa-chevron-down"></i>
+		</label>
+		<div class="submenu">
+			<a href="/admin/borrow-return-list">Danh sách mượn/trả</a>
+		</div>
+	</div>
+	
+	<div>
+		<input type="checkbox" id="menu4" class="toggle-menu">
+		<label for="menu4" class="menu-item">
+			<i class="fa-solid fa-sign-out-alt"></i> Hỗ trợ
+			<i class="fa-solid fa-chevron-down"></i>
+		</label>
+		<div class="submenu">
+			<a href="/login">Đăng xuất</a>
+			<a href="/forget-password">Đổi mật khẩu</a>
+		</div>
+	</div>
+	
+	<!--return_borrow_view -->
+	<div class="container">
+		<h2>Thông tin mượn/trả sách</h2>
+		
+		<table>
+			<thead>
+				<tr>
+					<th>Mã sách</th>
+					<th>Ảnh</th>
+					<th>Tên sách</th>
+					<th>Tác giả</th>
+					<th>Ngày mượn</th>
+					<th>Ngày trả</th>
+					<th>Trạng thái</th>
+					<th>Gia hạn</th>
+				</tr>
+			</thead>
+			<tbody>
+			    <tr th:each="borrow : ${borrowReturnList}">
+			        <td th:text="${borrow.book.bookId}"></td>
+			        <td>
+			            <img th:src="@{'data:image/jpeg;base64,' + ${#strings.encodeBase64(borrow.book.bookImage)}}" 
+			                 alt="Ảnh sách" width="50">
+			        </td>
+			        <td th:text="${borrow.book.bookName}"></td>
+			        <td th:text="${borrow.book.author.authorName}"></td>
+			        <td th:text="${#dates.format(borrow.startDate, 'dd/MM/yyyy')}"></td>
+			        <td th:text="${#dates.format(borrow.endDate, 'dd/MM/yyyy')}"></td>
+			        <td>
+			            <span th:text="${borrow.status}" 
+			                  th:classappend="${borrow.status == 'Quá hạn' ? 'text-danger' : (borrow.status == 'Sắp hết hạn' ? 'text-warning' : 'text-success')}">
+			            </span>
+			        </td>
+			        <td>
+			            <a th:if="${borrow.renewCount < 3}" th:href="@{/admin/renew-book/{id}(id=${borrow.id})}" class="btn-renew">Gia hạn</a>
+			            <span th:unless="${borrow.renewCount < 3}" class="text-muted">Không thể gia hạn</span>
+			        </td>
+			    </tr>
+			</tbody>
+
+		</table>
+	</div>
+</div>
+</body>
+</html>

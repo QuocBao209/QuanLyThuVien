@@ -29,7 +29,7 @@ public class BookController {
     private static final long MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
 
     // Hiển thị form thêm sách
-    @GetMapping("/add-book")
+    @PostMapping("/add-book")
     public ModelAndView getAddBookForm() {
         ModelAndView modelAndView = new ModelAndView("addBook");
         modelAndView.addObject("categories", categoryService.getCategories());
@@ -122,7 +122,7 @@ public class BookController {
     }
 
     // Hiển thị danh sách sách
-    @GetMapping("/book-list")
+    @PostMapping("/book-list")
     public ModelAndView showBookListForm() {
         ModelAndView modelAndView = new ModelAndView("bookList");
         modelAndView.addObject("books", bookService.getBooks());
@@ -130,7 +130,7 @@ public class BookController {
     }
 
     // Hiển thị form chỉnh sửa sách
-    @GetMapping("/edit-book/{id}")
+    @PostMapping("/edit-book/{id}")
     public ModelAndView showBookEditForm(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("bookEdit");
         Book book = bookService.getBookById(id);
@@ -145,7 +145,7 @@ public class BookController {
     }
 
     // Xóa sách
-    @GetMapping("/delete-book/{id}")
+    @PostMapping("/delete-book/{id}")
     public ModelAndView deleteBook(@PathVariable Long id) {
         bookService.deleteBook(id);
         return new ModelAndView("redirect:/admin/book-list");
