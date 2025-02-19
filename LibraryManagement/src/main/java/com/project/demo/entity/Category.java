@@ -11,9 +11,9 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long categoryId;
 
+    @Column(columnDefinition = "NVARCHAR(255)")
     private String categoryName;
 
-    // Optional: Override toString() for better output representation
     @Override
     public String toString() {
         return categoryName;

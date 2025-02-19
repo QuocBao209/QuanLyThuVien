@@ -11,12 +11,14 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bookId;
 
+    @Column(columnDefinition = "NVARCHAR(255)")
     private String bookName;
+
     private int amount;
     private int publishYear;
 
     @Lob
-    private byte[] bookImage; // Lưu ảnh trực tiếp
+    private byte[] bookImage;
 
     @ManyToOne
     @JoinColumn(name = "author_id")

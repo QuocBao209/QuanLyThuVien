@@ -56,4 +56,15 @@ public class UserService {
         return userRepository.findByUsername(username).isPresent();
     }
 
+    public boolean resetPassword(String email, String newPassword) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setPassword(BCryptUtil.hashPassword(newPassword));
+            userRepository.save(user);
+            return true;
+        }
+        return false;
+    }
+
 }

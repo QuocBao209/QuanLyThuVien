@@ -11,9 +11,9 @@ public class Author {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long authorId;
 
+    @Column(columnDefinition = "NVARCHAR(255)")
     private String authorName;
 
-    // Optional: Override toString() for better output representation
     @Override
     public String toString() {
         return authorName;
