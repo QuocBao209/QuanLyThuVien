@@ -47,11 +47,44 @@
 				<span th:text="*{phone}"></span>
 			</div>
 			
-			<button class="changed-btn">Thay đổi thông tin</button>
+			<button class="changed-btn" onclick="openPopup()">Thay đổi thông tin</button>
 			
 			<form action="/user-logout" method="get">
 				<button class="logout-btn">Đăng xuất</button>
 			</form>
+			
+			<!-- Form chỉnh sửa khi bấm "Thay đổi thông tin" -->
+			<div id="editAccountPopup" class="popup-overlay">
+			    <div class="popup-content">
+			        <h2>Chỉnh sửa thông tin</h2>
+			        
+			        <form action="/home/edit-account" method="post">
+			            <div class="info-group">
+			                <label>Tên tài khoản:</label>
+			                <input type="text" name="username" th:value="*{username}">
+			            </div>
+			            
+			            <div class="info-group">
+			                <label>Họ và tên:</label>
+			                <input type="text" name="name" th:value="*{name}">
+			            </div>
+			            
+			            <div class="info-group">
+			                <label>Email:</label>
+			                <input type="text" name="email" th:value="*{email}">
+			            </div>
+			            
+			            <div class="info-group">
+			                <label>Số điện thoại:</label>
+			                <input type="text" name="phone" th:value="*{phone}">
+			            </div>
+			            
+			            <button type="submit" class="save-btn">Lưu</button>
+			            <button type="button" class="close-btn" onclick="closePopup()">Hủy</button>
+			        </form>
+			    </div>
+			</div>
+
 		</section>
 		
 		<!-- Bảng lịch sử mượn / trả bên phải -->
@@ -97,4 +130,24 @@
 		</section>
 	</div>
 </body>
+
+<!-- Chức năng pop-up giao diện (không vi phạm nguyên tắc mô hình MVC -->
+<script type="text/javascript">
+	function openPopup() {
+	    document.getElementById("editAccountPopup").style.display = "flex";
+	}
+	
+	function closePopup() {
+	    document.getElementById("editAccountPopup").style.display = "none";
+	}
+	
+	// Đảm bảo popup không tự hiển thị khi tải trang
+	document.addEventListener("DOMContentLoaded", function () {
+	    document.getElementById("editAccountPopup").style.display = "none";
+	});
+
+</script>
 </html>
+
+
+
