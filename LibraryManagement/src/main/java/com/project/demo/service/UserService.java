@@ -66,5 +66,10 @@ public class UserService {
         }
         return false;
     }
+    
+    // Tìm người dùng bằng username
+    public Optional<User> getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
 
 }

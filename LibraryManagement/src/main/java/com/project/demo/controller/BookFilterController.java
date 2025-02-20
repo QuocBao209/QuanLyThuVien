@@ -7,9 +7,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/home")
-public class HomeController {
-	@GetMapping("") 
-	public ModelAndView showHomePage() {
-		return new ModelAndView("home");
+public class BookFilterController {
+	@GetMapping("/book-filter")
+	public ModelAndView bookFilterPage() {
+		return new ModelAndView("bookFilter");
 	}
 }

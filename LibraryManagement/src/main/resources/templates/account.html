@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="/css/account.css">
+	<title>Thông tin cá nhân</title>
+</head>
+<body>
+	<!-- Menu Bar -->
+	<header>
+		<div class="logo">📚 Thư viện Điện tử</div>
+		<nav>
+			<ul>
+				<li><a href="/home">Trang chủ</a></li>
+				<li><a href="#">Thư viện</a></li>
+				<li><a href="/home/account">Tài khoản</a></li>
+				<li><a href="#">Liên hệ</a></li>
+			</ul>
+		</nav>
+		<input type="text" placeholder="Tìm kiếm sách ..." class="search-bar">
+	</header>
+	
+	<!-- Form chức thông tin tài khoản và lịch sử mượn / trả -->
+	<div class="main-container">
+		<!-- Form thông tin bên trái -->
+		<section class="left-container" th:object="${user}"> 	<!-- object : chọn user hiện tại -->
+			<h2>Thông tin cá nhân</h2>
+			
+			<div class="info-group">
+				<label>Tên tài khoản:</label>
+				<span th:text="*{username}"></span>
+			</div>
+			
+			<div class="info-group">
+				<label>Họ và tên:</label>
+				<span th:text="*{name}"></span>
+			</div>
+			
+			<div class="info-group">
+				<label>Email:</label>
+				<span th:text="*{email}"></span>
+			</div>
+			
+			<div class="info-group">
+				<label>Số điện thoại:</label>
+				<span th:text="*{phone}"></span>
+			</div>
+			
+			<button class="changed-btn">Thay đổi thông tin</button>
+			
+			<form action="/user-logout" method="get">
+				<button class="logout-btn">Đăng xuất</button>
+			</form>
+		</section>
+		
+		<!-- Bảng lịch sử mượn / trả bên phải -->
+		<section class="right-container">
+			<h2>Lịch sử mượn / trả sách</h2>
+			<!-- Bộ lọc -->
+			<form action="/home/account" method="get">
+				<div class="searching-group">
+					<label for="status">Trạng thái:</label>
+					<select class="status" id="status">
+						<option value="all">Tất cả</option>
+						<option value="borrowed">Đang mượn</option>
+						<option value="returned">Đã trả</option>
+						<option value="not-returned">Chưa trả</option>
+					</select>
+				</div>
+				
+				<input type="text" name="search" placeholder="Nhập tên sách tại đây ...">
+				
+				<button type="submit">Tìm kiếm</button>
+			</form>
+			<!-- Bảng lịch sử -->
+			<table>
+			<thead>
+				<tr>
+					<th>Tên sách</th>
+					<th>Tên tác giả</th>
+					<th>Ngày mượn</th>
+					<th>Ngày trả</th>
+					<th>Trạng thái</th>
+				</tr>
+			</thead>
+			<tbody>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+			</tbody>
+			</table>
+		</section>
+	</div>
+</body>
+</html>
