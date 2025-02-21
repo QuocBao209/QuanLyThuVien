@@ -28,9 +28,15 @@
 		</label>
 		
 		<div class="submenu">
-
-			<a href="/admin/book-list">Danh sách thư viện</a>
-			<a href="/admin/add-book">Thêm sách</a>
+			<!-- Nút xem ds thư viện -->
+			<form action="/admin/book-list" method="post">
+				<button type="submit" class="menu-btn">Danh sách thư viện</button>
+			</form>
+			
+			<!-- Nút thêm sách -->
+			<form action="/admin/add-book" method="post">
+				<button type="submit" class="menu-btn">Thêm sách</button>
+			</form>
 		</div>
 	</div>
 	
@@ -41,8 +47,15 @@
         	<i class="fa-solid fa-chevron-down"></i>
     	</label>
     	<div class="submenu">
-	        <a href="/admin/user-list">Danh sách độc giả</a>
-	        <a href="#">Danh sách vi phạm</a>
+    		<!-- Nút ds độc giả -->
+	        <form action="/admin/user-list" method="post">
+				<button type="submit" class="menu-btn">Danh sách độc giả</button>
+			</form>
+			
+			<!-- Nút ds vi phạm -->
+			<form action="/admin/block-list" method="post">
+				<button type="submit" class="menu-btn">Danh sách vi phạm</button>
+			</form>
     	</div>
 	</div>
 	
@@ -53,9 +66,9 @@
 			<i class="fa-solid fa-chevron-down"></i>
 		</label>
 		<div class="submenu">
-			<a href="#">Sách đang mượn</a>
-			<a href="#">Sách đã trả</a>
-			<a href="#">Quá hạn</a>
+			<form action="/admin/borrow-return-list" method="post">
+				<button type="submit" class="menu-btn">Danh sách mượn/trả</button>
+			</form>
 		</div>
 	</div>
 	
@@ -67,10 +80,9 @@
 		</label>
 		<div class="submenu">
 			<a href="/logout">Đăng xuất</a>
-			<a href="#">Đổi mật khẩu</a>
+			<a href="/forget-password">Đổi mật khẩu</a>
 		</div>
 	</div>
-	
 </div>
 
 <!-- Form sửa thông tin sách -->

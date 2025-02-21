@@ -57,17 +57,41 @@ body {
     margin-top: 5px;
 }
 
-.submenu a {
+.menu-btn{
     display: block;
-    color: #BDC3C7; 
-    text-decoration: none;
-    padding: 8px 0;
+    width: 100%;  /* Chiều dài bằng menu-item */
+    background: #2C3E50; /* Cùng màu với sidebar */
+    color: white;
+    text-align: left;
+    padding: 12px;
+    margin-bottom: 5px;
+    border: none; /* Ẩn viền button */
+    text-decoration: none; /* Xóa gạch chân ở thẻ a */
     font-size: 14px;
-    transition: color 0.3s;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
 }
 
-.submenu a:hover {
-    color: #1ABC9C;
+.submenu a {
+	display: block;
+    width: 90%;  /* Chiều dài bằng menu-item */
+    background: #2C3E50; /* Cùng màu với sidebar */
+    color: white;
+    text-align: left;
+    padding: 12px;
+    margin-bottom: 5px;
+    border: none; /* Ẩn viền button */
+    text-decoration: none; /* Xóa gạch chân ở thẻ a */
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.menu-btn:hover, .submenu a:hover {
+    background: #1ABC9C; /* Hiệu ứng hover */
+    color: white;
 }
 
 .toggle-menu {
