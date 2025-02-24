@@ -45,7 +45,7 @@ public class RegisterController {
         newUser.setUsername(username);
         newUser.setPassword(password);
         newUser.setRole("USER");
-        newUser.setStatus("Hoạt động"); // Gán trạng thái là "Hoạt động"
+        newUser.setStatus("Hoạt động");
 
         userService.registerUser(newUser);
 

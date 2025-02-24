@@ -19,7 +19,7 @@ public class UserController {
 	@PostMapping("/user-list")
 	public ModelAndView userListForm() {
 		ModelAndView modelAndView = new ModelAndView("userList");
-        modelAndView.addObject("users", userService.getUsers());
+        modelAndView.addObject("users", userService.getAllUsersWithRoleUser());
         return modelAndView;
 	}
 }

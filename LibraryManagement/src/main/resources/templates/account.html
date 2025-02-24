@@ -20,35 +20,35 @@
 		</nav>
 		<input type="text" placeholder="Tìm kiếm sách ..." class="search-bar">
 	</header>
-	
+
 	<!-- Form chức thông tin tài khoản và lịch sử mượn / trả -->
 	<div class="main-container">
 		<!-- Form thông tin bên trái -->
 		<section class="left-container" th:object="${user}"> 	<!-- object : chọn user hiện tại -->
 			<h2>Thông tin cá nhân</h2>
-			
+
 			<div class="info-group">
 				<label>Tên tài khoản:</label>
 				<span th:text="*{username}"></span>
 			</div>
-			
+
 			<div class="info-group">
 				<label>Họ và tên:</label>
 				<span th:text="*{name}"></span>
 			</div>
-			
+
 			<div class="info-group">
 				<label>Email:</label>
 				<span th:text="*{email}"></span>
 			</div>
-			
+
 			<div class="info-group">
 				<label>Số điện thoại:</label>
 				<span th:text="*{phone}"></span>
 			</div>
-			
+
 			<button class="changed-btn" onclick="openPopup()">Thay đổi thông tin</button>
-			
+
 			<form action="/user-logout" method="get">
 				<button class="logout-btn">Đăng xuất</button>
 			</form>
@@ -86,7 +86,7 @@
 			</div>
 
 		</section>
-		
+
 		<!-- Bảng lịch sử mượn / trả bên phải -->
 		<section class="right-container">
 			<h2>Lịch sử mượn / trả sách</h2>
@@ -101,9 +101,9 @@
 						<option value="not-returned">Chưa trả</option>
 					</select>
 				</div>
-				
+
 				<input type="text" name="search" placeholder="Nhập tên sách tại đây ...">
-				
+
 				<button type="submit">Tìm kiếm</button>
 			</form>
 			<!-- Bảng lịch sử -->

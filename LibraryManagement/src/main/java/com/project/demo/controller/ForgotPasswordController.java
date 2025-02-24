@@ -34,7 +34,7 @@ public class ForgotPasswordController {
             emailService.sendEmail(email, "Mã OTP đặt lại mật khẩu", "Mã OTP của bạn: " + otp);
             model.addAttribute("message", "Mã OTP đã được gửi đến email của bạn!");
             model.addAttribute("email", email);
-            model.addAttribute("otpSent", true); // Đánh dấu đã gửi OTP
+            model.addAttribute("otpSent", true);
         } catch (MessagingException e) {
             model.addAttribute("error", "Gửi email thất bại!");
         }

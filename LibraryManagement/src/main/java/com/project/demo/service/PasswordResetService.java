@@ -19,7 +19,7 @@ public class PasswordResetService {
     }
 
     public void saveOTP(String email, String otp) {
-        passwordResetRepository.deleteByEmail(email); // Xóa OTP cũ nếu có
+        passwordResetRepository.deleteByEmail(email);
 
         PasswordReset passwordReset = new PasswordReset();
         passwordReset.setEmail(email);
