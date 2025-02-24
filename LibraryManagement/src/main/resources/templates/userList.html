@@ -90,8 +90,7 @@
 					<th>ID</th>
                     <th>Họ Tên</th>
                     <th>Email</th>
-                    <th>Ngày Đăng Ký</th>
-                    <th>Sách Đang Mượn</th>
+                    <th>Số điện thoại</th>
                     <th>Trạng Thái</th>
                     <th>Hành Động</th>
 				</tr>
@@ -102,11 +101,7 @@
 					<td th:text=${user.name}></td>
 					<td th:text=${user.email}></td>
 					<td th:text=${user.phone}></td>
-					<td>
-						<span th:class="${reader.status == 'active' ? 'status-active' : 'status-inactive'}"
-                              th:text="${reader.status == 'active' ? 'Hoạt động' : 'Khóa'}">
-                        </span>
-					</td>
+					<td th:text=${user.status}></td>
 					<td>
                         <button class="edit-btn">✏️</button>
                         <button class="delete-btn">🗑️</button>

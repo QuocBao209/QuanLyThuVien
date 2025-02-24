@@ -31,14 +31,12 @@ public class RegisterController {
                                         @RequestParam("password") String password) {
         ModelAndView modelAndView = new ModelAndView();
 
-        // Kiểm tra xem username đã tồn tại chưa
         if (userService.existsByUsername(username)) {
             modelAndView.addObject("error", "Username already exists. Please choose another.");
             modelAndView.setViewName("register");
             return modelAndView;
         }
 
-        // Tạo đối tượng User từ form đăng ký
         User newUser = new User();
         newUser.setCmt(cmt);
         newUser.setName(name);
@@ -47,6 +45,7 @@ public class RegisterController {
         newUser.setUsername(username);
         newUser.setPassword(password);
         newUser.setRole("USER");
+        newUser.setStatus("Hoạt động"); // Gán trạng thái là "Hoạt động"
 
         userService.registerUser(newUser);
 

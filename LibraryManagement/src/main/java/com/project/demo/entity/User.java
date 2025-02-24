@@ -18,6 +18,8 @@ public class User {
     private String email;
     private String username;
     private String password;
+
+    @Column(columnDefinition = "NVARCHAR(255)")
     private String status;
     private String role;
 }

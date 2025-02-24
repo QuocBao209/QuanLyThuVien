@@ -19,6 +19,9 @@ public class UserService {
     public List<User> getUsers() {
         return userRepository.findAll();
     }
+    
+    // Lấy danh sách độc giả (role : user)
+   
 
     // Lưu tất cả người dùng vào cơ sở dữ liệu
     public void transferData(List<User> users) {
