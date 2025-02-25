@@ -101,11 +101,16 @@
 					<td th:text=${user.name}></td>
 					<td th:text=${user.email}></td>
 					<td th:text=${user.phone}></td>
-					<td th:text=${user.status}></td>
 					<td>
-                        <button class="edit-btn">✏️</button>
-                        <button class="delete-btn">🗑️</button>
-                    </td>
+						<form action="@{/admin/update-status}" method="post">
+							<input type="hidden" name="userId" th:value="${user.userId" />
+							<select name="status">
+								<option value="Hoạt động" th:selected="${user.status == 'Hoạt động'}">Hoạt động</option>
+								<option value="Khóa" th:selected="${user.status == 'Khóa'}">Khóa</option>
+							</select>
+							<button type="submit" class="edit-btn">✏️</button>
+						</form>
+					</td>
 				</tr>
 			</tbody>
 		</table>

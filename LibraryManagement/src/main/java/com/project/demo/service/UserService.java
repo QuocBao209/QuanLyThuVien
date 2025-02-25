@@ -76,5 +76,15 @@ public class UserService {
     public Optional<User> getUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+    
+    // Cập nhật status độc giả
+    public void updateStatus(Long userId, String newStatus) {
+    	Optional<User> userOptional = userRepository.findById(userId);
+    	if (userOptional.isPresent()) {
+    		User user = userOptional.get();
+    		user.setStatus(newStatus);
+    		userRepository.save(user);
+    	}
+    }
 
 }
