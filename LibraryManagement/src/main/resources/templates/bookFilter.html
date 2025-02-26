@@ -12,7 +12,7 @@
 		<nav>
 			<ul>
 				<li><a href="/home">Trang chủ</a></li>
-				<li><a href="#">Thư viện</a></li>
+				<li><a href="/home/libraryPage">Thư viện</a></li>
 				<li><a href="/home/account">Tài khoản</a></li>
 				<li><a href="#">Liên hệ</a></li>
 			</ul>
@@ -59,16 +59,16 @@
 		</div>
 		
 		<!-- Khu vực hiện kết quả -->
-    <div class="book-results">
-        <h2>Danh sách sách tìm được</h2>
-        <div class="book-list" th:if="${books != null}">
-            <div th:each="book : ${books}" class="book-item">
-                <img th:src="@{${book.imageUrl}}" alt="book image">
-                <h4 th:text="${book.title}"></h4>
-                <p th:text="${book.author}"></p>
-            </div>
-        </div>
-    </div>
+	    <div class="book-results">
+	        <h2>Danh sách sách tìm được</h2>
+	        <div class="book-list" th:if="${books != null}">
+	            <div th:each="book : ${books}" class="book-item">
+	                <img th:src="@{${book.imageUrl}}" alt="book image">
+	                <h4 th:text="${book.title}"></h4>
+	                <p th:text="${book.author}"></p>
+	            </div>
+	        </div>
+	    </div>
 		
 	</div>
 </body>

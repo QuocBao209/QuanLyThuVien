@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="/css/libraryPage.css">
+	<title>Thư viện</title>
+</head>
+<body>
+	<header>
+		<div class="logo">📚 Thư viện Điện tử</div>
+		<nav>
+			<ul>
+				<li><a href="/home">Trang chủ</a></li>
+				<li><a href="/home/library">Thư viện</a></li>
+				<li><a href="/home/account">Tài khoản</a></li>
+				<li><a href="#">Liên hệ</a></li>
+			</ul>
+		</nav>
+		<input type="text" placeholder="Tìm kiếm sách ..." class="search-bar">
+	</header>
+	
+	<!-- Danh sách sách -->
+	<div class="book-container">
+		<h2>Thư viện</h2>
+		<div class="book-list" th:if="${books != null and not #lists.isEmpty(books)}">
+			<div th:each="book : ${books}" class="book-item">
+				<img alt="book image" src="@{${book.imageUrl}}">
+				<h4 th:text="${book.bookName}"></h4>
+				<p th:text="'Tác giả: ' + ${book.author}"></p>
+				<p th:text="'Thể loại: ' + ${book.category}"></p>
+				<p th:text="'Năm xuất bản: ' + ${book.publishYear}"></p>
+				
+				<div class="button-container">
+					<form action="book-info" method="get">
+						<button type="submit">Xem sách</button>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<div th:if="${books == null or #lists.isEmpty(books)}">
+			<p>Không có sách nào trong thư viện</p>
+		</div>
+	</div>
+</body>
+</html>

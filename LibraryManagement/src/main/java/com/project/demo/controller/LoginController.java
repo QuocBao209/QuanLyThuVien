@@ -41,17 +41,44 @@ public class LoginController {
 			session.setAttribute("user", username);			// Lưu username vào session
 			session.setAttribute("role", user.getRole());	// Lưu role vào session
 			
-			if ("ADMIN".equalsIgnoreCase(user.getRole())) {
-				modelAndView.setViewName("admin");
-			} else {
-				modelAndView.setViewName("home");
-			}
+			
+			modelAndView.setViewName("home");
+			
 		} else {
 			modelAndView.addObject("error", "Invalid username or password");
 			modelAndView.setViewName("login");
 		}
 
 		return modelAndView;
+	}
+	
+	@GetMapping("/admin-login")
+	public ModelAndView showAdminLoginPage() {
+		return new ModelAndView("adminLogin");
+	}
+	
+	// Đăng nhập trang Admin
+	@PostMapping("/admin-login")
+	public ModelAndView loginAdminPage(@RequestParam("username") String username,
+									   @RequestParam("password") String password,
+									   HttpSession session) {
+			ModelAndView mav = new ModelAndView();
+			Optional<User> userOptionnal = userService.authenticateUser(username, password);
+			
+			if (userOptionnal.isPresent()) {
+				User user = userOptionnal.get();
+				
+				session.setAttribute("user", username);
+				session.setAttribute("role", user.getRole());
+				
+				if ("ADMIN".equalsIgnoreCase(user.getRole())) {
+					mav.setViewName("admin");
+				} else {
+					mav.addObject("error", "Invalid username or password");
+					mav.setViewName("adminLogin");
+				}
+			}
+			return mav;
 	}
 	
 	// Đăng xuất tài khoản user, xóa session
