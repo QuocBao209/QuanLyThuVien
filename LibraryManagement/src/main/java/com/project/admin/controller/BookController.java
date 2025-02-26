@@ -139,7 +139,7 @@ public class BookController {
     }
 
     // Hiển thị form chỉnh sửa sách
-    @PostMapping("/edit-book/{id}")
+    @GetMapping("/edit-book/{id}")
     public ModelAndView showBookEditForm(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("bookEdit");
         Book book = bookService.getBookById(id);
@@ -154,10 +154,10 @@ public class BookController {
     }
 
     // Xóa sách
-    @PostMapping("/delete-book/{id}")
+    @GetMapping("/delete-book/{id}")
     public ModelAndView deleteBook(@PathVariable Long id) {
         bookService.deleteBook(id);
         System.out.println("Redirecting to /admin/book-list");
-        return new ModelAndView("redirect:/admin/book-list");
+        return new ModelAndView("forward:/admin/book-list");
     }
 }
