@@ -102,10 +102,14 @@
 				<td th:text="${book.author.authorName}"></td>
 				<td th:text="${book.category.categoryName}"></td>
 				<td>
-					<a th:href="@{/admin/edit-book/{id}(id=${book.bookId})}" class="btn btn-edit">Sửa</a>
+					<form th:action="@{/admin/edit-book/{id}(id=${book.bookId})}" method="post">
+					    	<button type="submit" class="btn btn-edit">Sửa</button>
+					</form>
 				</td> 
 				<td>
-					<a th:href="@{/admin/delete-book/{id}(id=${book.bookId})}" class="btn btn-remove">Xóa</a>
+					<form th:action="@{/admin/delete-book/{id}(id=${book.bookId})}" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sách này?');">
+					    	<button type="submit" class="btn btn-remove">Xóa</button>
+					</form>
 				</td> 
 			</tr>
 			</tbody>
