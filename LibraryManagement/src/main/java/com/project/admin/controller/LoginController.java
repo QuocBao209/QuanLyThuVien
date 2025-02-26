@@ -1,10 +1,10 @@
-package com.project.demo.controller;
+package com.project.admin.controller;
 
-import com.project.demo.service.UserService;
+import com.project.admin.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 
-import com.project.demo.entity.User;
+import com.project.admin.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,9 +26,13 @@ public class LoginController {
 		return new ModelAndView("login");
 	}
 	
+	@GetMapping("/admin-login")
+	public ModelAndView showAdminLoginPage() {
+		return new ModelAndView("adminLogin");
+	}
 	
 	// Đăng nhập trang Admin
-	@PostMapping("/login")
+	@PostMapping("/admin-login")
 	public ModelAndView loginAdminPage(@RequestParam("username") String username,
 									   @RequestParam("password") String password,
 									   HttpSession session) {
@@ -41,7 +45,12 @@ public class LoginController {
 				session.setAttribute("user", username);
 				session.setAttribute("role", user.getRole());
 				
-				mav.setViewName("home");
+				if ("ADMIN".equalsIgnoreCase(user.getRole())) {
+					mav.setViewName("admin");
+				} else {
+					mav.addObject("error", "Invalid username or password");
+					mav.setViewName("adminLogin");
+				}
 			}
 			return mav;
 	}

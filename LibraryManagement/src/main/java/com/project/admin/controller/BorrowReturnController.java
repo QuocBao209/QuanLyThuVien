@@ -6,8 +6,8 @@
 //import org.springframework.web.bind.annotation.GetMapping;
 //import org.springframework.web.bind.annotation.RequestMapping;
 //
-//import com.project.demo.entity.Borrow_Return;
-//import com.project.demo.service.Borrow_ReturnService;
+//import com.project.admin.entity.Borrow_Return;
+//import com.project.admin.service.Borrow_ReturnService;
 //
 //import ch.qos.logback.core.model.Model;
 //
