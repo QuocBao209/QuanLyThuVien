@@ -33,6 +33,7 @@ public class BookController {
     public ModelAndView getAddBookForm() {
         ModelAndView modelAndView = new ModelAndView("addBook");
         modelAndView.addObject("categories", categoryService.getCategories());
+        modelAndView.addObject("book", new Book());
         return modelAndView;
     }
 
@@ -45,7 +46,7 @@ public class BookController {
                                        @RequestParam("category") String categoryName,
                                        @RequestParam("publish-year") int publishYear,
                                        @RequestParam("book-image") MultipartFile bookImage) {
-        ModelAndView modelAndView = new ModelAndView();
+        ModelAndView modelAndView = new ModelAndView("addBook");
 
         try {
             // Kiểm tra định dạng ảnh
@@ -150,4 +151,21 @@ public class BookController {
         bookService.deleteBook(id);
         return new ModelAndView("redirect:/admin/book-list");
     }
+    
+    // Thêm thể loại mới
+    @PostMapping("/add-category")
+    public ModelAndView addCategory(@RequestParam("new-category") String categoryName) {
+        Category existingCategory = categoryService.findByName(categoryName);
+        if (existingCategory != null) {
+            return new ModelAndView("redirect:/admin/add-book").addObject("message", "Thể loại đã tồn tại!");
+        }
+
+        // Thêm thể loại mới
+        Category newCategory = new Category();
+        newCategory.setCategoryName(categoryName);
+        categoryService.saveCategory(newCategory);
+
+        return new ModelAndView("redirect:/admin/add-book").addObject("message", "Thêm thể loại thành công!");
+    }
+
 }
