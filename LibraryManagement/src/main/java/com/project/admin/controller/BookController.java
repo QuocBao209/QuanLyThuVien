@@ -33,7 +33,6 @@ public class BookController {
     public ModelAndView getAddBookForm() {
         ModelAndView modelAndView = new ModelAndView("addBook");
         modelAndView.addObject("categories", categoryService.getCategories());
-        modelAndView.addObject("book", new Book());
         return modelAndView;
     }
 
@@ -46,7 +45,7 @@ public class BookController {
                                        @RequestParam("category") String categoryName,
                                        @RequestParam("publish-year") int publishYear,
                                        @RequestParam("book-image") MultipartFile bookImage) {
-        ModelAndView modelAndView = new ModelAndView("addBook");
+        ModelAndView modelAndView = new ModelAndView();
 
         try {
             // Kiểm tra định dạng ảnh
@@ -62,6 +61,10 @@ public class BookController {
                     return modelAndView;
                 }
             }
+            
+            System.out.println("Loại ảnh: " + bookImage.getContentType());
+            System.out.println("Kích thước ảnh: " + bookImage.getSize());
+
 
             // Kiểm tra hoặc thêm mới Author
             Optional<Author> optionalAuthor = Optional.ofNullable(authorService.findByName(authorName));
@@ -105,6 +108,11 @@ public class BookController {
             book.setPublishYear(publishYear);
             book.setAuthor(author);
             book.setCategory(category);
+            
+            System.out.println("Tên sách: " + bookName);
+            System.out.println("Tên tác giả: " + authorName);
+            System.out.println("Thể loại: " + categoryName);
+
 
             // Lưu ảnh nếu có
             if (!bookImage.isEmpty()) {
@@ -113,7 +121,7 @@ public class BookController {
 
             bookService.saveBook(book);
             modelAndView.addObject("message", "Thao tác thành công!");
-            modelAndView.setViewName("redirect:/admin/book-list");
+            modelAndView.setViewName("forward:/admin/book-list");
         } catch (IOException e) {
             modelAndView.addObject("message", "Lỗi khi xử lý ảnh!");
             modelAndView.setViewName("error");
@@ -149,23 +157,7 @@ public class BookController {
     @PostMapping("/delete-book/{id}")
     public ModelAndView deleteBook(@PathVariable Long id) {
         bookService.deleteBook(id);
+        System.out.println("Redirecting to /admin/book-list");
         return new ModelAndView("redirect:/admin/book-list");
     }
-    
-    // Thêm thể loại mới
-    @PostMapping("/add-category")
-    public ModelAndView addCategory(@RequestParam("new-category") String categoryName) {
-        Category existingCategory = categoryService.findByName(categoryName);
-        if (existingCategory != null) {
-            return new ModelAndView("redirect:/admin/add-book").addObject("message", "Thể loại đã tồn tại!");
-        }
-
-        // Thêm thể loại mới
-        Category newCategory = new Category();
-        newCategory.setCategoryName(categoryName);
-        categoryService.saveCategory(newCategory);
-
-        return new ModelAndView("redirect:/admin/add-book").addObject("message", "Thêm thể loại thành công!");
-    }
-
 }

@@ -96,19 +96,12 @@
 
 		<div class="input-group">
 		    <label for="category">Thể loại:</label>
-		    <select id="category" name="category" required onchange="toggleCategoryInput()">
+		    <select id="category" name="category" required>
 		        <option value="">Chọn thể loại</option>
 		        <th:block th:each="category : ${categories}">
-		            <option th:value="${category.getCategoryId()}" th:text="${category.getCategoryName()}"></option>
+		            <option th:value="${category.getCategoryName()}" th:text="${category.getCategoryName()}"></option>
 		        </th:block>
-		        <option value="other">Khác</option>
 		    </select>
-		</div>
-		
-		<!-- Ô input nhập thể loại mới -->
-		<div class="input-group">
-		    <label for="other-category">Nhập thể loại khác:</label>
-		    <input type="text" id="other-category" name="other-category" placeholder="Nhập thể loại" disabled>
 		</div>
 	
 		<div class="input-group">
@@ -130,18 +123,6 @@
 
 </body>
 
-<script>
-    function toggleCategoryInput() {
-        var categorySelect = document.getElementById("category");
-        var otherCategoryInput = document.getElementById("other-category");
-
-        if (categorySelect.value === "other") {
-        	otherCategoryInput.disabled = false;	// Khi chọn "Khác", ô nhập thể loại mới được mở
-        } else {
-        	otherCategoryInput.disabled = true;		// Khi chọn thể loại có sẵn, ô input đóng lại
-        }
-    }
-</script>
 </html>
 
 
