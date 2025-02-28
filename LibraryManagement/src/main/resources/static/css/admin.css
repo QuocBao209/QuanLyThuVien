@@ -1,13 +1,7 @@
-body {
-    font-family: 'Poppins', sans-serif; 
-    margin: 0;
-    padding: 0;
-    background: #ffffff; 
-    color: white;
-}
+
 
 .sidebar {
-    width: 250px;
+    width: 300px;
     background: #2C3E50; 
     padding: 15px;
     height: 100vh;

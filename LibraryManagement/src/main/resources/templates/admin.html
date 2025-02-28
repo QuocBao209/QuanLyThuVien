@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
     <title>Dashboard</title>
 </head>
 <body>
-<div class="sidebar">
+<div class="sidebar" th:fragment="sidebar">
 	<h2>Menu</h2>
 	<div>
 		<input type="checkbox" id="menu1" class="toggle-menu">
@@ -23,7 +23,7 @@
 			</form>
 			
 			<!-- Nút thêm sách -->
-			<form action="/admin/add-book" method="post">
+			<form action="/admin/add-book-option" method="post">
 				<button type="submit" class="menu-btn">Thêm sách</button>
 			</form>
 		</div>

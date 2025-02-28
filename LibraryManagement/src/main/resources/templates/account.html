@@ -3,23 +3,13 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="/css/account.css">
+	<link rel="stylesheet" th:href="@{/css/account.css}">
+	<link rel="stylesheet" th:href="@{/css/home.css}">
 	<title>Thông tin cá nhân</title>
 </head>
 <body>
 	<!-- Menu Bar -->
-	<header>
-		<div class="logo">📚 Thư viện Điện tử</div>
-		<nav>
-			<ul>
-				<li><a href="/home">Trang chủ</a></li>
-				<li><a href="#">Thư viện</a></li>
-				<li><a href="/home/account">Tài khoản</a></li>
-				<li><a href="#">Liên hệ</a></li>
-			</ul>
-		</nav>
-		<input type="text" placeholder="Tìm kiếm sách ..." class="search-bar">
-	</header>
+	<div th:replace="home :: header"></div>
 
 	<!-- Form chức thông tin tài khoản và lịch sử mượn / trả -->
 	<div class="main-container">

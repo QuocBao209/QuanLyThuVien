@@ -35,6 +35,18 @@ public class BookController {
         modelAndView.addObject("categories", categoryService.getCategories());
         return modelAndView;
     }
+    
+    // Hiển thị lựa chọn thêm sách
+    @PostMapping("/add-book-option")
+    public String addBookOption() {
+    	return "addBookOption";
+    }
+    
+    // Hiển thị trang import sách
+    @PostMapping("/import-book") 
+    public String importBookForm() {
+    	return "importBook";
+    }
 
     // Xử lý lưu sách vào database
     @PostMapping("/submit-book-info")

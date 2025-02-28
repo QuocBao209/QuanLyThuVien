@@ -4,75 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Danh sách độc giả</title>
-    <link rel="stylesheet" href="/css/userList.css">
+    <link rel="stylesheet" th:href="@{/css/userList.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
 </head>
 <body>
 	<!-- Sidebar -->
-	<div class="sidebar">
-		<h2>Menu</h2>
-		<div>
-			<input type="checkbox" id="menu1" class="toggle-menu">
-			<label for="menu1" class="menu-item">
-				<i class="fa-solid fa-book"></i> Quản lý sách
-				<i class="fa-solid fa-chevron-down ms-auto"></i>
-			</label>
-			
-			<div class="submenu">
-				<!-- Nút xem ds thư viện -->
-				<form action="/admin/book-list" method="post">
-					<button type="submit" class="menu-btn">Danh sách thư viện</button>
-				</form>
-				
-				<!-- Nút thêm sách -->
-				<form action="/admin/add-book" method="post">
-					<button type="submit" class="menu-btn">Thêm sách</button>
-				</form>
-			</div>
-		</div>
-		
-		<div>
-	    	<input type="checkbox" id="menu2" class="toggle-menu">
-	    	<label for="menu2" class="menu-item">
-	        	<i class="fa-solid fa-user"></i> Quản lý độc giả
-	        	<i class="fa-solid fa-chevron-down"></i>
-	    	</label>
-	    	<div class="submenu">
-	    		<!-- Nút ds độc giả -->
-		        <form action="/admin/user-list" method="post">
-					<button type="submit" class="menu-btn">Danh sách độc giả</button>
-				</form>
-				
-				<!-- Nút ds vi phạm -->
-				<form action="/admin/block-list" method="post">
-					<button type="submit" class="menu-btn">Danh sách vi phạm</button>
-				</form>
-	    	</div>
-		</div>
-		
-		<div>
-			<input type="checkbox" id="menu3" class="toggle-menu">
-			<label for="menu3" class="menu-item">
-				<i class="fa-solid fa-employee"></i> Quản lý dịch vụ
-				<i class="fa-solid fa-chevron-down"></i>
-			</label>
-			<div class="submenu">
-				<form action="/admin/borrow-return-list" method="post">
-					<button type="submit" class="menu-btn">Danh sách mượn/trả</button>
-				</form>
-			</div>
-		</div>
-		
-		<div>
-			<input type="checkbox" id="menu4" class="toggle-menu">
-			<label for="menu4" class="menu-item">
-				<i class="fa-solid fa-sign-out-alt"></i> Hỗ trợ
-				<i class="fa-solid fa-chevron-down"></i>
-			</label>
-			<div class="submenu">
-				<a href="/logout">Đăng xuất</a>
-			</div>
-		</div>	
-	</div>
+	<div th:replace="admin :: sidebar"></div>
 
 	<!-- Danh sách độc giả -->
 	<div class="container">

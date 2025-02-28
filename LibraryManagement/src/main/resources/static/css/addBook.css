@@ -76,111 +76,83 @@ select:focus {
     font-family: Arial, sans-serif; /* Đảm bảo font trong select giống với input */
 }
 
-button {
-	width: 100%;
-	padding: 10px;
-	background-color: #28a745;
-	color: #00ff00;
-	border: none;
-	border-radius: 5px;
-	font-size: 16px;
-	cursor: pointer;
-}
-
-button:hover {
-	background-color: #218838; 
-}
-
-
-/* Sidebar */
-.sidebar {
-    width: 250px;
-    height: 100vh;
-    background: #2C3E50; 
-    padding: 0 15px 0 15px;
-    height: 100vh;
-    position: fixed;
-    left: 0;
-    top: 0;
-    overflow-y: auto;
-}
-
-.sidebar h2 {
-    text-align: center;
-    color: #ECF0F1; 
-    font-size: 20px;
-    margin-bottom: 15px;
-}
-
-.menu-item {
+/* Nhóm button */
+.button-group {
     display: flex;
-    justify-content: space-between;
+    flex-direction: row;
+    justify-content: center; /* Căn giữa nhóm nút */
+    gap: 15px; /* Khoảng cách giữa các nút */
+    margin-top: 20px;
+}
+
+/* Định dạng chung */
+.button-group button {
+    width: 140px; /* Giảm kích thước */
+    padding: 10px;
+    background-color: #28a745; /* Màu xanh */
+    color: white;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.3s ease-in-out, transform 0.2s;
+}
+
+/* Hiệu ứng hover */
+.button-group button:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+/* Nút "Quay lại" có màu đỏ */
+.button-group .back-btn {
+    background-color: #dc3545;
+}
+
+.button-group .back-btn:hover {
+    background-color: #c82333;
+}
+
+/* Thêm nhiều tác giả */
+.author-field {
+    display: flex;
     align-items: center;
-    background: #34495E;
-    padding: 12px;
-    border-radius: 5px;
-    cursor: pointer;
     margin-bottom: 5px;
+}
+
+.author-field input {
+    flex-grow: 1;
+    padding: 8px;
+    margin-right: 5px;
+}
+
+.remove-author {
+    background: #ff4d4d;
     color: white;
-    font-size: 16px;
-    transition: background 0.3s;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
 }
 
-.menu-item:hover {
-    background: #1ABC9C;
+.remove-author:hover {
+    background: #cc0000;
 }
 
-.menu-item i {
-    margin-right: 10px;
-}
-
-.submenu {
-    display: none;
-    padding-left: 20px;
+#add-author {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 8px;
     margin-top: 5px;
-}
-
-.menu-btn{
-    display: block;
-    width: 100%;  /* Chiều dài bằng menu-item */
-    background: #2C3E50; /* Cùng màu với sidebar */
-    color: white;
-    text-align: left;
-    padding: 12px;
-    margin-bottom: 5px;
-    border: none; /* Ẩn viền button */
-    text-decoration: none; /* Xóa gạch chân ở thẻ a */
-    font-size: 14px;
-    border-radius: 5px;
     cursor: pointer;
-    transition: background 0.3s;
-}
-
-.submenu a {
-	display: block;
-    width: 90%;  /* Chiều dài bằng menu-item */
-    background: #2C3E50; /* Cùng màu với sidebar */
-    color: white;
-    text-align: left;
-    padding: 12px;
-    margin-bottom: 5px;
-    border: none; /* Ẩn viền button */
-    text-decoration: none; /* Xóa gạch chân ở thẻ a */
-    font-size: 14px;
     border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s;
 }
 
-.menu-btn:hover, .submenu a:hover {
-    background: #1ABC9C; /* Hiệu ứng hover */
-    color: white;
+#add-author:hover {
+    background: #0056b3;
 }
 
-.toggle-menu {
-    display: none;
-}
 
-.toggle-menu:checked + .menu-item + .submenu {
-    display: block;
-}
+

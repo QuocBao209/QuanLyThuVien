@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Thêm sách</title>
+	<link rel="stylesheet" th:href="@{/css/admin.css}">
+	<link rel="stylesheet" th:href="@{/css/addBookOption.css}">
+</head>
+<body>
+<body>
+	<!-- Sidebar -->
+	<div th:replace="admin :: sidebar"></div>
+	
+	<div class="option-container">
+		<h2>Chọn lựa chọn Thêm sách</h2>
+		<form action="/admin/add-book" method="post">
+			<button type="submit">Thêm 1 sách</button>
+		</form>
+		
+		<form action="/admin/import-book" method="post">
+			<button type="submit">Thêm nhiều sách</button>
+		</form>
+	</div>
+</body>
+</html>

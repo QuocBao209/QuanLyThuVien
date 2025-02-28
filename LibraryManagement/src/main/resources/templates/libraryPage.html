@@ -3,22 +3,13 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="/css/libraryPage.css">
+	<link rel="stylesheet" th:href="@{/css/libraryPage.css}">
+	<link rel="stylesheet" th:href="@{/css/home.css}">
 	<title>Thư viện</title>
 </head>
 <body>
-	<header>
-		<div class="logo">📚 Thư viện Điện tử</div>
-		<nav>
-			<ul>
-				<li><a href="/home">Trang chủ</a></li>
-				<li><a href="/home/libraryPage">Thư viện</a></li>
-				<li><a href="/home/account">Tài khoản</a></li>
-				<li><a href="#">Liên hệ</a></li>
-			</ul>
-		</nav>
-		<input type="text" placeholder="Tìm kiếm sách ..." class="search-bar">
-	</header>
+	<!-- Header -->
+	<div th:replace="home :: header"></div>
 	
 	<!-- Danh sách sách -->
 	<div class="book-container">

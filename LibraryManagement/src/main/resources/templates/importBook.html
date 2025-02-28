@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Thêm nhiều sách</title>
+	<link rel="stylesheet" th:href="@{/css/importBook.css}">
+	<link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+<body>
+	<!-- Sidebar -->
+	<div th:replace="admin :: sidebar"></div>
+	
+	<div class="main-container">
+	    <div class="button-group">
+	        <form action="/upload" method="post" enctype="multipart/form-data">
+	            <label for="fileInput" class="custom-file-label">📁 Chọn File</label>
+	            <input type="file" id="fileInput" name="file">
+	            <button type="submit">Tải lên</button>
+	        </form>
+	    </div>
+	</div>
+
+</body>
+</html>
