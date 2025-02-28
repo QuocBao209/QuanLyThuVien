@@ -14,6 +14,7 @@ public class DataTransferService {
     @Autowired private AuthorService authorService;
     @Autowired private CategoryService categoryService;
     @Autowired private Borrow_ReturnService borrowReturnService;
+    @Autowired private ImportService importService;
 
     @Transactional
     public void transferData() {
@@ -22,13 +23,18 @@ public class DataTransferService {
         List<Author> authors = authorService.getAuthors();
         List<Category> categories = categoryService.getCategories();
         List<Borrow_Return> borrowReturns = borrowReturnService.getBorrowReturns();
+        List<ImportReceipt> importReceipts = importService.getAllImportReceipts();
+        List<ImportDetail> importDetails = importService.getAllImportDetails();
 
         userService.transferData(users);
         bookService.transferData(books);
         authorService.transferData(authors);
         categoryService.transferData(categories);
         borrowReturnService.transferData(borrowReturns);
+        importService.transferImportReceipts(importReceipts);
+        importService.transferImportDetails(importDetails);
 
         System.out.println("Dữ liệu đã được lấy và lưu lại thành công!");
     }
+
 }

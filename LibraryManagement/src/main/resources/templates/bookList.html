@@ -37,7 +37,13 @@
 				<td th:text="${book.bookId}"></td>
 				<td></td>
 				<td th:text="${book.bookName}"></td>
-				<td th:text="${book.author.authorName}"></td>
+				<td>
+					<span th:each="author, iterStat : ${book.authors}">
+						<span th:text="${author.authorName}"></span>
+						<span th:if="${!iterStat.last}">, </span>
+					</span>
+				</td>
+
 				<td th:text="${book.category.categoryName}"></td>
 				<td>
 					<form th:action="@{/admin/edit-book/{id}(id=${book.bookId})}" method="post">

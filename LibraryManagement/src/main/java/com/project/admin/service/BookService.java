@@ -1,49 +1,61 @@
 package com.project.admin.service;
 
+import com.project.admin.entity.Author;
 import com.project.admin.entity.Book;
 import com.project.admin.entity.Category;
-import com.project.admin.entity.Author;
 import com.project.admin.repository.BookRepository;
 import com.project.admin.repository.CategoryRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class BookService {
     @Autowired
     private BookRepository bookRepository;
+    @Autowired
     private CategoryRepository categoryRepository;
 
+    // Lấy danh sách tất cả sách
     public List<Book> getBooks() {
         return bookRepository.findAll();
     }
 
-    public Optional<Book> findByBookNameAndAuthor(String bookName, Author author) {
-        return bookRepository.findByBookNameAndAuthor(bookName, author);
+    // Tìm sách theo tên và danh sách tác giả
+    public Optional<Book> findByBookNameAndAuthors(String bookName, List<Author> authors) {
+        return bookRepository.findAll().stream()
+                .filter(book -> book.getBookName().equalsIgnoreCase(bookName) &&
+                        new HashSet<>(book.getAuthors()).containsAll(authors))
+                .findFirst();
     }
 
+    // Lấy sách theo ID
     public Book getBookById(Long id) {
         return bookRepository.findById(id).orElse(null);
     }
 
+    // Lưu sách mới hoặc cập nhật sách
     public void saveBook(Book book) {
         bookRepository.save(book);
     }
 
+    // Cập nhật thông tin sách (nếu tồn tại)
     public void updateBook(Book book) {
         if (bookRepository.existsById(book.getBookId())) {
             bookRepository.save(book);
         }
     }
 
+    // Xóa sách theo ID
     public void deleteBook(Long id) {
         bookRepository.deleteById(id);
     }
 
+    // Chuyển dữ liệu danh sách sách vào database
     public void transferData(List<Book> books) {
         bookRepository.saveAll(books);
     }

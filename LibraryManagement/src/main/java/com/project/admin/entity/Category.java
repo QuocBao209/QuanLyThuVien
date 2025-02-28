@@ -3,9 +3,11 @@ package com.project.admin.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "Category")
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@Data
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,6 +15,9 @@ public class Category {
 
     @Column(columnDefinition = "NVARCHAR(255)")
     private String categoryName;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Book> books;
 
     @Override
     public String toString() {

@@ -15,7 +15,9 @@
 <!-- Form thêm sách -->
 <div id="form-container">
 	<h2>Thêm sách</h2>
-	<div class="input-group">
+
+	<form action="/admin/submit-book-info" method="post" enctype="multipart/form-data">
+		<div class="input-group">
 			<label for="book-title">Tên sách:</label>
 			<input type="text" id="book-title" name="book-title" placeholder="Nhập tên sách" required>
 		</div>
@@ -37,10 +39,10 @@
 		</div>
 
 		<div class="input-group">
-		    <label for="category">Thể loại:</label>
-		    <input type="text" id="category" name="category" placeholder="Nhập tên thể loại" required>
+			<label for="category">Thể loại:</label>
+			<input type="text" id="category" name="category" placeholder="Nhập tên thể loại" required>
 		</div>
-	
+
 		<div class="input-group">
 			<label for="publish-year">Năm Phát Hành:</label>
 			<input type="number" id="publish-year" name="publish-year" min="1900" max="2025" step="1" placeholder="Nhập năm phát hành" required>
@@ -51,40 +53,37 @@
 			<label for="book-image">Ảnh bìa sách:</label>
 			<input type="file" id="book-image" name="book-image" accept="image/*" required>
 		</div>
-	
-	<div class="button-group">
-		<!-- Quay lại chọn Option Thêm sách -->
-		<form action="/admin/add-book-option" method="post">
-			<button type="submit">Quay lại</button>
-		</form>
-	
-		<form action="/admin/submit-book-info" method="post" enctype="multipart/form-data">	
+
+		<div class="button-group">
 			<button type="submit">Thêm sách</button>
-		</form>
-	</div>
+		</div>
+	</form>
+
+	<!-- Quay lại -->
+	<form action="/admin/add-book-option" method="post">
+		<button type="submit">Quay lại</button>
+	</form>
 </div>
-</body>
 
 <script>
-document.getElementById('add-author').addEventListener('click', function() {
-	let container = document.getElementById('author-container');
-	let newField = document.createElement('div');
-	newField.classList.add('author-field');
-	newField.innerHTML = `
-        <input type="text" name="authors[]" placeholder="Nhập tên tác giả" required>
+	document.getElementById('add-author').addEventListener('click', function() {
+		let container = document.getElementById('author-container');
+		let newField = document.createElement('div');
+		newField.classList.add('author-field');
+		newField.innerHTML = `
+        <input type="text" name="authors" placeholder="Nhập tên tác giả" required>
         <button type="button" class="remove-author" onclick="removeAuthor(this)">Xóa</button>
     `;
-    container.appendChild(newField);
-})
+		container.appendChild(newField);
+	});
 
-function removeAuthor(button) {
-	let container = document.getElementById('author-container');
-	if (container.children.length > 1) {
-		button.parentElement.remove();
+	function removeAuthor(button) {
+		let container = document.getElementById('author-container');
+		if (container.children.length > 1) {
+			button.parentElement.remove();
+		}
 	}
-}
 </script>
 
+</body>
 </html>
-
-
