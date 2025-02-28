@@ -38,10 +38,17 @@
 		</div>
 		
 		<div class="input-group">
-            <label for="author">Tác giả:</label>
-            <input type="text" id="author" name="author" placeholder="Nhập tên tác giả"
-                   th:value="${book.author.authorName}" required>
-        </div>
+		    <label>Tác giả:</label>
+		    <div id="author-container">
+		        <th:block th:each="author : ${book.authors}">
+		            <div class="author-field">
+		                <input type="text" name="authors[]" th:value="${author.authorName}" required>
+		                <button type="button" class="remove-author" onclick="removeAuthor(this)">Xóa</button>
+		            </div>
+		        </th:block>
+		    </div>
+		    <button type="button" id="add-author">Thêm tác giả</button>
+		</div>
 
         <div class="input-group">
             <label for="amount">Số lượng:</label>
@@ -51,11 +58,8 @@
 
         <div class="input-group">
             <label for="category">Thể loại:</label>
-            <select id="category" name="category">
-                <option th:each="cat:${categories}" th:value="${cat.categoryName}"
-                        th:text="${cat.categoryName}" th:selected="${cat.categoryName == book.category.categoryName}">
-                </option>
-            </select>
+            <input type="text" id="category" name="category" placeholder="Nhập tên thể loại" 
+				th:value="${book.categoryName}" required>
         </div>
 
         <div class="input-group">
@@ -84,4 +88,25 @@
 	</form>
 </div>
 </body>
+
+<script>
+document.getElementById('add-author').addEventListener('click', function() {
+    let container = document.getElementById('author-container');
+    let newField = document.createElement('div');
+    newField.classList.add('author-field');
+    newField.innerHTML = `
+        <input type="text" name="authors[]" placeholder="Nhập tên tác giả" required>
+        <button type="button" class="remove-author" onclick="removeAuthor(this)">Xóa</button>
+    `;
+    container.appendChild(newField);
+});
+
+function removeAuthor(button) {
+    let container = document.getElementById('author-container');
+    if (container.children.length > 1) {
+        button.parentElement.remove();
+    }
+}
+
+</script>
 </html>

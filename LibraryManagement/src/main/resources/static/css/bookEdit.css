@@ -80,4 +80,50 @@ button:hover {
 	background-color: #218838; 
 }
 
+/* Chỉnh sửa phần nhập tác giả */
+.author-field {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.author-field input {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.author-field button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    padding: 8px 10px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.author-field button:hover {
+    background-color: #c82333;
+}
+
+/* Nút thêm tác giả */
+#add-author {
+    width: auto;
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+#add-author:hover {
+    background-color: #0056b3;
+}
+
 
