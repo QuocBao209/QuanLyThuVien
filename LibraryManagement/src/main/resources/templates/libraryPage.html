@@ -16,7 +16,7 @@
 		<h2>Thư viện</h2>
 		<div class="book-list" th:if="${books != null and not #lists.isEmpty(books)}">
 			<div th:each="book : ${books}" class="book-item">
-				<img alt="book image" src="@{${book.imageUrl}}">
+				<img th:if="${book.base64Image != null}" th:src="'data:image/png;base64,' + ${book.base64Image}" alt="Book Image">
 				<h4 th:text="${book.bookName}"></h4>
 				<p th:text="'Tác giả: ' + ${book.author}"></p>
 				<p th:text="'Thể loại: ' + ${book.category}"></p>

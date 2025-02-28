@@ -74,39 +74,72 @@ table th {
     color: white;
 }
 
-/* Trạng thái */
-.status-active {
-    color: green;
+/* Kiểu dáng chung cho select */
+.status-select {
+    padding: 8px 12px;
+    font-size: 14px;
     font-weight: bold;
-}
-
-.status-inactive {
-    color: red;
-    font-weight: bold;
-}
-
-/* Nút chỉnh sửa và xóa */
-.edit-btn, .delete-btn {
     border: none;
-    padding: 5px 10px;
-    cursor: pointer;
     border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    appearance: none; /* Loại bỏ kiểu mặc định của select */
+    text-align: center;
 }
 
-.edit-btn {
-    background-color: #ffc107;
-    color: black;
+/* Màu xanh khi trạng thái là "Hoạt động" */
+.status-active {
+    background-color: #28a745;
+    color: white;
 }
 
-.delete-btn {
+/* Màu đỏ khi trạng thái là "Khóa" */
+.status-locked {
     background-color: #dc3545;
     color: white;
 }
 
-.edit-btn:hover {
-    background-color: #e0a800;
+/* Hover hiệu ứng */
+.status-select:hover {
+    filter: brightness(1.1);
 }
 
-.delete-btn:hover {
-    background-color: #c82333;
+/* Focus hiệu ứng */
+.status-select:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Kiểu dáng option */
+.status-select option {
+    padding: 10px;
+    background-color: white; /* Màu nền mặc định */
+    color: black;
+    font-weight: bold;
+    border-bottom: 1px solid #ccc; /* Đường kẻ phân biệt */
+}
+
+/* Màu của option khi chọn */
+.status-select option[value="Hoạt động"] {
+    background-color: #28a745;
+    color: white;
+}
+
+.status-select option[value="Khóa"] {
+    background-color: #dc3545;
+    color: white;
+}
+
+.edit-btn {
+    padding: 5px 10px;
+    background-color: #d39e00;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.edit-btn:hover {
+    background-color: #218838;
 }
