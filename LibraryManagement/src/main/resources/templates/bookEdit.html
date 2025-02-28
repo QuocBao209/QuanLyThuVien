@@ -29,14 +29,14 @@
 		    <label for="book-id">ID Sách:</label>
 		    <input type="text" id="book-id" name="book-id" th:value="${book.bookId}" readonly>
 		</div>
-		
+
 		<div class="input-group">
 			<label for="book-title">Tên sách:</label>
-			<input type="text" id="book-title" name="book-title" placeholder="Nhập tên sách" 
+			<input type="text" id="book-title" name="book-title" placeholder="Nhập tên sách"
 				th:value="${book.bookName}" required>
-			
+
 		</div>
-		
+
 		<div class="input-group">
 		    <label>Tác giả:</label>
 		    <div id="author-container">
@@ -58,7 +58,7 @@
 
         <div class="input-group">
             <label for="category">Thể loại:</label>
-            <input type="text" id="category" name="category" placeholder="Nhập tên thể loại" 
+            <input type="text" id="category" name="category" placeholder="Nhập tên thể loại"
 				th:value="${book.categoryName}" required>
         </div>
 
@@ -68,14 +68,14 @@
                    th:value="${book.publishYear}" required>
         </div>
 
-        <!-- 
+        <!--
         <div class="input-group">
             <label>Ảnh bìa hiện tại:</label>
             <img th:src="@{/images/{imageName}(imageName=${book.imageName})}" alt="Ảnh bìa sách" width="150px">
         </div>
-        
+
         Sửa xong phần ảnh thì bỏ comment
-         --> 
+         -->
 
         <div class="input-group">
             <label for="book-image">Thay đổi ảnh bìa:</label>
