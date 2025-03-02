@@ -18,5 +18,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findByPublishYear(int publishYear);
 
     @Query("SELECT b.bookImage FROM Book b WHERE b.bookId = :bookId")
-    byte[] findBookImageById(@Param("bookId") Long bookId);
+    String findBookImagePathById(@Param("bookId") Long bookId);
+
 }

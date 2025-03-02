@@ -15,14 +15,14 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bookId;
 
-    @Column(columnDefinition = "NVARCHAR(255)", nullable = false, unique = true)
+    @Column(columnDefinition = "NVARCHAR(255)", nullable = false, unique = false)
     private String bookName;
 
     private int amount;
     private int publishYear;
 
-    @Lob
-    private byte[] bookImage;
+    @Column(columnDefinition = "NVARCHAR(500)")
+    private String bookImage;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
@@ -44,6 +44,7 @@ public class Book {
         authors.add(author);
         author.getBooks().add(this);
     }
+
 
     public void removeAuthor(Author author) {
         authors.remove(author);

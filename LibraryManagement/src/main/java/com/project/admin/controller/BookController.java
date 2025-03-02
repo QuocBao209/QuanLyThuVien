@@ -12,7 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,6 +30,7 @@ public class BookController {
 
     private static final List<String> ALLOWED_IMAGE_TYPES = Arrays.asList("image/jpeg", "image/png", "image/gif");
     private static final long MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
+    private static final String IMAGE_UPLOAD_DIR = "uploads/book_images/";
 
     // Hiển thị trang import sách
     @PostMapping("/import-book")
@@ -112,14 +117,23 @@ public class BookController {
             book.setAuthors(authors);
             book.setCategory(category);
 
-            // Lưu ảnh nếu có
             if (!bookImage.isEmpty()) {
-                book.setBookImage(bookImage.getBytes());
+                File uploadDir = new File(IMAGE_UPLOAD_DIR);
+                if (!uploadDir.exists()) {
+                    uploadDir.mkdirs();
+                }
+
+                String fileName = UUID.randomUUID() + "_" + bookImage.getOriginalFilename();
+                Path filePath = Paths.get(IMAGE_UPLOAD_DIR, fileName);
+                Files.write(filePath, bookImage.getBytes());
+
+                book.setBookImage(filePath.toString());
             }
+
 
             bookService.saveBook(book);
             modelAndView.addObject("message", "Thao tác thành công!");
-            modelAndView.setViewName("redirect:/admin/book-list");
+            modelAndView.setViewName("forward:/admin/book-list");
         } catch (IOException e) {
             modelAndView.addObject("message", "Lỗi khi xử lý ảnh!");
             modelAndView.setViewName("error");
