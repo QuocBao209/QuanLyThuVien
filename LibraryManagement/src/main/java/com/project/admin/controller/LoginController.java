@@ -66,7 +66,7 @@ public class LoginController {
     @GetMapping("logout")
     public String logoutAdmin(HttpSession session) {
     	session.invalidate();
-    	return "redirect:/login";
+    	return "redirect:/admin-login";
     }
 
     // Quên mật khẩu

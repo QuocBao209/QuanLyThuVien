@@ -119,7 +119,7 @@ public class BookController {
 
             bookService.saveBook(book);
             modelAndView.addObject("message", "Thao tác thành công!");
-            modelAndView.setViewName("redirect:/admin/book-list");
+            modelAndView.setViewName("forward:/admin/book-list");
         } catch (IOException e) {
             modelAndView.addObject("message", "Lỗi khi xử lý ảnh!");
             modelAndView.setViewName("error");

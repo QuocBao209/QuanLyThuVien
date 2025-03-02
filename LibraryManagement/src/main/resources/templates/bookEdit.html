@@ -59,7 +59,7 @@
         <div class="input-group">
             <label for="category">Thể loại:</label>
             <input type="text" id="category" name="category" placeholder="Nhập tên thể loại"
-				th:value="${book.categoryName}" required>
+				th:value="${book.category.getCategoryName()}" required>
         </div>
 
         <div class="input-group">
