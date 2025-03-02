@@ -86,5 +86,11 @@ public class UserService {
     		userRepository.save(user);
     	}
     }
-
+    
+ // Xác định role tài khoản theo email (Bảo)
+    public String getUserRole(String email) {
+    	return userRepository.findByEmail(email)
+    			.map(User::getRole)
+    			.orElseThrow(() -> new IllegalArgumentException("Email không tồn tại trong hệ thống!"));		
+    }
 }

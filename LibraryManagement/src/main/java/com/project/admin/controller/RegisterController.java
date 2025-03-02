@@ -14,16 +14,17 @@ public class RegisterController {
 
     @Autowired
     private UserService userService;
-
+    
+    // Xử lý đăng ký Admin 
     // Hiển thị trang đăng ký
-    @GetMapping("/register")
-    public ModelAndView showRegisterPage() {
-        return new ModelAndView("register");
+    @GetMapping("/admin-register")
+    public ModelAndView showAdminRegisterPage() {
+        return new ModelAndView("adminRegister");
     }
 
     // Xử lý đăng ký người dùng mới
-    @PostMapping("/register")
-    public ModelAndView processRegister(@RequestParam("cmt") String cmt,
+    @PostMapping("/admin-register")
+    public ModelAndView processAdminRegister(@RequestParam("cmt") String cmt,
                                         @RequestParam("name") String name,
                                         @RequestParam("phone") String phone,
                                         @RequestParam("email") String email,
@@ -44,12 +45,12 @@ public class RegisterController {
         newUser.setEmail(email);
         newUser.setUsername(username);
         newUser.setPassword(password);
-        newUser.setRole("USER");
+        newUser.setRole("ADMIN");
         newUser.setStatus("Hoạt động");
 
         userService.registerUser(newUser);
 
-        modelAndView.setViewName("login");
+        modelAndView.setViewName("adminLogin");
         modelAndView.addObject("message", "Registration successful. Please login.");
 
         return modelAndView;

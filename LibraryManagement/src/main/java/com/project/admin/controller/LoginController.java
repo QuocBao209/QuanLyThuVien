@@ -19,12 +19,6 @@ public class LoginController {
 
 	@Autowired
 	private UserService userService;
-
-	// Hiển thị trang đăng nhập
-	@GetMapping("/login")
-	public ModelAndView showLoginPage() {
-		return new ModelAndView("login");
-	}
 	
 	@GetMapping("/admin-login")
 	public ModelAndView showAdminLoginPage() {
@@ -45,28 +39,16 @@ public class LoginController {
 				session.setAttribute("user", username);
 				session.setAttribute("role", user.getRole());
 				
-				if ("ADMIN".equalsIgnoreCase(user.getRole())) {
-					mav.setViewName("admin");
-				} else {
-					mav.addObject("error", "Invalid username or password");
-					mav.setViewName("adminLogin");
-				}
+				mav.setViewName("admin");
 			}
 			return mav;
 	}
-	
-	// Đăng xuất tài khoản user, xóa session
-    @GetMapping("/user-logout")
-    public String logout(HttpSession session) {
-        session.invalidate(); // Xóa toàn bộ session
-        return "redirect:/home"; // Quay về trangchủ
-    }
     
     // Đăng xuất tài khoản admin, xóa session
     @GetMapping("logout")
     public String logoutAdmin(HttpSession session) {
     	session.invalidate();
-    	return "redirect:/login";
+    	return "redirect:/admin-login";
     }
 
     // Quên mật khẩu

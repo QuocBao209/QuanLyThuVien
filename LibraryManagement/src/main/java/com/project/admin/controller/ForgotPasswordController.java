@@ -21,9 +21,11 @@ public class ForgotPasswordController {
     private UserService userService;
 
     @GetMapping("/forget-password")
-    public String showForgotPasswordPage() {
+    public String showForgotPasswordPage(@RequestParam(required = false, defaultValue = "user") String from, Model model) {
+        model.addAttribute("from", from); // Đưa `from` vào model để Thymeleaf sử dụng
         return "forgetPassword";
     }
+
 
     @PostMapping("/forget-password")
     public String sendOTP(@RequestParam String email, Model model) {
@@ -49,7 +51,7 @@ public class ForgotPasswordController {
             model.addAttribute("error", "Mã OTP không hợp lệ hoặc đã hết hạn!");
         } else if (userService.resetPassword(email, newPassword)) {
             model.addAttribute("message", "Mật khẩu đã được đặt lại thành công!");
-            return "login";
+            return "adminLogin";
         } else {
             model.addAttribute("error", "Email không tồn tại trong hệ thống!");
         }
@@ -58,4 +60,10 @@ public class ForgotPasswordController {
         model.addAttribute("otpSent", true);
         return "forgetPassword";
     }
+    
+    @GetMapping("/return")
+    public String returnToLogin(@RequestParam(required = false, defaultValue = "user") String from) {
+        return from.equals("admin") ? "redirect:/admin-login" : "redirect:/login";
+    }
+
 }

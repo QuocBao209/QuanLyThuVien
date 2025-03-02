@@ -16,9 +16,15 @@
 		<h2>Thư viện</h2>
 		<div class="book-list" th:if="${books != null and not #lists.isEmpty(books)}">
 			<div th:each="book : ${books}" class="book-item">
-				<img alt="book image" src="@{${book.imageUrl}}">
+				<img th:src="@{/images/book_images/{img}(img=${book.bookImage})}" alt="Ảnh bìa" width="80">
 				<h4 th:text="${book.bookName}"></h4>
-				<p th:text="'Tác giả: ' + ${book.author}"></p>
+				<p>
+				    Tác giả: 
+				    <span th:each="author, iterStat : ${book.authors}">
+				        <span th:text="${author.authorName}"></span>
+				        <span th:if="${!iterStat.last}">, </span>
+				    </span>
+				</p>
 				<p th:text="'Thể loại: ' + ${book.category}"></p>
 				<p th:text="'Năm xuất bản: ' + ${book.publishYear}"></p>
 				

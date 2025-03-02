@@ -48,8 +48,9 @@ public class ForgotPasswordController {
         if (!passwordResetService.verifyOTP(email, otp)) {
             model.addAttribute("error", "Mã OTP không hợp lệ hoặc đã hết hạn!");
         } else if (userService.resetPassword(email, newPassword)) {
+        	String role = userService.getUserRole(email);	// Gọi phương thức check user role (Bảo)
             model.addAttribute("message", "Mật khẩu đã được đặt lại thành công!");
-            return "login";
+            return role.equals("USER") ? "login" : "adminLogin";	// Trả về view login tương ứng với role (Bảo)
         } else {
             model.addAttribute("error", "Email không tồn tại trong hệ thống!");
         }

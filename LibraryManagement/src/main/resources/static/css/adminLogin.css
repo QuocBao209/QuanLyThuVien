@@ -3,6 +3,7 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f4f6f9;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
@@ -21,6 +22,9 @@ form {
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     width: 350px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .input-group {
@@ -35,7 +39,7 @@ label {
 }
 
 input {
-    width: 100%;
+    width: 94%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -45,10 +49,6 @@ input {
 /* Hiển thị mật khẩu */
 .password-container {
     position: relative;
-}
-
-.password-container input {
-    padding-right: 40px;
 }
 
 .password-container i {
