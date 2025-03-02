@@ -3,14 +3,13 @@ package com.project.admin.controller;
 import com.project.admin.entity.Author;
 import com.project.admin.entity.Book;
 import com.project.admin.entity.Category;
-import com.project.admin.service.AuthorService;
-import com.project.admin.service.BookService;
-import com.project.admin.service.CategoryService;
+import com.project.admin.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +26,7 @@ public class BookController {
     @Autowired private BookService bookService;
     @Autowired private AuthorService authorService;
     @Autowired private CategoryService categoryService;
+    @Autowired private ExcelBookService excelBookService;
 
     private static final List<String> ALLOWED_IMAGE_TYPES = Arrays.asList("image/jpeg", "image/png", "image/gif");
     private static final long MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -175,4 +175,28 @@ public class BookController {
         modelAndView.addObject("books", bookService.getBooks());
         return modelAndView;
     }
+    
+    // Xử lý import từ excel
+    @PostMapping("/upload-excel")
+    public ModelAndView uploadExcel(@RequestParam("file") MultipartFile file) {
+        ModelAndView modelAndView = new ModelAndView();
+        if (file.isEmpty()) {
+            modelAndView.addObject("message", "Vui lòng chọn file Excel!");
+            modelAndView.setViewName("error");
+            return modelAndView;
+        }
+
+        try {
+            List<Book> importedBooks = excelBookService.importBooksFromExcel(file);
+            modelAndView.addObject("message", "Thêm thành công " + importedBooks.size() + " sách!");
+            modelAndView.setViewName("forward:/admin/book-list");
+        } catch (IOException e) {
+            modelAndView.addObject("message", "Lỗi khi đọc file Excel!");
+            modelAndView.setViewName("error");
+        }
+
+        return modelAndView;
+    }
+
 }
+

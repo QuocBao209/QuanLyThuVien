@@ -17,9 +17,10 @@
 		<form action="/admin/add-book" method="post">
 			<button type="submit">Thêm 1 sách</button>
 		</form>
-		
-		<form action="/admin/import-book" method="post">
-			<button type="submit">Thêm nhiều sách</button>
+
+		<form action="/admin/upload-excel" method="post" enctype="multipart/form-data">
+			<input type="file" name="file" accept=".xlsx, .xls" required>
+			<button type="submit">Nhập sách từ Excel</button>
 		</form>
 	</div>
 </body>
