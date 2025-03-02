@@ -32,7 +32,7 @@ public class CategoryService {
 
     // Tìm thể loại theo tên
     public Category findByName(String categoryName) {
-        return categoryRepository.findByCategoryName(categoryName).orElse(null); // Đổi thành findByCategoryName
+        return categoryRepository.findByCategoryName(categoryName).orElse(null);
     }
 
     // Lưu thể loại vào cơ sở dữ liệu, tránh trùng lặp
