@@ -26,14 +26,7 @@ public class LibraryController {
 	@GetMapping("/libraryPage")
 	public ModelAndView libraryPage() {
 		ModelAndView mav = new ModelAndView("libraryPage");
-		List<Book> books = bookService.getBooks().stream().map(book -> {
-            // Chuyển đổi ảnh thành Base64
-            if (book.getBookImage() != null) {
-                String base64Image = Base64.getEncoder().encodeToString(book.getBookImage());
-                book.setBase64Image(base64Image); // Gán vào thuộc tính mới
-            }
-            return book;
-        }).collect(Collectors.toList());
+		List<Book> books = bookService.getBooks();
 		mav.addObject("books", books);
 		return mav;
 	}

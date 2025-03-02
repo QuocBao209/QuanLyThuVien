@@ -79,7 +79,7 @@
 
 	function removeAuthor(button) {
 		let container = document.getElementById('author-container');
-		if (container.children.length > 1) {
+		if (container.children.length > 1 && container.children.length <= 5) {
 			button.parentElement.remove();
 		}
 	}
