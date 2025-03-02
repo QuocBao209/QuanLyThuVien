@@ -127,8 +127,10 @@ public class BookController {
                 Path filePath = Paths.get(IMAGE_UPLOAD_DIR, fileName);
                 Files.write(filePath, bookImage.getBytes());
 
-                book.setBookImage(filePath.toString());
+                // Chỉ lưu tên file vào database
+                book.setBookImage(fileName);
             }
+
 
 
             bookService.saveBook(book);
