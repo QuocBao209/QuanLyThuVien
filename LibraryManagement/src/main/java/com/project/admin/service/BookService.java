@@ -49,6 +49,9 @@ public class BookService {
             bookRepository.save(book);
         }
     }
+    public String getBookImagePath(Long bookId) {
+        return bookRepository.findBookImagePathById(bookId);
+    }
 
     // Xóa sách theo ID
     public void deleteBook(Long id) {

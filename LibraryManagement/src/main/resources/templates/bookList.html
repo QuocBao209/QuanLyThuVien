@@ -35,7 +35,9 @@
 			<tbody>
 			<tr th:each="book : ${books}">
 				<td th:text="${book.bookId}"></td>
-				<td></td>
+				<td>
+					<img th:src="@{/images/book_images/{img}(img=${book.bookImage})}" alt="Ảnh bìa" width="80">
+				</td>
 				<td th:text="${book.bookName}"></td>
 				<td>
 					<span th:each="author, iterStat : ${book.authors}">
