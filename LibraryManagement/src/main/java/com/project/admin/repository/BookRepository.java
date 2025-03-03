@@ -11,13 +11,16 @@ import java.util.List;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-    List<Book> findByBookName(String bookName);
+    List<Book> findByBookNameAndIsDeletedFalse(String bookName);
 
-    List<Book> findByCategory(Category category);
+    List<Book> findByCategoryAndIsDeletedFalse(Category category);
 
-    List<Book> findByPublishYear(int publishYear);
+    List<Book> findByPublishYearAndIsDeletedFalse(int publishYear);
 
-    @Query("SELECT b.bookImage FROM Book b WHERE b.bookId = :bookId")
+    List<Book> findByIsDeletedFalse();
+
+    List<Book> findByBookNameContainingIgnoreCaseAndIsDeletedFalseOrAuthors_AuthorNameContainingIgnoreCaseAndIsDeletedFalse(String title, String author);
+
+    @Query("SELECT b.bookImage FROM Book b WHERE b.bookId = :bookId AND b.isDeleted = false")
     String findBookImagePathById(@Param("bookId") Long bookId);
-
 }

@@ -14,13 +14,14 @@
 	<!-- Form danh sách -->
     <div class="container">
         <h2>Danh sách thư viện</h2>
-        
-        <div class="search-container">
-			<input type="text" id="searchInput" placeholder="Nhập tên sách hoặc tên tác giả ...">
-			<button class="search-btn">🔍 Tìm kiếm</button>
-		</div>
-        
-        <table>
+
+		<form th:action="@{/admin/search-book}" method="post">
+			<input type="text" name="keyword" placeholder="Nhập tên sách hoặc tên tác giả ...">
+			<button type="submit" class="search-btn">🔍 Tìm kiếm</button>
+		</form>
+
+
+		<table>
             <thead>
                 <tr>
                     <th>ID</th>

@@ -14,15 +14,20 @@ import com.project.admin.service.UserService;
 public class UserController {
 	
 	@Autowired private UserService userService;
-	
-	// Hiển thị danh sách tài khoản độc giả
 	@PostMapping("/user-list")
-	public ModelAndView userListForm() {
+	public ModelAndView userListForm(@RequestParam(value = "keyword", required = false) String keyword) {
 		ModelAndView modelAndView = new ModelAndView("userList");
-        modelAndView.addObject("users", userService.getAllUsersWithRoleUser());
-        return modelAndView;
+
+		if (keyword == null || keyword.isEmpty()) {
+			modelAndView.addObject("users", userService.getAllUsersWithRoleUser());
+		} else {
+			modelAndView.addObject("users", userService.searchUsers(keyword));
+		}
+
+		return modelAndView;
 	}
-	
+
+
 	// Cập nhật status
 	@PostMapping("/update-status")
 	public String updateStatus(@RequestParam("userId") Long userId, 

@@ -14,12 +14,13 @@
 	<!-- Danh sách độc giả -->
 	<div class="container">
 		<h2>Danh sách độc giả</h2>
-		
-		<div class="search-container">
-			<input type="text" id="searchInput" placeholder="Nhập tên hoặc email độc giả ...">
-			<button class="search-btn">🔍 Tìm kiếm</button>
-		</div>
-		
+
+		<form th:action="@{/admin/user-list}" method="post" class="search-container">
+			<input type="text" name="keyword" placeholder="Nhập tên hoặc email độc giả ..." />
+			<button type="submit" class="search-btn">🔍 Tìm kiếm</button>
+		</form>
+
+
 		<table>
 			<thead>
 				<tr>
