@@ -36,6 +36,7 @@ public class FavoriteListController {
 		String newCart = String.join("-", bookIds);
 		Cookie cookie = new Cookie("cart", newCart);
 		cookie.setPath("/");
+		cookie.setMaxAge(60 * 60 * 24 * 365);
 		response.addCookie(cookie);
 		
 		return "redirect:/home/library-page";
