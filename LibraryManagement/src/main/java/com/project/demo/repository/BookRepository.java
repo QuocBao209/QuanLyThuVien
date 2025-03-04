@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 import java.util.List;
+import java.util.Set;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
 
@@ -32,4 +33,12 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     Page<Book> findBooksByAuthors(@Param("authors") List<Author> authors,
                                   @Param("excludeBookId") Long excludeBookId,
                                   Pageable pageable);
+
+    @Query("SELECT b FROM Book b WHERE b.isDeleted = false " +
+            "AND (:categoryNames IS NULL OR b.category.categoryName IN :categoryNames) " +
+            "AND (:startYear IS NULL OR :endYear IS NULL OR (b.publishYear BETWEEN :startYear AND :endYear))")
+    List<Book> findFilteredBooks(@Param("categoryNames") Set<String> categoryNames,
+                                 @Param("startYear") Integer startYear,
+                                 @Param("endYear") Integer endYear);
+
 }

@@ -74,6 +74,36 @@ public class BookService {
         return bookRepository.findByIsDeletedFalse();
     }
 
+
+    public List<Book> filterBooks(Set<String> categoryNames, Set<String> timeRanges) {
+        List<Book> books = bookRepository.findByIsDeletedFalse();
+
+        // Lọc theo danh mục
+        if (categoryNames != null && !categoryNames.isEmpty()) {
+            books = books.stream()
+                    .filter(book -> categoryNames.contains(book.getCategory().getCategoryName()))
+                    .collect(Collectors.toList());
+        }
+
+        // Lọc theo khoảng thời gian xuất bản
+        if (timeRanges != null && !timeRanges.isEmpty()) {
+            books = books.stream()
+                    .filter(book -> timeRanges.stream().anyMatch(range -> isWithinYearRange(book.getPublishYear(), range)))
+                    .collect(Collectors.toList());
+        }
+
+        return books;
+    }
+
+    private boolean isWithinYearRange(int year, String range) {
+        String[] years = range.split("-");
+        if (years.length == 2) {
+            int startYear = Integer.parseInt(years[0]);
+            int endYear = Integer.parseInt(years[1]);
+            return year >= startYear && year <= endYear;
+        }
+        return false;
+    }
     // Chuyển dữ liệu danh sách sách vào database
     public void transferData(List<Book> books) {
         bookRepository.saveAll(books);
