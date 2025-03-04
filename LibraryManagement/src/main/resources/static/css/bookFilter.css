@@ -44,10 +44,12 @@
     margin-bottom: 20px; /* Add margin to create space */
     border-bottom: 1px solid #ccc; /* Add light border between filters */
     padding-bottom: 20px; /* Add padding below the category filter */
+    text-align: left;
 }
 
 .time-filter {
     margin-top: 20px;
+    text-align: left;
 }
 
 button[type="submit"] {

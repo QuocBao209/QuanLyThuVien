@@ -23,7 +23,7 @@ public class LibraryController {
 	    this.bookService = bookService;
 	 }
 
-	@GetMapping("/libraryPage")
+	@GetMapping("/library-page")
 	public ModelAndView libraryPage() {
 		ModelAndView mav = new ModelAndView("libraryPage");
 		List<Book> books = bookService.getBooks();

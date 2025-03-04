@@ -9,16 +9,17 @@
 .book-container {
     width: 80%;
     margin: 20px auto;
-    background: white;
+    background: #D4E6F1; 
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .book-container h2 {
-	text-align: center;
-	font-size: 30px;
-	padding: 20px;
+    text-align: center;
+    font-size: 30px;
+    padding: 20px;
+    color: #2C3E50; 
 }
 
 /* Căn chỉnh danh sách sách theo hàng ngang */
@@ -35,21 +36,33 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    border: 1px solid #ddd;
+    border: 1px solid #B5D5E3; 
     padding: 15px;
     border-radius: 8px;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
     width: 250px;
     text-align: center;
-    background-color: #fff;
+    background-color: #FFF8F2; 
 }
+
+.book-item h4 {
+    margin: 5px;
+    margin-top: 20px;
+    color: #000000; 
+    font-size: 15px;
+}
+
 
 /* Định dạng ảnh sách */
 .book-item img {
-    width: 100%;
+    width: 62%;
     height: 180px;
     object-fit: cover;
     border-radius: 5px;
+}
+
+.book-item:hover {
+    transform: scale(1.05);
 }
 
 /* Căn chỉnh container chứa button */
@@ -57,12 +70,12 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-top: auto; /* Đẩy button xuống dưới cùng */
+    margin-top: auto; 
 }
 
 /* Định dạng button */
 .book-item button {
-    background-color: #218838;
+    background-color: #008040;
     color: white;
     border: none;
     padding: 10px 15px;
@@ -72,13 +85,11 @@
     transition: 0.3s;
     font-size: 14px;
     font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s;
     width: 100%; 
 }
 
 /* Hiệu ứng hover */
 .book-item button:hover {
+    background-color: #80ff00; 
     transform: scale(1.1);
 }
-

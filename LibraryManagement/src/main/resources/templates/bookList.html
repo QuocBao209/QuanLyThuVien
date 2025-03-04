@@ -34,7 +34,7 @@
                 </tr>
             </thead>
 			<tbody>
-			<tr th:each="book : ${books}">
+			<tr th:each="book : ${books}"> 
 				<td th:text="${book.bookId}"></td>
 				<td>
 					<img th:src="@{/images/book_images/{img}(img=${book.bookImage})}" alt="Ảnh bìa" width="80">

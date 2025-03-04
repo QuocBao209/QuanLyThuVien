@@ -12,13 +12,13 @@
 <form action="/login" method="post">
 	<div class="input-group">
 		<label for="username">Tên tài khoản:</label>
-		<input type="text" id="username" name="username" placeholder="Nhập tên tài khoản" required="required">
+		<input type="text" id="username" name="username" placeholder="Nhập tên tài khoản" required="required" autocomplete="username">
 	</div>
 
 	<div class="input-group">
 	    <label for="password">Mật khẩu:</label>
 	    <div class="password-container">
-	        <input type="password" id="password" name="password" placeholder="Nhập mật khẩu" required>
+	        <input type="password" id="password" name="password" placeholder="Nhập mật khẩu" required autocomplete="current-password">
 	        <i class="fa-solid fa-eye-slash" id="togglePassword"></i>
 	    </div>
 	</div>

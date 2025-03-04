@@ -31,16 +31,18 @@ public class BookController {
     private static final long MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
     private static final String IMAGE_UPLOAD_DIR = "uploads/book_images/";
 
+    // Hiển thị trang import sách
     @PostMapping("/import-book")
     public String importBookForm() {
         return "importBook";
     }
-
+    // Hiển thị lựa chọn thêm sách
     @PostMapping("/add-book-option")
     public String addBookOption() {
         return "addBookOption";
     }
 
+    // Hiển thị form thêm sách
     @PostMapping("/add-book")
     public ModelAndView getAddBookForm() {
         ModelAndView modelAndView = new ModelAndView("addBook");
@@ -49,6 +51,7 @@ public class BookController {
         return modelAndView;
     }
 
+    // Xử lý lưu sách vào database
     @PostMapping("/submit-book-info")
     public ModelAndView submitBookInfo(@RequestParam(value="book-id", required = false) Long bookId,
                                        @RequestParam("authors") List<String> authorNames,
@@ -75,11 +78,13 @@ public class BookController {
                 fileName = bookImage.getOriginalFilename();
             }
 
+            // Xử lý danh sách tác giả
             List<Author> authors = authorNames.stream()
                     .map(name -> authorService.findByName(name)
                             .orElseGet(() -> authorService.saveAuthor(new Author(name))))
                     .collect(Collectors.toList());
 
+            // Kiểm tra hoặc thêm mới Category
             Category category = categoryService.findByName(categoryName);
             if (category == null) {
                 category = categoryService.saveCategory(new Category(categoryName));
@@ -147,6 +152,7 @@ public class BookController {
         return modelAndView;
     }
 
+    // Xóa sách
     @PostMapping("/delete-book/{id}")
     public ModelAndView deleteBook(@PathVariable Long id) {
         bookService.deleteBook(id); // Không xóa hẳn, chỉ đánh dấu là đã xóa
@@ -209,5 +215,4 @@ public class BookController {
         modelAndView.addObject("books", bookService.searchBooks(keyword));
         return modelAndView;
     }
-
 }

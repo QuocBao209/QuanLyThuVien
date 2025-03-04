@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" th:href="@{/css/bookDetail.css}">
+	<link rel="stylesheet" th:href="@{/css/home.css}">
+	<title>Thông tin chi tiết sách</title>
+</head>
+<body>
+	<!-- Header -->
+	<div th:replace="home :: header"></div>
+	
+	<!-- Danh sách sách -->
+	<div class="book-container" th:object="${book}">
+		<div class="image">
+			<img th:src="@{/images/book_images/{img}(img=${book.bookImage})}" alt="Ảnh bìa" src="80">
+			
+			<form th:action="@{/home/library-page/add/{id}(id=${book.bookId})}" method="post" 
+					onsubmit="return confirm('Bạn có muốn mượn sách này? Vui lòng xác nhận ở Danh sách yêu thích (nếu có)');">
+			    <button type="submit">Mượn sách</button>
+			</form>
+		</div>
+		
+		<div class="detail-group">
+			<h4 th:text="${book.bookName}"></h4>
+				<p>
+				    Tác giả: 
+				    <span th:each="author, iterStat : ${book.authors}">
+				        <span th:text="${author.authorName}"></span>
+				        <span th:if="${!iterStat.last}">, </span>
+				    </span>
+				</p>
+				<p th:text="'Thể loại: ' + ${book.category}"></p>
+				<p th:text="'Năm xuất bản: ' + ${book.publishYear}"></p>
+				<p th:text="'Số lượng hiện tại: ' + ${book.amount} + ' quyển'"></p>
+		</div>
+	</div>
+	
+	<!-- Sách đề cử theo tác giả -->
+	<div class="recommend-author">
+		<h3>Sách cùng tác giả</h3>
+		<div class="book-list">
+			<div class="book-item" th:each="recBook : ${recBooks.content}">
+				<img th:src="@{/images/book_images/{img}(img=${recBook.bookImage})}" alt="Ảnh bìa" width="80">
+				<h4 th:text="${recBook.bookName}"></h4>
+				
+				<div class="button-container">
+					<form th:action="@{/home/library-page/book-detail/{id}(id=${recBook.bookId})}" method="get">
+						<button type="submit">Xem sách</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- Phân trang -->
+	<div class="pagination">
+		<button th:if="${recBooks.hasPrevious()}"
+                th:onclick="'changePage(' + ${recBooks.number - 1} + ')'"
+                class="page-btn">Trang trước</button>
+
+        <span>Trang <span th:text="${recBooks.number + 1}"></span> / <span th:text="${recBooks.totalPages}"></span></span>
+
+        <button th:if="${recBooks.hasNext()}"
+                th:onclick="'changePage(' + ${recBooks.number + 1} + ')'"
+                class="page-btn">Trang tiếp</button>
+	</div>
+	
+	<!-- Hiển thị thông báo khi không có sách -->
+	<div class="no-books-message" th:if="${recBooks.totalElements == 0}">
+	    <p>Xin lỗi bạn! Hiện tại chưa có sách hoặc chúng tôi chưa cập nhật. Mong bạn thông cảm!</p>
+	</div>
+	
+	<!-- Footer -->
+	<div th:replace="home :: footer"></div>
+</body>
+
+<script>
+    function changePage(pageNumber) {
+        let url = new URL(window.location.href);
+        url.searchParams.set("page", pageNumber);
+        window.location.href = url.toString();
+    }
+</script>
+
+</html>
