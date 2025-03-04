@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" th:href="@{/css/latestBook.css}">
+	<link rel="stylesheet" th:href="@{/css/home.css}">
+	<title>Sách mới nhất</title>
+</head>
+<body>
+		<!-- Header -->
+	<div th:replace="home :: header"></div>
+	
+	
+		<!-- Danh sách sách -->
+	<div class="book-container">
+		<h2>Danh sách sách mới nhất</h2>
+		<th:block th:if="${#lists.isEmpty(books)}">
+            <p>Chưa có sách nào được thêm.</p>
+        </th:block>
+		<div class="book-list">
+			<div th:each="book : ${books}" class="book-item" onmousemove="showInfo(event, this)" onmouseleave="hideInfo(this)">
+				<img th:alt="${book.bookName}"  th:src="@{/images/book_images/{img}(img=${book.bookImage})}">
+				<h4 th:text="${book.bookName}"></h4>
+				<!-- Tooltip chứa thông tin sách -->
+			    <div class="book-info">
+			        <img th:alt="${book.bookName}" th:src="@{/images/book_images/{img}(img=${book.bookImage})}">
+					<h4 th:text="${book.bookName}"></h4>
+					<p>
+				    Tác giả: 
+				    <span th:each="author, iterStat : ${book.authors}">
+				        <span th:text="${author.authorName}"></span>
+				        <span th:if="${!iterStat.last}">, </span>
+				    </span>
+					</p>
+					<p th:text="'Thể loại: ' + ${book.category}"></p>
+					<p th:text="'Năm xuất bản: ' + ${book.publishYear}"></p>
+			    </div>
+			</div>
+		</div>
+	</div>
+	
+	 <script>
+        function showInfo(event, bookItem) {
+            let infoBox = bookItem.querySelector(".book-info");
+            infoBox.style.display = "block";
+         // Lấy kích thước của tooltip
+            let tooltipWidth = infoBox.offsetWidth;
+            let tooltipHeight = infoBox.offsetHeight;
+
+         // Tính toán vị trí tooltip dựa trên vị trí chuột so với phần tử cha
+            let posX = event.clientX - bookItem.getBoundingClientRect().left + 10;
+            let posY = event.clientY - bookItem.getBoundingClientRect().top + 10;
+
+            // Đảm bảo tooltip không bị tràn khỏi màn hình
+            if (posX + tooltipWidth > window.innerWidth) {
+                posX -= tooltipWidth + 20;
+            }
+            if (posY + tooltipHeight > window.innerHeight) {
+                posY -= tooltipHeight + 20;
+            }
+            infoBox.style.left = posX + "px";
+            infoBox.style.top = posY + "px";
+        }
+
+        function hideInfo(bookItem) {
+            let infoBox = bookItem.querySelector(".book-info");
+            infoBox.style.display = "none";
+        }
+    </script>
+</body>
+</html>

@@ -9,17 +9,23 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import java.util.Optional;
 import java.util.List;
+import java.util.Set;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-    List<Book> findByBookName(String bookName);
+    List<Book> findByBookNameAndIsDeletedFalse(String bookName);
 
-    List<Book> findByCategory(Category category);
+    List<Book> findByCategoryAndIsDeletedFalse(Category category);
 
-    List<Book> findByPublishYear(int publishYear);
+    List<Book> findByPublishYearAndIsDeletedFalse(int publishYear);
 
-    @Query("SELECT b.bookImage FROM Book b WHERE b.bookId = :bookId")
+    List<Book> findByIsDeletedFalse();
+
+    List<Book> findByBookNameContainingIgnoreCaseAndIsDeletedFalseOrAuthors_AuthorNameContainingIgnoreCaseAndIsDeletedFalse(String title, String author);
+
+    @Query("SELECT b.bookImage FROM Book b WHERE b.bookId = :bookId AND b.isDeleted = false")
     String findBookImagePathById(@Param("bookId") Long bookId);
 
     // Phân trang
@@ -27,4 +33,12 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     Page<Book> findBooksByAuthors(@Param("authors") List<Author> authors,
                                   @Param("excludeBookId") Long excludeBookId,
                                   Pageable pageable);
+
+    @Query("SELECT b FROM Book b WHERE b.isDeleted = false " +
+            "AND (:categoryNames IS NULL OR b.category.categoryName IN :categoryNames) " +
+            "AND (:startYear IS NULL OR :endYear IS NULL OR (b.publishYear BETWEEN :startYear AND :endYear))")
+    List<Book> findFilteredBooks(@Param("categoryNames") Set<String> categoryNames,
+                                 @Param("startYear") Integer startYear,
+                                 @Param("endYear") Integer endYear);
+
 }

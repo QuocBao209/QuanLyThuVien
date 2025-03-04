@@ -8,65 +8,64 @@
 	<title>Sách theo chủ đề</title>
 </head>
 <body>
-	
-	<!-- Header -->
-	<div th:replace="home :: header"></div>
-	
-	<div id="main-container">
-		<!-- Filter -->
-		<div id="filter-container">
-			<h3>Lọc theo chủ đề</h3>
-			<form action="/book-filter" method="get">
-				<div class="category-filter">
-					<div th:each="category : ${categories}">
-						<label>
-							<input type="radio" name="categoryName" value="[[${category.categoryName}]]">
-							[[${category.categoryName}]]
-						</label>
-					</div>
-				</div>
-				
-				<h3>Chọn khoảng thời gian</h3>
-				<div class="time-filter">
+<!-- Header -->
+<div th:replace="home :: header"></div>
+
+<div id="main-container">
+	<!-- Filter -->
+	<div id="filter-container">
+		<h3>Lọc theo chủ đề</h3>
+		<form action="/book-filter" method="get">
+			<div class="category-filter">
+				<div th:each="category : ${categories}">
 					<label>
-	                    <input type="radio" name="timeFilter" value="1999-2004">
-	                    1990 - 2004
-	                </label>
-	                <label>
-	                    <input type="radio" name="timeFilter" value="2005-2010">
-	                    2005 - 2010
-	                </label>
-	                <label>
-	                    <input type="radio" name="timeFilter" value="2011-2015">
-	                    2011 - 2015
-	                </label>
-	                <label>
-	                    <input type="radio" name="timeFilter" value="2016-2020">
-	                    2016 - 2020
-	                </label>
-	                <label>
-	                    <input type="radio" name="timeFilter" value="2016-2020">
-	                    2020 - 2025
-	                </label>
-	                
-	                <button type="submit">Tìm kiếm</button>
+						<input type="checkbox" name="categoryName" th:value="${category.categoryName}">
+						<span th:text="${category.categoryName}"></span>
+					</label>
 				</div>
-			</form>
-		</div>
-		
-		<!-- Khu vực hiện kết quả -->
-	    <div class="book-results">
-	        <h2>Danh sách sách tìm được</h2>
-	        <p>Hãy lọc thông tin để hiện thị các sách theo nhu cầu của bạn!</p>
-	        <div class="book-list" th:if="${books != null}">
-	            <div th:each="book : ${books}" class="book-item">
-	                <img th:src="@{${book.imageUrl}}" alt="book image">
-	                <h4 th:text="${book.title}"></h4>
-	                <p th:text="${book.author}"></p>
-	            </div>
-	        </div>
-	    </div>
-		
+			</div>
+
+			<h3>Chọn khoảng thời gian</h3>
+			<div class="time-filter">
+				<label>
+					<input type="radio" name="timeFilter" value="1999-2004">
+					1999 - 2004
+				</label>
+				<label>
+					<input type="radio" name="timeFilter" value="2005-2010">
+					2005 - 2010
+				</label>
+				<label>
+					<input type="radio" name="timeFilter" value="2011-2015">
+					2011 - 2015
+				</label>
+				<label>
+					<input type="radio" name="timeFilter" value="2016-2020">
+					2016 - 2020
+				</label>
+				<label>
+					<input type="radio" name="timeFilter" value="2021-2025">
+					2021 - 2025
+				</label>
+
+				<button type="submit">Tìm kiếm</button>
+			</div>
+		</form>
 	</div>
+
+	<!-- Khu vực hiện kết quả -->
+	<div class="book-results">
+		<h2>Danh sách sách tìm được</h2>
+		<p>Hãy lọc thông tin để hiển thị các sách theo nhu cầu của bạn!</p>
+		<div class="book-list" th:if="${books != null}">
+			<div th:each="book : ${books}" class="book-item">
+				<img th:src="@{${book.imageUrl}}" alt="book image">
+				<h4 th:text="${book.title}"></h4>
+				<p th:text="${book.author}"></p>
+			</div>
+		</div>
+	</div>
+
+</div>
 </body>
 </html>

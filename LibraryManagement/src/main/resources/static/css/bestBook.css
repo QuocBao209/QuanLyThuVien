@@ -1,0 +1,196 @@
+/* General reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #007BFF;
+    color: white;
+    padding: 15px 50px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+.search-bar {
+    padding: 8px;
+    width: 250px;
+    border: none;
+    border-radius: 4px;
+}
+
+/* book-container */
+.book-container {
+    width: 80%;
+    margin: 20px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.book-container h2 {
+	text-align: center;
+	font-size: 30px;
+	padding: 20px;
+}
+
+/* Top books (3 sách đầu tiên) */
+.top-books {
+    display: flex;
+    justify-content: center; /* Căn giữa toàn bộ */
+    align-items: flex-end; /* Căn theo đáy */
+    gap: 10px;
+    position: relative;
+}
+
+/* Tất cả các sách có kích thước bằng nhau */
+.top-books {
+    display: flex;
+    justify-content: center; /* Căn giữa */
+    align-items: flex-end; /* Canh theo đáy */
+    gap: 20px;
+    position: relative;
+}
+
+/* Giữ kích thước đồng đều cho các sách */
+.top-books .book-item {
+    width: 200px;
+    text-align: center;
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+/* Tạo kiểu bậc thang */
+.top-books .book-item:nth-child(1) {
+    transform: translateY(0px); /* Cao nhất */
+    z-index: 2;
+    order:2;
+}
+
+.top-books .book-item:nth-child(2) {
+    transform: translateY(40px); /* Trung bình */
+    z-index: 3;
+    order:1;
+}
+
+.top-books .book-item:nth-child(3) {
+    transform: translateY(80px); /* Thấp nhất */
+    z-index: 1;
+    order:3;
+}
+.top-books .book-item img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+/* Huy chương */
+.medal {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 22px;
+    font-weight: bold;
+    color: #fff;
+    background: gold;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #fff;
+}
+
+/* Huy chương bạc */
+.top-books .book-item:nth-child(2) .medal {
+    background: silver;
+}
+
+/* Huy chương đồng */
+.top-books .book-item:nth-child(3) .medal {
+    background: #cd7f32;
+}
+
+/* Căn chỉnh danh sách sách theo hàng ngang */
+.book-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+/* Định dạng từng mục sách */
+.book-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    width: 200px;
+    text-align: center;
+    background-color: #fff;
+}
+
+/* Định dạng ảnh sách */
+.book-item img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+/* Hiệu ứng khi di chuyển chuột vào sách*/
+.book-item:hover {
+    transform: scale(1.05);
+    box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
+}
+/* Info (bảng thông tin) */
+.book-info {
+    position: absolute; /* Đặt tooltip theo vị trí của cha */
+    background: white;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    border-radius: 5px;
+    display: none;
+    z-index: 999;
+    width: 250px;
+}
+

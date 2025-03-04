@@ -1,8 +1,6 @@
 package com.project.admin.service;
 
-import com.project.admin.entity.Author;
-import com.project.admin.entity.Book;
-import com.project.admin.entity.Category;
+import com.project.admin.entity.*;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.*;
 
 @Service
 public class ExcelBookService {
@@ -24,9 +21,13 @@ public class ExcelBookService {
     private CategoryService categoryService;
     @Autowired
     private AuthorService authorService;
+    @Autowired
+    private ImportService importService;
 
     public List<Book> importBooksFromExcel(MultipartFile file) throws IOException {
         List<Book> bookList = new ArrayList<>();
+        List<ImportDetail> importDetails = new ArrayList<>();
+        LocalDate importDate = LocalDate.now();
 
         try (InputStream is = file.getInputStream();
              Workbook workbook = new XSSFWorkbook(is)) {
@@ -47,7 +48,7 @@ public class ExcelBookService {
                 // Tìm hoặc thêm category
                 Category category = categoryService.findByName(categoryName);
                 if (category == null) {
-                    category = new Category();
+                    category = new Category(categoryName);
                     category.setCategoryName(categoryName);
                     category = categoryService.saveCategory(category);
                 }
@@ -63,8 +64,13 @@ public class ExcelBookService {
                 }
 
                 // Kiểm tra sách đã tồn tại chưa
-                if (bookService.findByBookNameAndAuthors(bookName, authors).isEmpty()) {
-                    Book book = new Book();
+                Optional<Book> existingBook = bookService.findByBookNameAndAuthors(bookName, authors);
+                Book book;
+                if (existingBook.isPresent()) {
+                    book = existingBook.get();
+                    book.setAmount(book.getAmount() + amount);
+                } else {
+                    book = new Book();
                     book.setBookName(bookName);
                     book.setAmount(amount);
                     book.setPublishYear(publishYear);
@@ -75,14 +81,23 @@ public class ExcelBookService {
                     if (!imageFileName.isEmpty()) {
                         book.setBookImage(imageFileName);
                     }
-
                     bookList.add(book);
                 }
+
+                // Tạo ImportDetail
+                ImportDetail importDetail = new ImportDetail();
+                importDetail.setBook(book);
+                importDetail.setAmount(amount);
+                importDetails.add(importDetail);
             }
         }
 
+        // Lưu sách vào database
         bookService.transferData(bookList);
+
+        // Lưu thông tin nhập kho
+        importService.importBooks(importDetails, importDate);
+
         return bookList;
     }
-
 }

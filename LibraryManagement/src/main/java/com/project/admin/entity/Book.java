@@ -51,6 +51,9 @@ public class Book {
         author.getBooks().remove(this);
     }
 
+    @Column(nullable = false)
+    private boolean isDeleted = false;
+
     @Override
     public String toString() {
         return bookName + " by " + (authors != null ? authors.toString() : "Unknown Author");

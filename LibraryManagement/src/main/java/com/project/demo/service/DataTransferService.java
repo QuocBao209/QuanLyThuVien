@@ -23,11 +23,13 @@ public class DataTransferService {
         List<Category> categories = categoryService.getCategories();
         List<Borrow_Return> borrowReturns = borrowReturnService.getBorrowReturns();
 
+
         userService.transferData(users);
         bookService.transferData(books);
         authorService.transferData(authors);
         categoryService.transferData(categories);
         borrowReturnService.transferData(borrowReturns);
+
 
         System.out.println("Dữ liệu đã được lấy và lưu lại thành công!");
     }
