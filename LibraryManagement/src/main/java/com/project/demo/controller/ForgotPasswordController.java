@@ -59,4 +59,11 @@ public class ForgotPasswordController {
         model.addAttribute("otpSent", true);
         return "forgetPassword";
     }
+    
+    @GetMapping("/return")
+    public String returnToLogin(@RequestParam(required = false, defaultValue = "user") String from) {
+        return from.equals("user") ? "redirect:/login" : "redirect:/adminLogin";
+    }
+    
+    
 }

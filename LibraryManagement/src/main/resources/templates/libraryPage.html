@@ -18,18 +18,9 @@
 			<div th:each="book : ${books}" class="book-item">
 				<img th:src="@{/images/book_images/{img}(img=${book.bookImage})}" alt="Ảnh bìa" width="80">
 				<h4 th:text="${book.bookName}"></h4>
-				<p>
-				    Tác giả: 
-				    <span th:each="author, iterStat : ${book.authors}">
-				        <span th:text="${author.authorName}"></span>
-				        <span th:if="${!iterStat.last}">, </span>
-				    </span>
-				</p>
-				<p th:text="'Thể loại: ' + ${book.category}"></p>
-				<p th:text="'Năm xuất bản: ' + ${book.publishYear}"></p>
 				
 				<div class="button-container">
-					<form action="book-info" method="get">
+					<form th:action="@{/home/library-page/book-detail/{id}(id=${book.bookId})}" method="get">
 						<button type="submit">Xem sách</button>
 					</form>
 				</div>

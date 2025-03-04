@@ -2,27 +2,31 @@ package com.project.demo.service;
 
 import com.project.demo.entity.Author;
 import com.project.demo.entity.Book;
-import com.project.demo.entity.Category;
 import com.project.demo.repository.BookRepository;
-import com.project.demo.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class BookService {
     @Autowired
     private BookRepository bookRepository;
-    @Autowired
-    private CategoryRepository categoryRepository;
+
 
     // Lấy danh sách tất cả sách
     public List<Book> getBooks() {
         return bookRepository.findAll();
+    }
+    
+    // Lấy tất cả sách theo ID
+    public List<Book> findAllById(List<Long> ids) {
+        return bookRepository.findAllById(ids);
     }
 
     // Tìm sách theo tên và danh sách tác giả
@@ -61,5 +65,11 @@ public class BookService {
     // Chuyển dữ liệu danh sách sách vào database
     public void transferData(List<Book> books) {
         bookRepository.saveAll(books);
+    }
+    
+    // Xử lý phân trang
+    public Page<Book> getBooksByAuthors(List<Author> authors, Long excludeBookId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return bookRepository.findBooksByAuthors(authors, excludeBookId, pageable);
     }
 }

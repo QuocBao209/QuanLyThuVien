@@ -20,7 +20,7 @@
 				<div class="category-filter">
 					<div th:each="category : ${categories}">
 						<label>
-							<input type="checkbox" name="categoryName" value="[[${category.categoryName}]]">
+							<input type="radio" name="categoryName" value="[[${category.categoryName}]]">
 							[[${category.categoryName}]]
 						</label>
 					</div>
@@ -29,20 +29,24 @@
 				<h3>Chọn khoảng thời gian</h3>
 				<div class="time-filter">
 					<label>
-	                    <input type="checkbox" name="timeFilter" value="1999-2004">
-	                    1999 - 2004
+	                    <input type="radio" name="timeFilter" value="1999-2004">
+	                    1990 - 2004
 	                </label>
 	                <label>
-	                    <input type="checkbox" name="timeFilter" value="2005-2010">
+	                    <input type="radio" name="timeFilter" value="2005-2010">
 	                    2005 - 2010
 	                </label>
 	                <label>
-	                    <input type="checkbox" name="timeFilter" value="2011-2015">
+	                    <input type="radio" name="timeFilter" value="2011-2015">
 	                    2011 - 2015
 	                </label>
 	                <label>
-	                    <input type="checkbox" name="timeFilter" value="2016-2020">
+	                    <input type="radio" name="timeFilter" value="2016-2020">
 	                    2016 - 2020
+	                </label>
+	                <label>
+	                    <input type="radio" name="timeFilter" value="2016-2020">
+	                    2020 - 2025
 	                </label>
 	                
 	                <button type="submit">Tìm kiếm</button>
@@ -53,6 +57,7 @@
 		<!-- Khu vực hiện kết quả -->
 	    <div class="book-results">
 	        <h2>Danh sách sách tìm được</h2>
+	        <p>Hãy lọc thông tin để hiện thị các sách theo nhu cầu của bạn!</p>
 	        <div class="book-list" th:if="${books != null}">
 	            <div th:each="book : ${books}" class="book-item">
 	                <img th:src="@{${book.imageUrl}}" alt="book image">

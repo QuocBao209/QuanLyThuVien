@@ -68,6 +68,10 @@
 <script>
 	document.getElementById('add-author').addEventListener('click', function() {
 		let container = document.getElementById('author-container');
+		if (container.children.length >= 5) {
+			alert("Bạn chỉ có thể thêm tối đa 5 tác giả!");
+			return;
+		}
 		let newField = document.createElement('div');
 		newField.classList.add('author-field');
 		newField.innerHTML = `
@@ -79,7 +83,7 @@
 
 	function removeAuthor(button) {
 		let container = document.getElementById('author-container');
-		if (container.children.length > 1 && container.children.length <= 5) {
+		if (container.children.length > 1) {
 			button.parentElement.remove();
 		}
 	}

@@ -148,7 +148,7 @@ public class BookController {
     @PostMapping("/book-list")
     public ModelAndView showBookListForm() {
         ModelAndView modelAndView = new ModelAndView("bookList");
-        modelAndView.addObject("books", bookService.getBooks());
+        modelAndView.addObject("books", bookService.getBooks()); 
         return modelAndView;
     }
 

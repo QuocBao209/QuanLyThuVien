@@ -1,0 +1,187 @@
+/* General reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Container chính của chi tiết sách */
+.book-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    width: 80%;
+    height: 60vh;
+    margin: 20px auto;
+    background: #D4E6F1; /* Màu nền xanh pastel nhẹ */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Ảnh sách bên trái */
+.image {
+    flex: 1;
+    max-width: 40%; /* Giới hạn tối đa ảnh chiếm 40% */
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.image img {
+    width: 100%;
+    height: auto;
+    max-width: 220px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    margin-top: 20px;
+    object-fit: contain;
+    object-position: center;
+}
+
+/* Nhóm thông tin bên phải */
+.detail-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    margin-left: 10px;
+}
+
+.detail-group h4 {
+    font-size: 24px;
+    color: #2C3E50; 
+    margin-bottom: 10px;
+}
+
+.detail-group p {
+    font-size: 20px;
+    color: #2C3E50; 
+    margin-bottom: 5px;
+}
+
+/* Nút mượn sách */
+form {
+    margin-top: 15px;
+}
+
+button {
+    background-color: #27AE60; 
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+button:hover {
+    transform: scale(1.1);
+}
+
+/* Phân trang - căn giữa và đồng bộ với danh sách */
+.recommend-author {
+    width: 80%;
+    margin: 20px auto;
+    background-color: #D4E6F1; 
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.recommend-author h3 {
+	font-size: 24px;
+	padding-bottom: 10px;
+	color: 2C3E50;
+}
+
+.book-list {
+	display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center; 
+}
+
+/* Định dạng từng mục sách */
+.book-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #B5D5E3; 
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    text-align: center;
+    background-color: #FFF8F2; 
+}
+
+.book-item h4 {
+    margin: 5px;
+    margin-top: 20px;
+    color: #2C3E50; 
+    font-size: 15px;
+}
+
+/* Định dạng ảnh sách */
+.book-item img {
+    width: 62%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.book-item:hover {
+    transform: scale(1.05);
+}
+
+/* Nút trang */
+.recommend-author button {
+    padding: 10px 15px;
+    background-color: #27AE60; 
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.page-btn {
+    padding: 10px 15px;
+    background-color: #6C5B7B; /* Tím pastel */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+/* Số trang */
+.pagination span {
+    font-size: 18px;
+    font-weight: bold;
+    color: #355C7D; /* Đồng bộ màu xanh đậm */
+}
+
+.no-books-message {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: #D35400; /* Cam nhẹ để nổi bật */
+    padding: 15px;
+    background-color: #FEF5E7; /* Nền nhẹ nhàng */
+    border-radius: 8px;
+    margin-top: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
