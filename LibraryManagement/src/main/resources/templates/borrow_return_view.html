@@ -3,56 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý tài khoản</title>
     <link rel="stylesheet" th:href="@{/css/borrow_return_view.css}">
     <link rel="stylesheet" th:href="@{/css/admin.css}">
-    <title>Danh sách mượn/trả</title>
 </head>
 <body>
 	<!-- Sidebar -->
 	<div th:replace="admin :: sidebar"></div>
 	
-	<!--return_borrow_view -->
-	<div class="container">
-		<h2>Thông tin mượn/trả sách</h2>
-		
-		<table>
-			<thead>
-				<tr>
-					<th>Mã sách</th>
-					<th>Ảnh</th>
-					<th>Tên sách</th>
-					<th>Tác giả</th>
-					<th>Ngày mượn</th>
-					<th>Ngày trả</th>
-					<th>Trạng thái</th>
-					<th>Gia hạn</th>
-				</tr>
-			</thead>
-			<tbody>
-			    <tr th:each="borrow : ${borrowReturnList}">
-			        <td th:text="${borrow.book.bookId}"></td>
-			        <td>
-			            <img th:src="@{'data:image/jpeg;base64,' + ${#strings.encodeBase64(borrow.book.bookImage)}}" 
-			                 alt="Ảnh sách" width="50">
-			        </td>
-			        <td th:text="${borrow.book.bookName}"></td>
-			        <td th:text="${borrow.book.author.authorName}"></td>
-			        <td th:text="${#dates.format(borrow.startDate, 'dd/MM/yyyy')}"></td>
-			        <td th:text="${#dates.format(borrow.endDate, 'dd/MM/yyyy')}"></td>
-			        <td>
-			            <span th:text="${borrow.status}" 
-			                  th:classappend="${borrow.status == 'Quá hạn' ? 'text-danger' : (borrow.status == 'Sắp hết hạn' ? 'text-warning' : 'text-success')}">
-			            </span>
-			        </td>
-			        <td>
-			            <a th:if="${borrow.renewCount < 3}" th:href="@{/admin/renew-book/{id}(id=${borrow.id})}" class="btn-renew">Gia hạn</a>
-			            <span th:unless="${borrow.renewCount < 3}" class="text-muted">Không thể gia hạn</span>
-			        </td>
-			    </tr>
-			</tbody>
+	<!-- Form danh sách -->
+    <div class="container">
+		<form th:action="@{/admin/search-book}" method="post" class="search-container">
+			<input type="text" name="keyword" placeholder="Nhập tên sách hoặc tên tác giả ...">
+			<button type="submit" class="search-btn">🔍 Tìm kiếm</button>
+		</form>
 
+
+		<table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Ảnh</th>
+                    <th>Tên sách</th>
+                    <th>Tác giả</th>
+                    <th>Ngày mượn</th>
+                    <th>Ngày trả</th>
+                    <th>Trạng thái</th>
+                    <th>Gia hạn</th>
+                </tr>
+            </thead>
+			<tbody>
+				<tr th:each="borrowReturn : ${borrowReturns}">
+	                    <td th:text="${borrowReturn.id}"></td>
+	                    <td>
+	                        <img th:src="@{/images/book_images/{img}(img=${borrowReturn.book.bookImage})}" 
+	                             alt="Ảnh bìa" width="80">
+	                    </td>
+	                    <td th:text="${borrowReturn.book.bookName}"></td>
+	                    <td>
+	                        <span th:each="author, iterStat : ${borrowReturn.book.authors}">
+	                            <span th:text="${author.authorName}"></span>
+	                            <span th:if="${!iterStat.last}">, </span>
+	                        </span>
+	                    </td>
+	                    <td th:text="${#dates.format(borrowReturn.startDate, 'dd/MM/yyyy')}"></td>
+	                    <td th:text="${#dates.format(borrowReturn.endDate, 'dd/MM/yyyy')}"></td>
+	                    <td>
+	                        <span th:text="${borrowReturn.status}"></span>
+	                    </td>
+	                    <td>
+	                        <form th:action="@{/admin/renew}" method="post">
+	                            <input type="hidden" name="borrowId" th:value="${borrowReturn.id}">
+	                            <button type="submit" class="renew-btn" th:if="${borrowReturn.renewCount < 3}">🔄 Gia hạn</button>
+	                            <span th:if="${borrowReturn.renewCount >= 3}" style="color: gray;">Hết lượt</span>
+	                        </form>
+	                    </td>
+	                </tr>
+            </tbody>
 		</table>
-	</div>
-</div>
+    </div>
 </body>
 </html>

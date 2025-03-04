@@ -1,23 +1,31 @@
-//package com.project.demo.controller;
-//
-//import java.util.List;
-//
-//import org.springframework.stereotype.Controller;
-//import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.RequestMapping;
-//
-//import com.project.admin.entity.Borrow_Return;
-//import com.project.admin.service.Borrow_ReturnService;
-//
-//import ch.qos.logback.core.model.Model;
-//
-//@Controller 
-//@RequestMapping("/admin")
-//public class BorrowReturnController {
-//	@GetMapping("/borrow-return-list")
-//	public String borrowReturnForm(Model model) {
-//		List<Borrow_Return> borrowReturnList = Borrow_ReturnService.getBorrowReturns();
-//		model.addAttribute("borrowReturnList", borrowReturnList);
-//		return "borrow_return_view";
-//	}
-//}
+package com.project.admin.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.project.admin.entity.Borrow_Return;
+import com.project.admin.repository.BookRepository;
+import com.project.admin.repository.Borrow_ReturnRepository;
+
+@Controller 
+@RequestMapping("/admin")
+public class BorrowReturnController {
+	
+	 @Autowired
+	 private Borrow_ReturnRepository borrowReturnRepository;
+
+	 @Autowired
+	 private BookRepository bookRepository;
+	
+	@PostMapping("/borrow-return-list")
+	public String historyTable(Model model) {
+		List<Borrow_Return> borrowedBooks = borrowReturnRepository.findAll();
+		model.addAttribute("borrowedBooks", borrowedBooks);
+		return "borrow_return_view";
+	}
+}

@@ -143,3 +143,13 @@ table th {
 .edit-btn:hover {
     background-color: #218838;
 }
+
+.history-btn {
+	padding: 5px 10px;
+    background-color: #0000ff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}

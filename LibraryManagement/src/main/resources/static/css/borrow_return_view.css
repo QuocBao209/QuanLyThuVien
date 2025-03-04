@@ -9,96 +9,107 @@ body {
     padding: 20px;
 }
 
-/* Container */
+/* Container styling */
 .container {
-    width: 90%;
+    width: 1150px;
+    height: 100vh;
     margin: 20px auto;
+    background: #fff;
     padding: 20px;
-    background: #f9f9f9;
     border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-left: 270px;
 }
 
-/* Tiêu đề */
-h2 {
-    text-align: center;
-    color: #333;
-    margin-bottom: 20px;
+/* Ô tìm kiếm */
+.search-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 15px;
 }
 
-/* Bảng danh sách */
+.search-container input {
+    width: 40%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.search-btn {
+    padding: 10px;
+    margin-right: 500px;
+    margin-left: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.search-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Table styling */
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 10px;
-    background: white;
-    border-radius: 10px;
-    overflow: hidden;
+    margin-top: 20px;
 }
 
-/* Tiêu đề bảng */
-table th {
-    background-color: #007bff;
-    color: white;
+th, td {
     padding: 12px;
     text-align: center;
-    font-size: 16px;
+    border-bottom: 1px solid #ddd;
 }
 
-/* Hàng và ô */
-table td {
-    padding: 10px;
-    border: 1px solid #ddd;
-    text-align: center;
-    font-size: 14px;
+/* Header row styling */
+thead {
+    background: #007BFF;
+    color: #fff;
 }
 
-/* Ảnh sách */
-table td img {
+th {
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Alternating row colors */
+tbody tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+/* Hover effect */
+tbody tr:hover {
+    background: #f1f1f1;
+}
+
+/* Image styling */
+td img {
     border-radius: 5px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Trạng thái */
-.text-danger {
-    color: red;
-    font-weight: bold;
-}
-
-.text-warning {
-    color: orange;
-    font-weight: bold;
-}
-
-.text-success {
-    color: green;
-    font-weight: bold;
-}
-
-/* Nút gia hạn */
-.btn-renew {
-    display: inline-block;
-    background-color: #28a745;
+/* Renew button */
+.renew-btn {
+    background: #28a745;
     color: white;
-    padding: 5px 10px;
+    border: none;
+    padding: 8px 12px;
     border-radius: 5px;
-    text-decoration: none;
-    font-size: 14px;
+    cursor: pointer;
     transition: 0.3s;
 }
 
-.btn-renew:hover {
-    background-color: #218838;
+.renew-btn:hover {
+    background: #218838;
 }
 
-/* Văn bản khi không thể gia hạn */
-.text-muted {
-    color: #6c757d;
-    font-size: 14px;
+/* "Hết lượt" text */
+td span[style="color: gray;"] {
+    font-weight: bold;
 }
 
-/* Hiệu ứng hover cho hàng */
-table tbody tr:hover {
-    background-color: #f1f1f1;
-    transition: 0.3s;
-}
