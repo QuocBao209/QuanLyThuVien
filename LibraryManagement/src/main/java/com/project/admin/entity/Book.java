@@ -52,7 +52,7 @@ public class Book {
     }
 
     @Column(nullable = false)
-    private boolean isDeleted = false; // Mặc định là "chưa bị xóa"
+    private boolean isDeleted = false;
 
     @Override
     public String toString() {

@@ -25,6 +25,11 @@ public class UserService {
         return userRepository.findAllByRole("USER");
     }
 
+    public List<User> searchUsers(String keyword) {
+        return userRepository.findByRoleAndNameContainingOrRoleAndEmailContaining("USER", keyword, "USER", keyword);
+    }
+
+
     // Lưu tất cả người dùng vào cơ sở dữ liệu
     public void transferData(List<User> users) {
         users.forEach(user -> {
@@ -86,8 +91,8 @@ public class UserService {
     		userRepository.save(user);
     	}
     }
-    
- // Xác định role tài khoản theo email (Bảo)
+
+    // Xác định role tài khoản theo email (Bảo)
     public String getUserRole(String email) {
     	return userRepository.findByEmail(email)
     			.map(User::getRole)

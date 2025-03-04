@@ -34,10 +34,10 @@
 			</thead>
 			<tbody>
 				<tr th:each="user : ${users}">
-					<td th:text=${user.userId}></td>
-					<td th:text=${user.name}></td>
-					<td th:text=${user.email}></td>
-					<td th:text=${user.phone}></td>
+					<td th:text="${user.userId}"></td>
+					<td th:text="${user.name}"></td>
+					<td th:text="${user.email}"></td>
+					<td th:text="${user.phone}"></td>
 					<td>
 					    <select class="status-select" th:data-user-id="${user.userId}"
 					            th:classappend="${user.status == 'Hoạt động' ? 'status-active' : 'status-locked'}"

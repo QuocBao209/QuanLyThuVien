@@ -8,8 +8,8 @@ import java.util.List;
 @Entity
 @Table(name = "Category")
 @Data
-@NoArgsConstructor  // Lombok sẽ tạo constructor không tham số
-@AllArgsConstructor // Lombok tạo constructor có tất cả tham số
+@NoArgsConstructor
+@AllArgsConstructor
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

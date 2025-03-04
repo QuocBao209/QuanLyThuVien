@@ -8,10 +8,8 @@ import com.project.demo.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class BookService {
@@ -20,45 +18,57 @@ public class BookService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    // Lấy danh sách tất cả sách
-    public List<Book> getBooks() {
-        return bookRepository.findAll();
-    }
-
-    // Tìm sách theo tên và danh sách tác giả
     public Optional<Book> findByBookNameAndAuthors(String bookName, List<Author> authors) {
-        return bookRepository.findAll().stream()
-                .filter(book -> book.getBookName().equalsIgnoreCase(bookName) &&
-                        new HashSet<>(book.getAuthors()).containsAll(authors))
+        return bookRepository.findByBookNameAndIsDeletedFalse(bookName).stream()
+                .filter(book -> new HashSet<>(book.getAuthors()).containsAll(authors))
                 .findFirst();
     }
 
-    // Lấy sách theo ID
-    public Book getBookById(Long id) {
-        return bookRepository.findById(id).orElse(null);
+    public Optional<Book> findExactMatch(String bookName, List<Author> authors, Category category, int publishYear) {
+        return bookRepository.findByIsDeletedFalse().stream()
+                .filter(b -> b.getBookName().equalsIgnoreCase(bookName) &&
+                        b.getPublishYear() == publishYear &&
+                        Objects.equals(b.getCategory(), category) &&
+                        new HashSet<>(b.getAuthors()).equals(new HashSet<>(authors)))
+                .findFirst();
     }
 
-    // Lưu sách mới hoặc cập nhật sách
+    public List<Book> searchBooks(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return bookRepository.findByIsDeletedFalse();
+        }
+        return bookRepository.findByBookNameContainingIgnoreCaseAndIsDeletedFalseOrAuthors_AuthorNameContainingIgnoreCaseAndIsDeletedFalse(keyword, keyword);
+    }
+
+    public Book getBookById(Long id) {
+        return bookRepository.findById(id).filter(book -> !book.isDeleted()).orElse(null);
+    }
+
     public void saveBook(Book book) {
         bookRepository.save(book);
     }
 
-    // Cập nhật thông tin sách (nếu tồn tại)
     public void updateBook(Book book) {
         if (bookRepository.existsById(book.getBookId())) {
             bookRepository.save(book);
         }
     }
+
     public String getBookImagePath(Long bookId) {
         return bookRepository.findBookImagePathById(bookId);
     }
 
-    // Xóa sách theo ID
     public void deleteBook(Long id) {
-        bookRepository.deleteById(id);
+        bookRepository.findById(id).ifPresent(book -> {
+            book.setDeleted(true);
+            bookRepository.save(book);
+        });
     }
 
-    // Chuyển dữ liệu danh sách sách vào database
+    public List<Book> getBooks() {
+        return bookRepository.findByIsDeletedFalse();
+    }
+
     public void transferData(List<Book> books) {
         bookRepository.saveAll(books);
     }
