@@ -22,7 +22,7 @@
 /* Ảnh sách bên trái */
 .image {
     flex: 1;
-    max-width: 40%; /* Giới hạn tối đa ảnh chiếm 40% */
+    max-width: 100%; /* Giới hạn tối đa ảnh chiếm 40% */
     display: flex;
     justify-content: center;
     text-align: center;
@@ -33,10 +33,9 @@
 .image img {
     width: 100%;
     height: auto;
-    max-width: 220px;
+    max-width: 250px;
     border-radius: 8px;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-    margin-top: 20px;
     object-fit: contain;
     object-position: center;
 }
@@ -61,6 +60,22 @@
     font-size: 20px;
     color: #2C3E50; 
     margin-bottom: 5px;
+}
+
+.btn {
+	display: flex;
+	flex-direction: row;
+	margin-top: 134px;
+}
+
+.like-btn {
+	margin-left: 50px;
+	width: 200px;
+	background-color: #0080ff;
+}
+
+.borrow-btn {
+	width: 200px;
 }
 
 /* Nút mượn sách */
@@ -185,3 +200,22 @@ button:hover {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+.popup {
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    animation: fadeOut 3s ease-in-out forwards;
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; display: none; }
+}

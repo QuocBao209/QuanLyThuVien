@@ -31,10 +31,10 @@ public class BookController {
     private static final long MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
     private static final String IMAGE_UPLOAD_DIR = "uploads/book_images/";
 
-    // Hiển thị trang import sách
-    @PostMapping("/import-book")
-    public String importBookForm() {
-        return "importBook";
+    // Hiển thị danh sách nhâp hàng
+    @PostMapping("/import")
+    public String importForm() {
+        return "import";
     }
     // Hiển thị lựa chọn thêm sách
     @PostMapping("/add-book-option")
@@ -130,14 +130,16 @@ public class BookController {
 
         return modelAndView;
     }
-
+    
+    // Danh sách sách
     @PostMapping("/book-list")
     public ModelAndView showBookListForm() {
         ModelAndView modelAndView = new ModelAndView("bookList");
         modelAndView.addObject("books", bookService.getBooks());
         return modelAndView;
     }
-
+    
+    // Chỉnh sửa sách
     @PostMapping("/edit-book/{id}")
     public ModelAndView showBookEditForm(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("bookEdit");
@@ -161,7 +163,7 @@ public class BookController {
         return modelAndView;
     }
 
-
+    // Thêm sách từ Excel
     @PostMapping("/upload-excel")
     public ModelAndView uploadExcel(@RequestParam("file") MultipartFile file) {
         ModelAndView modelAndView = new ModelAndView();
@@ -199,7 +201,8 @@ public class BookController {
 
         return modelAndView;
     }
-
+    
+    // Xử lý lưu ảnh
     private void saveBookImage(MultipartFile bookImage, String fileName) throws IOException {
         File uploadDir = new File(IMAGE_UPLOAD_DIR);
         if (!uploadDir.exists()) {
@@ -208,7 +211,8 @@ public class BookController {
         Path filePath = Paths.get(IMAGE_UPLOAD_DIR, fileName);
         Files.write(filePath, bookImage.getBytes());
     }
-
+    
+    // Tìm kiếm sách
     @PostMapping("/search-book")
     public ModelAndView searchBook(@RequestParam("keyword") String keyword) {
         ModelAndView modelAndView = new ModelAndView("bookList");

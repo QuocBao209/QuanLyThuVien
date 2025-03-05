@@ -14,16 +14,11 @@
 	<!-- Danh sách sách -->
 	<div class="book-container" th:object="${book}">
 		<div class="image">
-			<img th:src="@{/images/book_images/{img}(img=${book.bookImage})}" alt="Ảnh bìa" src="80">
-			
-			<form th:action="@{/home/library-page/add/{id}(id=${book.bookId})}" method="post" 
-					onsubmit="return confirm('Bạn có muốn mượn sách này? Vui lòng xác nhận ở Danh sách yêu thích (nếu có)');">
-			    <button type="submit">Mượn sách</button>
-			</form>
+				<img th:src="@{/images/book_images/{img}(img=${book.bookImage})}" alt="Ảnh bìa" src="80">
 		</div>
 		
 		<div class="detail-group">
-			<h4 th:text="${book.bookName}"></h4>
+				<h4 th:text="${book.bookName}"></h4>
 				<p>
 				    Tác giả: 
 				    <span th:each="author, iterStat : ${book.authors}">
@@ -34,6 +29,22 @@
 				<p th:text="'Thể loại: ' + ${book.category}"></p>
 				<p th:text="'Năm xuất bản: ' + ${book.publishYear}"></p>
 				<p th:text="'Số lượng hiện tại: ' + ${book.amount} + ' quyển'"></p>
+				
+				<div class="btn">
+					<form th:action="@{home/submit-borrow/{id}(id=${book.bookId})}" method="post"
+						onsubmit="return confirm('Bạn có muốn mượn sách này? Nếu có, xin bạn hãy xác nhận ở mục Tài khoản.');">
+						<button type="submit" class="borrow-btn">Mượn sách</button>
+					</form>
+					
+					<form th:action="@{/home/add/{id}(id=${book.bookId})}" method="get">
+					    <button type="submit" class="like-btn">Thêm yêu thích</button>
+					</form>
+					
+					<div th:if="${favoriteSuccess}" class="popup">
+					    <p>✅ Đã thêm vào yêu thích!</p>
+					</div>
+					
+				</div>
 		</div>
 	</div>
 	
