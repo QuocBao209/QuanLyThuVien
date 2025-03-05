@@ -7,13 +7,11 @@ import com.project.demo.repository.BookRepository;
 import com.project.demo.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class BookService {
@@ -28,14 +26,6 @@ public class BookService {
                 .findFirst();
     }
 
-    public Optional<Book> findExactMatch(String bookName, List<Author> authors, Category category, int publishYear) {
-        return bookRepository.findByIsDeletedFalse().stream()
-                .filter(b -> b.getBookName().equalsIgnoreCase(bookName) &&
-                        b.getPublishYear() == publishYear &&
-                        Objects.equals(b.getCategory(), category) &&
-                        new HashSet<>(b.getAuthors()).equals(new HashSet<>(authors)))
-                .findFirst();
-    }
 
     public List<Book> searchBooks(String keyword) {
         if (keyword == null || keyword.trim().isEmpty()) {
@@ -48,84 +38,40 @@ public class BookService {
         return bookRepository.findById(id).orElse(null);
     }
 
-    // Lưu sách mới hoặc cập nhật sách
-    public void saveBook(Book book) {
-        bookRepository.save(book);
-    }
 
-    // Cập nhật thông tin sách (nếu tồn tại)
-    public void updateBook(Book book) {
-        if (bookRepository.existsById(book.getBookId())) {
-            bookRepository.save(book);
-        }
-    }
-    public String getBookImagePath(Long bookId) {
-        return bookRepository.findBookImagePathById(bookId);
-    }
 
-    // Xóa sách theo ID
-    public void deleteBook(Long id) {
-        bookRepository.findById(id).ifPresent(book -> {
-            book.setDeleted(true);
-            bookRepository.save(book);
-        });
-    }
-
-    // Lấy danh sách tất cả Book (kiểu List)
     public List<Book> getBooks() {
         return bookRepository.findByIsDeletedFalse();
     }
 
-    // Xử lý lọc thông tin trả về dữ liệu Page do làm danh sách phân trang (đang để mặc định mỗi trang có 20 sách)
-    public Page<Book> filterBooks(Set<String> categoryNames, Set<String> timeRanges, int page, int size) {
-    	Pageable pageable = PageRequest.of(page, size);				// Bảo
-        List<Book> books = bookRepository.findByIsDeletedFalse();
+    public Page<Book> filterBooks(Set<String> categoryNames, Set<String> timeRanges, String bookName,  Pageable pageable) {
+        Integer startYear = null;
+        Integer endYear = null;
 
-        // Lọc theo danh mục
-        if (categoryNames != null && !categoryNames.isEmpty()) {
-            books = books.stream()
-                    .filter(book -> categoryNames.contains(book.getCategory().getCategoryName()))
-                    .collect(Collectors.toList());
-        }
-
-        // Lọc theo khoảng thời gian xuất bản
         if (timeRanges != null && !timeRanges.isEmpty()) {
-            books = books.stream()
-                    .filter(book -> timeRanges.stream().anyMatch(range -> isWithinYearRange(book.getPublishYear(), range)))
-                    .collect(Collectors.toList());
+            OptionalInt minYear = timeRanges.stream()
+                    .mapToInt(range -> Integer.parseInt(range.split("-")[0]))
+                    .min();
+            OptionalInt maxYear = timeRanges.stream()
+                    .mapToInt(range -> Integer.parseInt(range.split("-")[1]))
+                    .max();
+
+            if (minYear.isPresent() && maxYear.isPresent()) {
+                startYear = minYear.getAsInt();
+                endYear = maxYear.getAsInt();
+            }
         }
 
-        // Chuyển danh sách đã lọc thành Page<Book> (Bảo)
-        int start = (int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), books.size());
-        List<Book> pagedBooks = books.subList(start, end);
-
-        return new PageImpl<>(pagedBooks, pageable, books.size());
+        return bookRepository.findFilteredBooks(categoryNames, startYear, endYear,  pageable);
     }
 
-    private boolean isWithinYearRange(int year, String range) {
-        String[] years = range.split("-");
-        if (years.length == 2) {
-            int startYear = Integer.parseInt(years[0]);
-            int endYear = Integer.parseInt(years[1]);
-            return year >= startYear && year <= endYear;
-        }
-        return false;
-    }
-    
-    // Chuyển dữ liệu danh sách sách vào database
     public void transferData(List<Book> books) {
         bookRepository.saveAll(books);
     }
 
-    // Phân trang danh sách theo tác giả ở bookDetail (Bảo)
     public Page<Book> getBooksByAuthors(List<Author> authors, Long excludeBookId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return bookRepository.findBooksByAuthors(authors, excludeBookId, pageable);
     }
-    
-    // Phân trang danh sách tất cả sách ở bookFilter (kiểu dữ liệu Page) (Bảo)
-    public Page<Book> getAllBooks(Pageable pageable) {
-        return bookRepository.findByIsDeletedFalse(pageable);
-    }
+
 }

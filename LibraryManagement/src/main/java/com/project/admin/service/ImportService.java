@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,20 +22,34 @@ public class ImportService {
 
     @Transactional
     public void importBooks(List<ImportDetail> importDetails, LocalDate importDate) {
-        ImportReceipt receipt = new ImportReceipt();
-        receipt.setImportDate(importDate);
-        importReceiptRepository.save(receipt);
+        // Tìm ImportReceipt cho ngày hiện tại hoặc tạo mới nếu chưa có
+        ImportReceipt receipt = importReceiptRepository.findByImportDate(importDate)
+                .orElseGet(() -> {
+                    ImportReceipt newReceipt = new ImportReceipt();
+                    newReceipt.setImportDate(importDate);
+                    return importReceiptRepository.save(newReceipt);
+                });
 
-        importDetails.forEach(detail -> {
-            detail.setImportReceipt(receipt);
-            importDetailRepository.save(detail);
+        for (ImportDetail detail : importDetails) {
+            // Kiểm tra xem sách đã nhập trong ngày chưa
+            Optional<ImportDetail> existingDetail = importDetailRepository.findByImportReceiptAndBook(receipt, detail.getBook());
+
+            if (existingDetail.isPresent()) {
+                ImportDetail foundDetail = existingDetail.get();
+                foundDetail.setAmount(foundDetail.getAmount() + detail.getAmount());
+                importDetailRepository.save(foundDetail);
+            } else {
+                detail.setImportReceipt(receipt);
+                importDetailRepository.save(detail);
+            }
 
             // Cập nhật số lượng sách trong kho
             Book book = detail.getBook();
             book.setAmount(book.getAmount() + detail.getAmount());
-            bookService.saveBook(book);
-        });
+        }
     }
+
+
 
     // Lấy tất cả ImportReceipt
     public List<ImportReceipt> getAllImportReceipts() {

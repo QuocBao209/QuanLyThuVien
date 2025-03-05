@@ -6,8 +6,11 @@ import com.project.demo.service.BookService;
 import com.project.demo.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,27 +25,23 @@ public class BookFilterController {
 	@Autowired private BookService bookService;
 	@Autowired private CategoryService categoryService;
 
-	public BookFilterController(BookService bookService, CategoryService categoryService) {
-		this.bookService = bookService;
-		this.categoryService = categoryService;
-	}
-
 	@GetMapping("/book-filter")
 	public ModelAndView bookFilterPage(
 			@RequestParam(value = "categoryName", required = false) Set<String> categoryNames,
 			@RequestParam(value = "timeFilter", required = false) Set<String> timeRanges,
-			@RequestParam(defaultValue = "0") int page,			// Bảo
-			@RequestParam(defaultValue = "20") int size) {		// Bảo
+			@RequestParam(value = "bookName", required = false, defaultValue = "") String bookName,
+			@RequestParam(value = "author", required = false, defaultValue = "") String author,
+			@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "20") int size) {
 
 		ModelAndView mav = new ModelAndView("bookFilter");
-		
 		List<Category> categories = categoryService.getAllCategories();
-		// Gọi phương thức filterBooks đã sửa (trả về Page<Book>)
-	    Page<Book> bookPage = bookService.filterBooks(categoryNames, timeRanges, page, size);	// Bảo
+		Pageable pageable = PageRequest.of(page, size);
+		Page<Book> bookPage = bookService.filterBooks(categoryNames, timeRanges, bookName.trim(), pageable);
 
-	    mav.addObject("bookPage", bookPage);
-	    mav.addObject("currentPage", page);
-	    mav.addObject("categories", categories);
+		mav.addObject("bookPage", bookPage);
+		mav.addObject("currentPage", page);
+		mav.addObject("categories", categories);
 		return mav;
 	}
 }

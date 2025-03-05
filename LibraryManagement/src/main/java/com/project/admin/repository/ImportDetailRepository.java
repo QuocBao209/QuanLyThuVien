@@ -1,9 +1,11 @@
 package com.project.admin.repository;
 
 import com.project.admin.entity.ImportDetail;
+import com.project.admin.entity.ImportReceipt;
+import com.project.admin.entity.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import java.util.Optional;
 
-@Repository
 public interface ImportDetailRepository extends JpaRepository<ImportDetail, Long> {
+    Optional<ImportDetail> findByImportReceiptAndBook(ImportReceipt importReceipt, Book book);
 }

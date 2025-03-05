@@ -18,11 +18,15 @@ public class BookService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    public Optional<Book> findByBookNameAndAuthors(String bookName, List<Author> authors) {
-        return bookRepository.findByBookNameAndIsDeletedFalse(bookName).stream()
-                .filter(book -> new HashSet<>(book.getAuthors()).containsAll(authors))
+    public Optional<Book> findByBookNameAndAuthors(String bookName, List<Author> authors, Category category, int publishYear) {
+        return bookRepository.findByIsDeletedFalse().stream()
+                .filter(book -> book.getBookName().equalsIgnoreCase(bookName) &&
+                        book.getPublishYear() == publishYear &&
+                        Objects.equals(book.getCategory(), category) &&
+                        new HashSet<>(book.getAuthors()).equals(new HashSet<>(authors))) // So sánh danh sách tác giả
                 .findFirst();
     }
+
 
     public Optional<Book> findExactMatch(String bookName, List<Author> authors, Category category, int publishYear) {
         return bookRepository.findByIsDeletedFalse().stream()
@@ -48,16 +52,6 @@ public class BookService {
         bookRepository.save(book);
     }
 
-    public void updateBook(Book book) {
-        if (bookRepository.existsById(book.getBookId())) {
-            bookRepository.save(book);
-        }
-    }
-
-    public String getBookImagePath(Long bookId) {
-        return bookRepository.findBookImagePathById(bookId);
-    }
-
     public void deleteBook(Long id) {
         bookRepository.findById(id).ifPresent(book -> {
             book.setDeleted(true);
@@ -68,6 +62,7 @@ public class BookService {
     public List<Book> getBooks() {
         return bookRepository.findByIsDeletedFalse();
     }
+
 
     public void transferData(List<Book> books) {
         bookRepository.saveAll(books);
