@@ -7,6 +7,7 @@ import com.project.demo.repository.BookRepository;
 import com.project.demo.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -70,12 +71,14 @@ public class BookService {
         });
     }
 
+    // Lấy danh sách tất cả Book (kiểu List)
     public List<Book> getBooks() {
         return bookRepository.findByIsDeletedFalse();
     }
 
-
-    public List<Book> filterBooks(Set<String> categoryNames, Set<String> timeRanges) {
+    // Xử lý lọc thông tin trả về dữ liệu Page do làm danh sách phân trang (đang để mặc định mỗi trang có 20 sách)
+    public Page<Book> filterBooks(Set<String> categoryNames, Set<String> timeRanges, int page, int size) {
+    	Pageable pageable = PageRequest.of(page, size);				// Bảo
         List<Book> books = bookRepository.findByIsDeletedFalse();
 
         // Lọc theo danh mục
@@ -92,7 +95,12 @@ public class BookService {
                     .collect(Collectors.toList());
         }
 
-        return books;
+        // Chuyển danh sách đã lọc thành Page<Book> (Bảo)
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), books.size());
+        List<Book> pagedBooks = books.subList(start, end);
+
+        return new PageImpl<>(pagedBooks, pageable, books.size());
     }
 
     private boolean isWithinYearRange(int year, String range) {
@@ -104,14 +112,20 @@ public class BookService {
         }
         return false;
     }
+    
     // Chuyển dữ liệu danh sách sách vào database
     public void transferData(List<Book> books) {
         bookRepository.saveAll(books);
     }
 
-    // Xử lý phân trang
+    // Phân trang danh sách theo tác giả ở bookDetail (Bảo)
     public Page<Book> getBooksByAuthors(List<Author> authors, Long excludeBookId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return bookRepository.findBooksByAuthors(authors, excludeBookId, pageable);
+    }
+    
+    // Phân trang danh sách tất cả sách ở bookFilter (kiểu dữ liệu Page) (Bảo)
+    public Page<Book> getAllBooks(Pageable pageable) {
+        return bookRepository.findByIsDeletedFalse(pageable);
     }
 }

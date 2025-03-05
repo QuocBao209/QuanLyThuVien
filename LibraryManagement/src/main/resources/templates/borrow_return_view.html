@@ -54,8 +54,8 @@
 	                    <td>
 	                        <form th:action="@{/admin/renew}" method="post">
 	                            <input type="hidden" name="borrowId" th:value="${borrowReturn.id}">
-	                            <button type="submit" class="renew-btn" th:if="${borrowReturn.renewCount < 3}">🔄 Gia hạn</button>
-	                            <span th:if="${borrowReturn.renewCount >= 3}" style="color: gray;">Hết lượt</span>
+	                            <button type="submit" class="renew-btn" th:if="${borrowReturn.renewCount < 2}">🔄 Gia hạn</button>
+	                            <span th:if="${borrowReturn.renewCount >= 2}" style="color: gray;">Hết lượt</span>
 	                        </form>
 	                    </td>
 	                </tr>

@@ -13,7 +13,7 @@ import com.project.demo.entity.Book;
 import com.project.demo.service.BookService;
 
 @Controller
-@RequestMapping("/home/library-page")
+@RequestMapping("/home")
 
 public class BookDetailController {
 	

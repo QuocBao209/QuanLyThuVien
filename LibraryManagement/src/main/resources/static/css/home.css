@@ -154,6 +154,12 @@ nav ul li a:hover {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Filter - list */
+.filter-list {
+	display: flex;
+	flex-direction: column;
+}
+
 /* Footer */
 footer {
     background-color: #007bff;
@@ -161,3 +167,23 @@ footer {
     padding: 15px;
     margin-top: 20px;
 }
+
+.book-highlight {
+    font-size: 18px;
+    color: #d9534f; /* Màu đỏ nổi bật */
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+    animation: bounceText 1.5s infinite;
+    display: inline-block;
+}
+
+/* Hiệu ứng nảy */
+@keyframes bounceText {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+
+
+

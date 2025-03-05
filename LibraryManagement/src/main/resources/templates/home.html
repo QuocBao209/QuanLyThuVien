@@ -10,12 +10,11 @@
 
 	<header th:fragment="header">
 		<a href="/home" style="text-decoration: none; color: inherit;">
-		<div class="logo">📚 Thư viện Điện tử</div>
+			📚 Thư viện Điện tử
 		</a>
 		<nav>
 			<ul>
 				<li><a href="/home">Trang chủ</a></li>
-				<li><a href="/home/library-page">Thư viện</a></li>
 				<li><a href="/home/account">Tài khoản</a></li>
 				<li><a href="/home/favorite-list">Danh sách yêu thích</a></li>
 				<li><a href="#">Liên hệ</a></li>
@@ -38,11 +37,14 @@
 		    <form action="/home/latest-book" method="get">
 		        <button class="book" name="bookType" value="Sách mới nhất">📖 Sách mới nhất</button>
 		    </form>
+		    <div class="filter-list">
+			    <form action="/home/book-filter" method="get">
+			        <button class="book" name="bookType" value="Sách theo chủ đề">📙 Sách theo chủ đề</button>
+			    </form>
+			    <div class="book-highlight">📢 Xem tất cả sách tại đây!</div> <!-- Dòng chữ luôn hiển thị -->
+		    </div>
 		    <form action="/home/best-book" method="get">
 		        <button class="book" name="bookType" value="Sách đọc nhiều">📘 Sách đọc nhiều</button>
-		    </form>
-		    <form action="/home/book-filter" method="get">
-		        <button class="book" name="bookType" value="Sách theo chủ đề">📙 Sách theo chủ đề</button>
 		    </form>
 		</div>
     </section>

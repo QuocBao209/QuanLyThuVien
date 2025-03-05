@@ -46,7 +46,7 @@
 				<h4 th:text="${recBook.bookName}"></h4>
 				
 				<div class="button-container">
-					<form th:action="@{/home/library-page/book-detail/{id}(id=${recBook.bookId})}" method="get">
+					<form th:action="@{/home/book-detail/{id}(id=${recBook.bookId})}" method="get">
 						<button type="submit">Xem sách</button>
 					</form>
 				</div>
