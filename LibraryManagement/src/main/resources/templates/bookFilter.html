@@ -15,47 +15,47 @@
 		<!-- Filter -->
 		<div id="filter-container">
 			<h3>Lọc theo chủ đề</h3>
-			<form action="/book-filter" method="get">
-				<div class="category-filter">
-					<div th:each="category : ${categories}">
-						<label>
-							<input type="checkbox" name="categoryName" th:value="${category.categoryName}"
-	       							th:checked="${categoryNames != null and categoryNames.contains(category.categoryName)}">
-							<span th:text="${category.categoryName}"></span>
-						</label>
-					</div>
-				</div>
-	
-				<h3>Chọn khoảng thời gian</h3>
-				<div class="time-filter">
-					<label>
-						<input type="radio" name="timeFilter" value="1990-2004"
-	    					th:checked="${timeRanges != null and timeRanges.contains('1990-2004')}">
-						1990 - 2004
-					</label>
-					<label>
-						<input type="radio" name="timeFilter" value="2005-2010"
-							th:checked="${timeRanges != null and timeRanges.contains('2005-2010')}">
-						2005 - 2010
-					</label>
-					<label>
-						<input type="radio" name="timeFilter" value="2011-2015"
-							th:checked="${timeRanges != null and timeRanges.contains('2011-2015')}">
-						2011 - 2015
-					</label>
-					<label>
-						<input type="radio" name="timeFilter" value="2016-2020"
-							th:checked="${timeRanges != null and timeRanges.contains('2016-2020')}">
-						2016 - 2020
-					</label>
-					<label>
-						<input type="radio" name="timeFilter" value="2021-2025"
-							th:checked="${timeRanges != null and timeRanges.contains('2021-2025')}">
-						2021 - 2025
-					</label>
-	
-					<button type="submit">Tìm kiếm</button>
-				</div>
+			<form th:action="@{/home/book-filter}" method="get">
+			    <div class="category-filter">
+			        <div th:each="category : ${categories}">
+			            <label>
+			                <input type="checkbox" name="categoryName" th:value="${category.categoryName}"
+       							th:checked="${categoryNames != null and #lists.contains(categoryNames, category.categoryName)}">
+			                <span th:text="${category.categoryName}"></span>
+			            </label>
+			        </div>
+			    </div>
+			
+			    <h3>Chọn khoảng thời gian</h3>
+			    <div class="time-filter">
+			        <label>
+			            <input type="radio" name="timeFilter" value="1990-2004"
+			                   th:checked="${selectedTimeRange != null and selectedTimeRange == '1990-2004'}">
+			            1990 - 2004
+			        </label>
+			        <label>
+			            <input type="radio" name="timeFilter" value="2005-2010"
+			                   th:checked="${selectedTimeRange != null and selectedTimeRange == '2005-2010'}">
+			            2005 - 2010
+			        </label>
+			        <label>
+			            <input type="radio" name="timeFilter" value="2011-2015"
+			                   th:checked="${selectedTimeRange != null and selectedTimeRange == '2011-2015'}">
+			            2011 - 2015
+			        </label>
+			        <label>
+			            <input type="radio" name="timeFilter" value="2016-2020"
+			                   th:checked="${selectedTimeRange != null and selectedTimeRange == '2016-2020'}">
+			            2016 - 2020
+			        </label>
+			        <label>
+			            <input type="radio" name="timeFilter" value="2021-2025"
+			                   th:checked="${selectedTimeRange != null and selectedTimeRange == '2021-2025'}">
+			            2021 - 2025
+			        </label>
+			
+			        <button type="submit">Tìm kiếm</button>
+			    </div>
 			</form>
 		</div>
 	
@@ -84,20 +84,20 @@
 	            <ul>
 	                <li th:if="${bookPage.hasPrevious()}">
 	                    <a th:href="@{/book-filter(page=${bookPage.number - 1}, size=${bookPage.size},
-						    categoryName=${categoryNames != null ? categoryNames : ''}, 
-						    timeFilter=${timeRanges != null ? timeRanges : ''})}">Trước</a>
+							categoryName=${categoryNames}, 
+							timeFilter=${selectedTimeRange})}">Trước</a>
 	                </li>
 	
 	                <li th:each="i : ${#numbers.sequence(0, bookPage.totalPages - 1)}"
 	                    th:classappend="${i == bookPage.number} ? 'active'">
 	                    <a th:href="@{/book-filter(page=${i}, size=${bookPage.size},
-	                        categoryName=${categoryNames}, timeFilter=${timeRanges})}" th:text="${i + 1}"></a>
+							categoryName=${categoryNames}, timeFilter=${selectedTimeRange})}" th:text="${i + 1}"></a>
 	                </li>
 	
 	                <li th:if="${bookPage.hasNext()}">
 	                    <a th:href="@{/book-filter(page=${bookPage.number + 1}, size=${bookPage.size},
-						    categoryName=${categoryNames != null ? categoryNames : ''}, 
-						    timeFilter=${timeRanges != null ? timeRanges : ''})}">Sau</a>
+							categoryName=${categoryNames}, 
+							timeFilter=${selectedTimeRange})}">Sau</a>
 	                </li>
 	            </ul>
 	        </div>

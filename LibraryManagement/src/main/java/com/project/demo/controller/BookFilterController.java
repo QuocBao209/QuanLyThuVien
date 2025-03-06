@@ -27,22 +27,43 @@ public class BookFilterController {
 		this.categoryService = categoryService;
 	}
 
+//	@GetMapping("/book-filter")
+//	public ModelAndView bookFilterPage(
+//			@RequestParam(value = "categoryName", required = false) Set<String> categoryNames,
+//			@RequestParam(value = "timeFilter", required = false) Set<String> timeRanges,
+//			@RequestParam(defaultValue = "0") int page,			// Bảo
+//			@RequestParam(defaultValue = "20") int size) {		// Bảo
+//
+//		ModelAndView mav = new ModelAndView("bookFilter");
+//		
+//		List<Category> categories = categoryService.getAllCategories();
+//		// Gọi phương thức filterBooks đã sửa (trả về Page<Book>)
+//	    Page<Book> bookPage = bookService.filterBooks(categoryNames, timeRanges, page, size);	// Bảo
+//
+//	    mav.addObject("bookPage", bookPage);
+//	    mav.addObject("currentPage", page);
+//	    mav.addObject("categories", categories);
+//		return mav;
+//	}
+	
 	@GetMapping("/book-filter")
 	public ModelAndView bookFilterPage(
-			@RequestParam(value = "categoryName", required = false) Set<String> categoryNames,
-			@RequestParam(value = "timeFilter", required = false) Set<String> timeRanges,
-			@RequestParam(defaultValue = "0") int page,			// Bảo
-			@RequestParam(defaultValue = "20") int size) {		// Bảo
+	        @RequestParam(value = "categoryName", required = false) Set<String> categoryNames,
+	        @RequestParam(value = "timeFilter", required = false) String timeRange,  // Đổi Set<String> thành String
+	        @RequestParam(defaultValue = "0") int page,
+	        @RequestParam(defaultValue = "20") int size) {
 
-		ModelAndView mav = new ModelAndView("bookFilter");
-		
-		List<Category> categories = categoryService.getAllCategories();
-		// Gọi phương thức filterBooks đã sửa (trả về Page<Book>)
-	    Page<Book> bookPage = bookService.filterBooks(categoryNames, timeRanges, page, size);	// Bảo
+	    ModelAndView mav = new ModelAndView("bookFilter");
+
+	    List<Category> categories = categoryService.getAllCategories();
+	    Page<Book> bookPage = bookService.filterBooks(categoryNames, timeRange, page, size); // Đổi timeRanges thành timeRange
 
 	    mav.addObject("bookPage", bookPage);
 	    mav.addObject("currentPage", page);
 	    mav.addObject("categories", categories);
-		return mav;
+	    mav.addObject("categoryNames", categoryNames);
+	    mav.addObject("selectedTimeRange", timeRange);  // Thêm để kiểm tra giá trị đã chọn trong form
+	    return mav;
 	}
+
 }

@@ -84,10 +84,10 @@
 				<div class="searching-group">
 					<label for="status">Trạng thái:</label>
 					<select class="status" id="status">
-						<option value="all">Tất cả</option>
+						<option value="pending">Đang chờ</option>
 						<option value="borrowed">Đang mượn</option>
 						<option value="returned">Đã trả</option>
-						<option value="not-returned">Chưa trả</option>
+						<option value="outdate">Quá hạn</option>
 					</select>
 				</div>
 
@@ -104,15 +104,40 @@
 					<th>Ngày mượn</th>
 					<th>Ngày trả</th>
 					<th>Trạng thái</th>
+					<th>Xác nhận Mượn</th>
+					<th>Gia hạn</th>
 				</tr>
 			</thead>
 			<tbody>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
+					<tr th:each="borrow : ${borrowesBooks}">
+						<td th:text="${borrow.book.bookName}"></td>
+						<td>
+							<span th:each="author,iterStat : ${borrow.book.authors}">
+			                    <span th:text="${author.authorName}"></span>
+			                    <span th:if="${!iterStat.last}">, </span>
+			                </span>
+						 <td th:text="${#dates.format(borrow.startDate, 'dd/MM/yyyy')}"></td>
+            			 <td th:text="${#dates.format(borrow.endDate, 'dd/MM/yyyy')}"></td>
+						<td>
+							<span th:switch="${borrow.status}">
+								<span th:case="'pending'" class="status-pending">Đang chờ</span>
+								<span th:case="'borrowed'" class="status-borrowed">Đang mượn</span>
+								<span th:case="'returned'" class="status-returned">Đã trả</span>
+								<span th:case="'outdate'" class="status-outdate">Quá hạn</span>
+							</span>
+						</td>
+						<td>
+			                <form th:if="${borrow.status == 'pending'}" th:action="@{/home/confirm-borrow}" method="post">
+			                    <input type="hidden" name="borrowId" th:value="${borrow.id}">
+			                    <button type="submit" class="confirm-btn">Xác nhận</button>
+			                </form>
+			            </td>
+						<td>
+			                <form th:if="${borrow.status == 'borrowed'}" th:action="@{/home/renew}" method="post">
+			                    <input type="hidden" name="borrowId" th:value="${borrow.id}">
+			                    <button type="submit" class="renew-btn">Gia hạn</button>
+			                </form>
+			            </td>
 					</tr>
 			</tbody>
 			</table>
