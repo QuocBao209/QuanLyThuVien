@@ -68,8 +68,12 @@ public class BookDetailController {
 	        Borrow_Return borrow = new Borrow_Return();
 	        borrow.setUser(userOptional.get());
 	        borrow.setBook(bookOptional.get());
-	        borrow.setStartDate(new Date()); // Ngày mượn
-	        borrow.setEndDate(calculateReturnDate()); // Ngày trả dự kiến
+	        
+	        // Đặt tất cả các trường ngày là null
+	        borrow.setUserConfirmDate(null);
+	        borrow.setStartDate(null);
+	        borrow.setEndDate(null);
+	        
 	        borrow.setStatus("pending"); // Trạng thái ban đầu là "Đang chờ"
 	        borrow.setRenewCount(0);
 	        
@@ -77,13 +81,6 @@ public class BookDetailController {
 	    }
 	    
 	    return "redirect:/home/account"; // Sau khi mượn, chuyển hướng về trang tài khoản
-	}
-
-	// Hàm tính ngày trả dự kiến (ví dụ: sau 15 ngày)
-	private Date calculateReturnDate() {
-	    Calendar calendar = Calendar.getInstance();
-	    calendar.add(Calendar.DAY_OF_MONTH, 15);
-	    return calendar.getTime();
 	}
 
 }

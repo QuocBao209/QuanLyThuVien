@@ -26,6 +26,7 @@
                     <th>Ảnh</th>
                     <th>Tên sách</th>
                     <th>Tác giả</th>
+                    <th>Ngày xác nhận mượn</th>
                     <th>Ngày mượn</th>
                     <th>Ngày trả</th>
                     <th>Trạng thái</th>
@@ -51,9 +52,11 @@
 	                        </span>
 	                    </td>
 	                    
-	                    <td th:text="${#dates.format(borrowReturn.startDate, 'dd/MM/yyyy')}"></td>
-	                    
-	                    <td th:text="${#dates.format(borrowReturn.endDate, 'dd/MM/yyyy')}"></td>
+	                    <td th:text="${borrowReturn.userConfirmDate != null ? #dates.format(borrowReturn.userConfirmDate, 'dd/MM/yyyy') : 'Đang chờ xác nhận'}"></td>
+
+						<td th:text="${borrowReturn.startDate != null ? #dates.format(borrowReturn.startDate, 'dd/MM/yyyy') : '------'}"></td>
+						
+						<td th:text="${borrowReturn.endDate != null ? #dates.format(borrowReturn.endDate, 'dd/MM/yyyy') : '------'}"></td>
 	                    
 	                    <td>
 	                        <span th:switch="${borrowReturn.status}">
@@ -74,6 +77,7 @@
 						                th:text="${borrowReturn.status == 'pending' ? 'Xác nhận mượn' : 'Xác nhận trả'}">
 						        </button>
 						    </form>
+						    
 						    <button th:if="${borrowReturn.status == 'returned'}" class="btn-disabled" disabled>Đã trả</button>
 						    <button th:if="${borrowReturn.status == 'outdate'}" class="btn-disabled" disabled>Quá hạn</button>
 						</td>

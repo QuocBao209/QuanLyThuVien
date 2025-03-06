@@ -110,7 +110,7 @@
 				</tr>
 			</thead>
 			<tbody>
-					<tr th:each="borrow : ${borrowesBooks}">
+					<tr th:each="borrow : ${borroweBooks}">
 						<td th:text="${borrow.book.bookName}"></td>
 						
 						<td>
@@ -120,11 +120,11 @@
 			                </span>
 			             </td>
 			             
-			             <td th:text="${#dates.format(borrow.startDate, 'dd/MM/yyyy')}"></td>
-			             
-						 <td th:text="${#dates.format(borrow.startDate, 'dd/MM/yyyy')}"></td>
-						 
-            			 <td th:text="${#dates.format(borrow.endDate, 'dd/MM/yyyy')}"></td>
+						<td th:text="${borrow.userConfirmDate != null ? #dates.format(borrow.userConfirmDate, 'dd/MM/yyyy') : '------'}"></td>
+
+						<td th:text="${borrow.startDate != null ? #dates.format(borrow.startDate, 'dd/MM/yyyy') : '------'}"></td>
+						
+						<td th:text="${borrow.endDate != null ? #dates.format(borrow.endDate, 'dd/MM/yyyy') : '------'}"></td>
             			 
 						<td>
 							<span th:switch="${borrow.status}">
@@ -136,7 +136,8 @@
 						</td>
 						
 						<td>
-			                <form th:if="${borrow.status == 'pending'}" th:action="@{/home/confirm-borrow}" method="post">
+			                <form th:if="${borrow.status == 'pending'}" th:action="@{/home/confirm-borrow}" method="post" 
+			                		onsubmit="return confirmBorrowAction(this)">
 			                    <input type="hidden" name="borrowId" th:value="${borrow.id}">
 			                    <button type="submit" class="confirm-btn">Xác nhận</button>
 			                </form>
@@ -169,7 +170,10 @@
 	document.addEventListener("DOMContentLoaded", function () {
 	    document.getElementById("editAccountPopup").style.display = "none";
 	});
-
+	
+	function confirmBorrowAction(form) {
+        return confirm("Bạn có chắc chắn xác nhận mượn không? Lưu ý rằng không thể hủy xác nhận sau khi bấm 'OK'!");
+    }
 </script>
 </html>
 

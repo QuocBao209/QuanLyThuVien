@@ -25,6 +25,9 @@ public class Borrow_Return {
 
     @Temporal(TemporalType.DATE)
     private Date endDate;
+    
+    @Temporal(TemporalType.DATE)
+    private Date userConfirmDate;
 
     private String status;
     private int renewCount;

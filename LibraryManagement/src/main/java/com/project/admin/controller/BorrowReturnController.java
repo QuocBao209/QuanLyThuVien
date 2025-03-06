@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 
 @Controller
@@ -22,7 +24,7 @@ public class BorrowReturnController {
 
 	@PostMapping("/borrow_return_view")
 	public String showBorrowReturns(Model model) {
-		List<Borrow_Return> borrowReturns = borrowReturnService.getBorrowReturns();
+		List<Borrow_Return> borrowReturns = borrowReturnService.getConfirmedBorrowReturns();
 		model.addAttribute("borrowReturns", borrowReturns);
 		return "borrow_return_view"; // Tên file Thymeleaf
 	}
@@ -33,7 +35,11 @@ public class BorrowReturnController {
 		Borrow_Return borrowReturn = borrowReturnService.findById(borrowId);
 
 		if (borrowReturn != null && "pending".equals(borrowReturn.getStatus())) {
+			LocalDate now = LocalDate.now();
+			borrowReturn.setStartDate(java.util.Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+			
 			borrowReturn.setStatus("borrowed"); // Chuyển trạng thái thành "borrowed"
+			
 			borrowReturnService.save(borrowReturn);
 			redirectAttributes.addFlashAttribute("message", "Xác nhận mượn thành công!");
 		} else {

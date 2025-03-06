@@ -36,11 +36,9 @@ public class BorrowReturnController {
 
         Borrow_Return borrowReturn = borrowReturnRepository.findById(borrowId).orElse(null);
         if (borrowReturn != null) {
-            LocalDate startDate = LocalDate.now();
-            LocalDate endDate = startDate.plusDays(15); // 15 ngày sau
-
-            borrowReturn.setStartDate(java.util.Date.from(startDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
-            borrowReturn.setEndDate(java.util.Date.from(endDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        	// Lưu ngày User bấm Xác nhận mượn
+        	LocalDate userConfirmDate = LocalDate.now();
+            borrowReturn.setUserConfirmDate(java.util.Date.from(userConfirmDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
             borrowReturnRepository.save(borrowReturn); // Lưu vào DB ✅
 

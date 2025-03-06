@@ -39,7 +39,7 @@ public class AccountController {
         Optional<User> userOptional = userService.getUserByUsername(username);
         userOptional.ifPresent(user -> {
             mav.addObject("user", user);
-            mav.addObject("borrowesBooks", borrowService.getBorrowsByUser(user));
+            mav.addObject("borroweBooks", borrowService.getBorrowsByUser(user));
         });
 
         return mav;

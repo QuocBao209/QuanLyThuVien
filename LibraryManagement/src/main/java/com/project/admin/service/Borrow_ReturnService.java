@@ -29,4 +29,10 @@ public class Borrow_ReturnService {
     public void transferData(List<Borrow_Return> borrowReturns) {
         borrowReturnRepository.saveAll(borrowReturns);
     }
+    
+    // Lấy danh sách các sách chỉ khi User bấm Xác nhận mượn
+    public List<Borrow_Return> getConfirmedBorrowReturns() {
+        return borrowReturnRepository.findByUserConfirmDateIsNotNull();
+    }
+
 }

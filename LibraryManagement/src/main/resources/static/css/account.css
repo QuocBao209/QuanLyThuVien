@@ -184,7 +184,7 @@ body {
 
 /* ----- Cột lịch sử mượn trả bên phải ----- */
 .right-container {
-    width: 65%;
+    width: 100%;
     margin-left: 20px;
     background: white;
     padding: 20px;
