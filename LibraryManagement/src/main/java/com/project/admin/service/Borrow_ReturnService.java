@@ -18,6 +18,14 @@ public class Borrow_ReturnService {
         return borrowReturnRepository.findAll();
     }
 
+    public Borrow_Return findById(Long id) {
+        return borrowReturnRepository.findById(id).orElse(null);
+    }
+
+    public void save(Borrow_Return borrowReturn) {
+        borrowReturnRepository.save(borrowReturn);
+    }
+
     public void transferData(List<Borrow_Return> borrowReturns) {
         borrowReturnRepository.saveAll(borrowReturns);
     }
