@@ -101,6 +101,7 @@
 				<tr>
 					<th>Tên sách</th>
 					<th>Tên tác giả</th>
+					<th>Ngày xác nhận</th>
 					<th>Ngày mượn</th>
 					<th>Ngày trả</th>
 					<th>Trạng thái</th>
@@ -111,13 +112,20 @@
 			<tbody>
 					<tr th:each="borrow : ${borrowesBooks}">
 						<td th:text="${borrow.book.bookName}"></td>
+						
 						<td>
 							<span th:each="author,iterStat : ${borrow.book.authors}">
 			                    <span th:text="${author.authorName}"></span>
 			                    <span th:if="${!iterStat.last}">, </span>
 			                </span>
+			             </td>
+			             
+			             <td th:text="${#dates.format(borrow.startDate, 'dd/MM/yyyy')}"></td>
+			             
 						 <td th:text="${#dates.format(borrow.startDate, 'dd/MM/yyyy')}"></td>
+						 
             			 <td th:text="${#dates.format(borrow.endDate, 'dd/MM/yyyy')}"></td>
+            			 
 						<td>
 							<span th:switch="${borrow.status}">
 								<span th:case="'pending'" class="status-pending">Đang chờ</span>
@@ -126,12 +134,14 @@
 								<span th:case="'outdate'" class="status-outdate">Quá hạn</span>
 							</span>
 						</td>
+						
 						<td>
 			                <form th:if="${borrow.status == 'pending'}" th:action="@{/home/confirm-borrow}" method="post">
 			                    <input type="hidden" name="borrowId" th:value="${borrow.id}">
 			                    <button type="submit" class="confirm-btn">Xác nhận</button>
 			                </form>
 			            </td>
+			            
 						<td>
 			                <form th:if="${borrow.status == 'borrowed'}" th:action="@{/home/renew}" method="post">
 			                    <input type="hidden" name="borrowId" th:value="${borrow.id}">
@@ -145,7 +155,7 @@
 	</div>
 </body>
 
-<!-- Chức năng pop-up giao diện (không vi phạm nguyên tắc mô hình MVC -->
+<!-- Chức năng pop-up giao diện (không vi phạm nguyên tắc mô hình MVC) -->
 <script type="text/javascript">
 	function openPopup() {
 	    document.getElementById("editAccountPopup").style.display = "flex";

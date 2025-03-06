@@ -36,27 +36,34 @@
 			<tbody>
 				<tr th:each="borrowReturn : ${borrowReturns}">
 	                    <td th:text="${borrowReturn.id}"></td>
+	                    
 	                    <td>
 	                        <img th:src="@{/images/book_images/{img}(img=${borrowReturn.book.bookImage})}" 
 	                             alt="Ảnh bìa" width="80">
 	                    </td>
+	                    
 	                    <td th:text="${borrowReturn.book.bookName}"></td>
+	                    
 	                    <td>
 	                        <span th:each="author, iterStat : ${borrowReturn.book.authors}">
 	                            <span th:text="${author.authorName}"></span>
 	                            <span th:if="${!iterStat.last}">, </span>
 	                        </span>
 	                    </td>
+	                    
 	                    <td th:text="${#dates.format(borrowReturn.startDate, 'dd/MM/yyyy')}"></td>
+	                    
 	                    <td th:text="${#dates.format(borrowReturn.endDate, 'dd/MM/yyyy')}"></td>
+	                    
 	                    <td>
-	                        <span th:switch="${borrow.status}">
+	                        <span th:switch="${borrowReturn.status}">
 								<span th:case="'pending'" class="status-pending">Đang chờ</span>
 								<span th:case="'borrowed'" class="status-borrowed">Đang mượn</span>
 								<span th:case="'returned'" class="status-returned">Đã trả</span>
 								<span th:case="'outdate'" class="status-outdate">Quá hạn</span>
 							</span>
 	                    </td>
+	                    
 	                    <td>
 						    <form th:action="@{/admin/borrow-confirm}" method="post"
 						          th:if="${borrowReturn.status == 'pending' or borrowReturn.status == 'borrowed'}"
@@ -70,6 +77,7 @@
 						    <button th:if="${borrowReturn.status == 'returned'}" class="btn-disabled" disabled>Đã trả</button>
 						    <button th:if="${borrowReturn.status == 'outdate'}" class="btn-disabled" disabled>Quá hạn</button>
 						</td>
+						
 	                    <td>
 	                        <form th:action="@{/admin/renew}" method="post">
 	                            <input type="hidden" name="borrowId" th:value="${borrowReturn.id}">
@@ -77,6 +85,7 @@
 	                            <span th:if="${borrowReturn.renewCount >= 2}" style="color: gray;">Hết lượt</span>
 	                        </form>
 	                    </td>
+	                    
 	                </tr>
             </tbody>
 		</table>

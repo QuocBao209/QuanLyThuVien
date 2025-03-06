@@ -22,7 +22,7 @@ public class BorrowReturnController {
 	 @Autowired
 	 private BookRepository bookRepository;
 	
-	@PostMapping("/borrow-return-list")
+	@PostMapping("/borrow-return-view")
 	public String historyTable(Model model) {
 		List<Borrow_Return> borrowedBooks = borrowReturnRepository.findAll();
 		model.addAttribute("borrowedBooks", borrowedBooks);
