@@ -113,3 +113,27 @@ td span[style="color: gray;"] {
     font-weight: bold;
 }
 
+.btn-confirm {
+    background-color: green;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-return {
+    background-color: red;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-disabled {
+    background-color: gray;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    cursor: not-allowed;
+}
+
