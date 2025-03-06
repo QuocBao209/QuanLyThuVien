@@ -17,10 +17,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     List<Book> findByBookNameAndIsDeletedFalse(String bookName);
 
-    List<Book> findByCategoryAndIsDeletedFalse(Category category);
-
-    List<Book> findByPublishYearAndIsDeletedFalse(int publishYear);
-
     List<Book> findByIsDeletedFalse();
 
     List<Book> findByBookNameContainingIgnoreCaseAndIsDeletedFalseOrAuthors_AuthorNameContainingIgnoreCaseAndIsDeletedFalse(String title, String author);
@@ -33,14 +29,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     Page<Book> findBooksByAuthors(@Param("authors") List<Author> authors,
                                   @Param("excludeBookId") Long excludeBookId,
                                   Pageable pageable);
-
-//    @Query("SELECT b FROM Book b WHERE b.isDeleted = false " +
-//            "AND (:categoryNames IS NULL OR b.category.categoryName IN :categoryNames) " +
-//            "AND (:startYear IS NULL OR :endYear IS NULL OR (b.publishYear BETWEEN :startYear AND :endYear))")
-//    List<Book> findFilteredBooks(@Param("categoryNames") Set<String> categoryNames,
-//                                 @Param("startYear") Integer startYear,
-//                                 @Param("endYear") Integer endYear);
-    
     // Sửa lại kiểu dữ liệu Page để phân trang (Bảo)
     @Query("SELECT b FROM Book b WHERE b.isDeleted = false " +
     	       "AND (:categoryNames IS NULL OR b.category.categoryName IN :categoryNames) " +

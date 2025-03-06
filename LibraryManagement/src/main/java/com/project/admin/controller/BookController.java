@@ -31,9 +31,9 @@ public class BookController {
     private static final long MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
     private static final String IMAGE_UPLOAD_DIR = "uploads/book_images/";
 
-    // Hiển thị danh sách nhâp hàng
+    // Hiển thị trang import sách
     @PostMapping("/import")
-    public String importForm() {
+    public String importBookForm() {
         return "import";
     }
     
@@ -91,20 +91,18 @@ public class BookController {
                 category = categoryService.saveCategory(new Category(categoryName));
             }
 
-            Optional<Book> existingBook = bookService.findExactMatch(bookName, authors, category, publishYear);
             Book book;
 
-            if (existingBook.isPresent()) {
-                book = existingBook.get();
-                book.setAmount(book.getAmount() + amount);
-                if (!fileName.isEmpty() && (book.getBookImage() == null || book.getBookImage().isEmpty())) {
-                    saveBookImage(bookImage, fileName);
-                    book.setBookImage(fileName);
+            if (bookId != null) { // TRƯỜNG HỢP CHỈNH SỬA SÁCH
+                book = bookService.getBookById(bookId);
+                if (book == null) {
+                    modelAndView.addObject("message", "Sách không tồn tại!");
+                    modelAndView.setViewName("error");
+                    return modelAndView;
                 }
-            } else {
-                book = new Book();
+
                 book.setBookName(bookName);
-                book.setAmount(amount);
+                book.setAmount(amount);  // CHỈ CẬP NHẬT, KHÔNG CỘNG DỒN
                 book.setPublishYear(publishYear);
                 book.setAuthors(authors);
                 book.setCategory(category);
@@ -113,14 +111,27 @@ public class BookController {
                     saveBookImage(bookImage, fileName);
                     book.setBookImage(fileName);
                 }
+            } else { // TRƯỜNG HỢP THÊM MỚI SÁCH
+                Optional<Book> existingBook = bookService.findExactMatch(bookName, authors, category, publishYear);
+                if (existingBook.isPresent()) {
+                    book = existingBook.get();
+                    book.setAmount(book.getAmount() + amount); // Chỉ cộng dồn nếu là sách mới
+                } else {
+                    book = new Book();
+                    book.setBookName(bookName);
+                    book.setAmount(amount);
+                    book.setPublishYear(publishYear);
+                    book.setAuthors(authors);
+                    book.setCategory(category);
+
+                    if (!fileName.isEmpty()) {
+                        saveBookImage(bookImage, fileName);
+                        book.setBookImage(fileName);
+                    }
+                }
             }
 
             bookService.saveBook(book);
-
-            ImportDetail importDetail = new ImportDetail();
-            importDetail.setBook(book);
-            importDetail.setAmount(amount);
-            importService.importBooks(Collections.singletonList(importDetail), LocalDate.now());
 
             modelAndView.addObject("message", "Thao tác thành công!");
             modelAndView.setViewName("forward:/admin/book-list");
@@ -131,16 +142,15 @@ public class BookController {
 
         return modelAndView;
     }
-    
-    // Danh sách sách
+
+
     @PostMapping("/book-list")
     public ModelAndView showBookListForm() {
         ModelAndView modelAndView = new ModelAndView("bookList");
         modelAndView.addObject("books", bookService.getBooks());
         return modelAndView;
     }
-    
-    // Chỉnh sửa sách
+
     @PostMapping("/edit-book/{id}")
     public ModelAndView showBookEditForm(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("bookEdit");
@@ -164,46 +174,26 @@ public class BookController {
         return modelAndView;
     }
 
-    // Thêm sách từ Excel
+
     @PostMapping("/upload-excel")
     public ModelAndView uploadExcel(@RequestParam("file") MultipartFile file) {
         ModelAndView modelAndView = new ModelAndView();
+
         if (file.isEmpty()) {
-            modelAndView.addObject("message", "Vui lòng chọn file Excel!");
-            modelAndView.setViewName("error");
+            modelAndView.setViewName("forward: /admin/book-list");
             return modelAndView;
         }
 
         try {
-            List<Book> importedBooks = excelBookService.importBooksFromExcel(file);
-            for (Book book : importedBooks) {
-                Optional<Book> existingBook = bookService.findExactMatch(
-                        book.getBookName(),
-                        book.getAuthors(),
-                        book.getCategory(),
-                        book.getPublishYear()
-                );
-
-                if (existingBook.isPresent()) {
-                    Book foundBook = existingBook.get();
-                    foundBook.setAmount(foundBook.getAmount() + book.getAmount());
-                    bookService.saveBook(foundBook);
-                } else {
-                    bookService.saveBook(book);
-                }
-            }
-
-            modelAndView.addObject("message", "Thêm thành công " + importedBooks.size() + " sách!");
-            modelAndView.setViewName("forward:/admin/book-list");
+            int importedCount = excelBookService.importBooksFromExcel(file);
+            modelAndView.setViewName("forward:/admin/book-list?success=Đã nhập " + importedCount + " sách!");
         } catch (IOException e) {
-            modelAndView.addObject("message", "Lỗi khi đọc file Excel!");
-            modelAndView.setViewName("error");
+            modelAndView.setViewName("forward:/admin/book-list?error=Lỗi khi đọc file Excel!");
         }
 
         return modelAndView;
     }
-    
-    // Xử lý lưu ảnh
+
     private void saveBookImage(MultipartFile bookImage, String fileName) throws IOException {
         File uploadDir = new File(IMAGE_UPLOAD_DIR);
         if (!uploadDir.exists()) {
@@ -212,12 +202,12 @@ public class BookController {
         Path filePath = Paths.get(IMAGE_UPLOAD_DIR, fileName);
         Files.write(filePath, bookImage.getBytes());
     }
-    
-    // Tìm kiếm sách
+
     @PostMapping("/search-book")
     public ModelAndView searchBook(@RequestParam("keyword") String keyword) {
         ModelAndView modelAndView = new ModelAndView("bookList");
         modelAndView.addObject("books", bookService.searchBooks(keyword));
         return modelAndView;
     }
+
 }

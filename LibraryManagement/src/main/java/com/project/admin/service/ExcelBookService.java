@@ -6,7 +6,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
@@ -24,13 +23,18 @@ public class ExcelBookService {
     @Autowired
     private ImportService importService;
 
-    public List<Book> importBooksFromExcel(MultipartFile file) throws IOException {
+    public int importBooksFromExcel(MultipartFile file) throws IOException {
         List<Book> bookList = new ArrayList<>();
         List<ImportDetail> importDetails = new ArrayList<>();
         LocalDate importDate = LocalDate.now();
 
+        Map<String, Category> categoryCache = new HashMap<>();
+        Map<String, Author> authorCache = new HashMap<>();
+        Map<String, Book> bookCache = new HashMap<>();
+
         try (InputStream is = file.getInputStream();
              Workbook workbook = new XSSFWorkbook(is)) {
+
             Sheet sheet = workbook.getSheetAt(0);
             Iterator<Row> rowIterator = sheet.iterator();
             rowIterator.next();
@@ -38,53 +42,51 @@ public class ExcelBookService {
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
 
-                String bookName = row.getCell(0).getStringCellValue();
-                int amount = (int) row.getCell(1).getNumericCellValue();
-                int publishYear = (int) row.getCell(2).getNumericCellValue();
-                String categoryName = row.getCell(3).getStringCellValue();
-                String authorNames = row.getCell(4).getStringCellValue();
-                String imageFileName = row.getCell(5) != null ? row.getCell(5).getStringCellValue() : "";
+                String bookName = getStringValue(row.getCell(0));
+                int amount = getIntValue(row.getCell(1));
+                int publishYear = getIntValue(row.getCell(2));
+                String categoryName = getStringValue(row.getCell(3));
+                String authorNames = getStringValue(row.getCell(4));
+                String imageFileName = getStringValue(row.getCell(5));
 
-                // Tìm hoặc thêm category
-                Category category = categoryService.findByName(categoryName);
-                if (category == null) {
-                    category = new Category(categoryName);
-                    category.setCategoryName(categoryName);
-                    category = categoryService.saveCategory(category);
+                if (bookName.isEmpty() || categoryName.isEmpty() || authorNames.isEmpty()) {
+                    continue;
                 }
 
-                // Xử lý danh sách tác giả
+                Category category = categoryCache.computeIfAbsent(categoryName, k -> {
+                    Category foundCategory = categoryService.findByName(k);
+                    return foundCategory != null ? foundCategory : categoryService.saveCategory(new Category(k));
+                });
+
                 List<Author> authors = new ArrayList<>();
                 for (String authorName : authorNames.split(",")) {
                     authorName = authorName.trim();
-                    String finalAuthorName = authorName;
-                    Author author = authorService.findByName(authorName)
-                            .orElseGet(() -> authorService.saveAuthor(new Author(finalAuthorName)));
+                    Author author = authorCache.computeIfAbsent(authorName, k ->
+                            authorService.findByName(k).orElseGet(() -> authorService.saveAuthor(new Author(k)))
+                    );
                     authors.add(author);
                 }
 
-                // Kiểm tra sách đã tồn tại chưa
-                Optional<Book> existingBook = bookService.findByBookNameAndAuthors(bookName, authors);
-                Book book;
-                if (existingBook.isPresent()) {
-                    book = existingBook.get();
-                    book.setAmount(book.getAmount() + amount);
-                } else {
-                    book = new Book();
-                    book.setBookName(bookName);
-                    book.setAmount(amount);
-                    book.setPublishYear(publishYear);
-                    book.setCategory(category);
-                    book.setAuthors(authors);
-
-                    // Nếu có ảnh, lưu tên file ảnh vào database
-                    if (!imageFileName.isEmpty()) {
-                        book.setBookImage(imageFileName);
-                    }
-                    bookList.add(book);
+                String bookKey = bookName.toLowerCase() + "-" + publishYear + "-" + categoryName + "-" + String.join(",", authorNames);
+                Book book = bookCache.get(bookKey);
+                if (book == null) {
+                    Optional<Book> existingBook = bookService.findByBookNameAndAuthors(bookName, authors, category, publishYear);
+                    book = existingBook.orElseGet(() -> {
+                        Book newBook = new Book();
+                        newBook.setBookName(bookName);
+                        newBook.setAmount(0);
+                        newBook.setPublishYear(publishYear);
+                        newBook.setCategory(category);
+                        newBook.setAuthors(authors);
+                        if (!imageFileName.isEmpty()) {
+                            newBook.setBookImage(imageFileName);
+                        }
+                        bookList.add(newBook);
+                        return newBook;
+                    });
+                    bookCache.put(bookKey, book);
                 }
 
-                // Tạo ImportDetail
                 ImportDetail importDetail = new ImportDetail();
                 importDetail.setBook(book);
                 importDetail.setAmount(amount);
@@ -92,12 +94,19 @@ public class ExcelBookService {
             }
         }
 
-        // Lưu sách vào database
         bookService.transferData(bookList);
-
-        // Lưu thông tin nhập kho
         importService.importBooks(importDetails, importDate);
 
-        return bookList;
+        return bookList.size();
+    }
+
+    private String getStringValue(Cell cell) {
+        if (cell == null || cell.getCellType() == CellType.BLANK) return "";
+        return cell.getCellType() == CellType.STRING ? cell.getStringCellValue().trim() : "";
+    }
+
+    private int getIntValue(Cell cell) {
+        if (cell == null || cell.getCellType() != CellType.NUMERIC) return 0;
+        return (int) cell.getNumericCellValue();
     }
 }
