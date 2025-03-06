@@ -161,8 +161,10 @@ button[type="submit"]:hover {
 .pagination ul {
     list-style: none;
     display: flex;
+    justify-content: center;
     gap: 5px;
     padding: 0;
+    margin-top: 15px;
 }
 
 .pagination ul li {

@@ -17,17 +17,27 @@
 			<h3>Lọc theo chủ đề</h3>
 			<form th:action="@{/home/book-filter}" method="get">
 			    <div class="category-filter">
+			    	<label>
+			            <input type="radio" name="categoryName" value=""
+			                   th:checked="${categoryNames == null or #lists.isEmpty(categoryNames)}">
+			            <span>Tất cả</span>
+			        </label>
 			        <div th:each="category : ${categories}">
 			            <label>
-			                <input type="checkbox" name="categoryName" th:value="${category.categoryName}"
+			                <input type="radio" name="categoryName" th:value="${category.categoryName}"
        							th:checked="${categoryNames != null and #lists.contains(categoryNames, category.categoryName)}">
 			                <span th:text="${category.categoryName}"></span>
 			            </label>
 			        </div>
 			    </div>
-			
+				
 			    <h3>Chọn khoảng thời gian</h3>
 			    <div class="time-filter">
+			    	<label>
+			            <input type="radio" name="timeFilter" value=""
+			                   th:checked="${selectedTimeRange == null or selectedTimeRange == ''}">
+			            Tất cả
+			        </label>
 			        <label>
 			            <input type="radio" name="timeFilter" value="1990-2004"
 			                   th:checked="${selectedTimeRange != null and selectedTimeRange == '1990-2004'}">
@@ -83,19 +93,19 @@
 	        <div class="pagination" th:if="${bookPage.totalPages > 1}">
 	            <ul>
 	                <li th:if="${bookPage.hasPrevious()}">
-	                    <a th:href="@{/book-filter(page=${bookPage.number - 1}, size=${bookPage.size},
+	                    <a th:href="@{/home/book-filter(page=${bookPage.number - 1}, size=${bookPage.size},
 							categoryName=${categoryNames}, 
 							timeFilter=${selectedTimeRange})}">Trước</a>
 	                </li>
 	
 	                <li th:each="i : ${#numbers.sequence(0, bookPage.totalPages - 1)}"
 	                    th:classappend="${i == bookPage.number} ? 'active'">
-	                    <a th:href="@{/book-filter(page=${i}, size=${bookPage.size},
+	                    <a th:href="@{/home/book-filter(page=${i}, size=${bookPage.size},
 							categoryName=${categoryNames}, timeFilter=${selectedTimeRange})}" th:text="${i + 1}"></a>
 	                </li>
 	
 	                <li th:if="${bookPage.hasNext()}">
-	                    <a th:href="@{/book-filter(page=${bookPage.number + 1}, size=${bookPage.size},
+	                    <a th:href="@{/home/book-filter(page=${bookPage.number + 1}, size=${bookPage.size},
 							categoryName=${categoryNames}, 
 							timeFilter=${selectedTimeRange})}">Sau</a>
 	                </li>
