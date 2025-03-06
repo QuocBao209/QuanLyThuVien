@@ -31,19 +31,10 @@
 				<p th:text="'Số lượng hiện tại: ' + ${book.amount} + ' quyển'"></p>
 				
 				<div class="btn">
-					<form th:action="@{home/submit-borrow/{id}(id=${book.bookId})}" method="post"
-						onsubmit="return confirm('Bạn có muốn mượn sách này? Nếu có, xin bạn hãy xác nhận ở mục Tài khoản.');">
-						<button type="submit" class="borrow-btn">Mượn sách</button>
+					<form th:action="@{/home/submit-borrow/{id}(id=${book.bookId})}" method="post"
+					      onsubmit="return confirm('Bạn có muốn mượn sách này? Nếu có, xin bạn hãy xác nhận ở mục Tài khoản.');">
+					    <button type="submit" class="borrow-btn">Mượn sách</button>
 					</form>
-					
-					<form th:action="@{/home/add/{id}(id=${book.bookId})}" method="get">
-					    <button type="submit" class="like-btn">Thêm yêu thích</button>
-					</form>
-					
-					<div th:if="${favoriteSuccess}" class="popup">
-					    <p>✅ Đã thêm vào yêu thích!</p>
-					</div>
-					
 				</div>
 		</div>
 	</div>

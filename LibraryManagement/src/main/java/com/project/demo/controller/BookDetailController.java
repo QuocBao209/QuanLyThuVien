@@ -1,16 +1,27 @@
 package com.project.demo.controller;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.project.demo.entity.Book;
+import com.project.demo.entity.Borrow_Return;
+import com.project.demo.entity.User;
 import com.project.demo.service.BookService;
+import com.project.demo.service.Borrow_ReturnService;
+import com.project.demo.service.UserService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/home")
@@ -18,6 +29,10 @@ import com.project.demo.service.BookService;
 public class BookDetailController {
 	
 	@Autowired private BookService bookService;
+	
+	@Autowired private UserService userService;
+	
+	@Autowired private Borrow_ReturnService borrowService;
 	
 	public BookDetailController(BookService bookService) {
 	    this.bookService = bookService;
@@ -35,6 +50,40 @@ public class BookDetailController {
 		mav.addObject("recBooks", recBooks);
 		
 		return mav;
+	}
+	
+	// Xử lý nút Mượn sách (Bảo) ( tương tác giữa account và nút "Mượn sách")
+	@PostMapping("/submit-borrow/{id}")
+	public String submitBorrow(@PathVariable Long id, HttpSession session) {
+	    String username = (String) session.getAttribute("user");
+	    
+	    if (username == null) {
+	        return "redirect:/login"; // Nếu chưa đăng nhập, chuyển hướng về trang login
+	    }
+	    
+	    Optional<User> userOptional = userService.getUserByUsername(username);
+	    Optional<Book> bookOptional = bookService.getOptionalBookById(id);
+	    
+	    if (userOptional.isPresent() && bookOptional.isPresent()) {
+	        Borrow_Return borrow = new Borrow_Return();
+	        borrow.setUser(userOptional.get());
+	        borrow.setBook(bookOptional.get());
+	        borrow.setStartDate(new Date()); // Ngày mượn
+	        borrow.setEndDate(calculateReturnDate()); // Ngày trả dự kiến
+	        borrow.setStatus("pending"); // Trạng thái ban đầu là "Đang chờ"
+	        borrow.setRenewCount(0);
+	        
+	        borrowService.saveBorrow(borrow);
+	    }
+	    
+	    return "redirect:/home/account"; // Sau khi mượn, chuyển hướng về trang tài khoản
+	}
+
+	// Hàm tính ngày trả dự kiến (ví dụ: sau 15 ngày)
+	private Date calculateReturnDate() {
+	    Calendar calendar = Calendar.getInstance();
+	    calendar.add(Calendar.DAY_OF_MONTH, 15);
+	    return calendar.getTime();
 	}
 
 }

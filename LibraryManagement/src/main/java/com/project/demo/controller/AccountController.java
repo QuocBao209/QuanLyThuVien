@@ -1,6 +1,7 @@
 package com.project.demo.controller;
 
 import com.project.demo.entity.User;
+import com.project.demo.service.Borrow_ReturnService;
 import com.project.demo.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
@@ -19,22 +20,29 @@ public class AccountController {
 
     @Autowired
     private UserService userService;
-
+    
+    @Autowired
+    private Borrow_ReturnService borrowService;
+    
+    
+    // Xử lý hiện thông tin của User và hiện thông tin sách trên table (Bảo)
     @GetMapping("/account")
     public ModelAndView accountForm(HttpSession session) {
         ModelAndView mav = new ModelAndView("account");
 
-        // Lấy thông tin user từ username đã đăng nhập
-        String username = (String) session.getAttribute("user"); 
-        Optional<User> userOptional = userService.getUserByUsername(username);
-        
+        String username = (String) session.getAttribute("user");
         if (username == null) {
-            mav.setViewName("redirect:/login"); // Chuyển hướng về trang đăng nhập nếu chưa đăng nhập
+            mav.setViewName("redirect:/login");
             return mav;
         }
 
-        userOptional.ifPresent(user -> mav.addObject("user", user));
+        Optional<User> userOptional = userService.getUserByUsername(username);
+        userOptional.ifPresent(user -> {
+            mav.addObject("user", user);
+            mav.addObject("borrowesBooks", borrowService.getBorrowsByUser(user));
+        });
 
         return mav;
     }
+
 }
