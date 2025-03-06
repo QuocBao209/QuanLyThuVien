@@ -9,8 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +21,6 @@ public class ImportService {
 
     @Transactional
     public void importBooks(List<ImportDetail> importDetails, LocalDate importDate) {
-        // Tìm ImportReceipt cho ngày hiện tại hoặc tạo mới nếu chưa có
         ImportReceipt receipt = importReceiptRepository.findByImportDate(importDate)
                 .orElseGet(() -> {
                     ImportReceipt newReceipt = new ImportReceipt();
@@ -30,8 +28,9 @@ public class ImportService {
                     return importReceiptRepository.save(newReceipt);
                 });
 
+        Map<Book, Integer> bookAmountMap = new HashMap<>();
+
         for (ImportDetail detail : importDetails) {
-            // Kiểm tra xem sách đã nhập trong ngày chưa
             Optional<ImportDetail> existingDetail = importDetailRepository.findByImportReceiptAndBook(receipt, detail.getBook());
 
             if (existingDetail.isPresent()) {
@@ -43,23 +42,24 @@ public class ImportService {
                 importDetailRepository.save(detail);
             }
 
-            // Cập nhật số lượng sách trong kho
-            Book book = detail.getBook();
-            book.setAmount(book.getAmount() + detail.getAmount());
+            bookAmountMap.merge(detail.getBook(), detail.getAmount(), Integer::sum);
+        }
+
+        for (Map.Entry<Book, Integer> entry : bookAmountMap.entrySet()) {
+            Book book = entry.getKey();
+            book.setAmount(book.getAmount() + entry.getValue());
+            bookService.saveBook(book);
         }
     }
 
-
-
-    // Lấy tất cả ImportReceipt
     public List<ImportReceipt> getAllImportReceipts() {
         return importReceiptRepository.findAll();
     }
 
-    // Lấy tất cả ImportDetail
     public List<ImportDetail> getAllImportDetails() {
         return importDetailRepository.findAll();
     }
+
     @Transactional
     public void transferImportReceipts(List<ImportReceipt> importReceipts) {
         if (importReceipts != null && !importReceipts.isEmpty()) {
@@ -73,6 +73,4 @@ public class ImportService {
             importDetailRepository.saveAll(importDetails);
         }
     }
-
-
 }

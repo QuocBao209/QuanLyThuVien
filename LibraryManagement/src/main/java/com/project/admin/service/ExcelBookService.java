@@ -28,7 +28,6 @@ public class ExcelBookService {
         List<ImportDetail> importDetails = new ArrayList<>();
         LocalDate importDate = LocalDate.now();
 
-        // Cache để tránh truy vấn CSDL nhiều lần
         Map<String, Category> categoryCache = new HashMap<>();
         Map<String, Author> authorCache = new HashMap<>();
         Map<String, Book> bookCache = new HashMap<>();
@@ -38,7 +37,7 @@ public class ExcelBookService {
 
             Sheet sheet = workbook.getSheetAt(0);
             Iterator<Row> rowIterator = sheet.iterator();
-            rowIterator.next(); // Bỏ qua tiêu đề
+            rowIterator.next();
 
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
@@ -51,16 +50,14 @@ public class ExcelBookService {
                 String imageFileName = getStringValue(row.getCell(5));
 
                 if (bookName.isEmpty() || categoryName.isEmpty() || authorNames.isEmpty()) {
-                    continue; // Bỏ qua dòng thiếu thông tin quan trọng
+                    continue;
                 }
 
-                // Lấy hoặc tạo mới danh mục
                 Category category = categoryCache.computeIfAbsent(categoryName, k -> {
                     Category foundCategory = categoryService.findByName(k);
                     return foundCategory != null ? foundCategory : categoryService.saveCategory(new Category(k));
                 });
 
-                // Lấy danh sách tác giả
                 List<Author> authors = new ArrayList<>();
                 for (String authorName : authorNames.split(",")) {
                     authorName = authorName.trim();
@@ -70,33 +67,26 @@ public class ExcelBookService {
                     authors.add(author);
                 }
 
-                // Kiểm tra sách đã tồn tại trong database
                 String bookKey = bookName.toLowerCase() + "-" + publishYear + "-" + categoryName + "-" + String.join(",", authorNames);
                 Book book = bookCache.get(bookKey);
                 if (book == null) {
                     Optional<Book> existingBook = bookService.findByBookNameAndAuthors(bookName, authors, category, publishYear);
-                    if (existingBook.isPresent()) {
-                        book = existingBook.get();
-                        book.setAmount(book.getAmount() + amount);
-                    } else {
-                        book = new Book();
-                        book.setBookName(bookName);
-                        book.setAmount(amount);
-                        book.setPublishYear(publishYear);
-                        book.setCategory(category);
-                        book.setAuthors(authors);
-
+                    book = existingBook.orElseGet(() -> {
+                        Book newBook = new Book();
+                        newBook.setBookName(bookName);
+                        newBook.setAmount(0);
+                        newBook.setPublishYear(publishYear);
+                        newBook.setCategory(category);
+                        newBook.setAuthors(authors);
                         if (!imageFileName.isEmpty()) {
-                            book.setBookImage(imageFileName);
+                            newBook.setBookImage(imageFileName);
                         }
-                        bookList.add(book);
-                    }
+                        bookList.add(newBook);
+                        return newBook;
+                    });
                     bookCache.put(bookKey, book);
-                } else {
-                    book.setAmount(book.getAmount() + amount);
                 }
 
-                // Thêm thông tin nhập kho
                 ImportDetail importDetail = new ImportDetail();
                 importDetail.setBook(book);
                 importDetail.setAmount(amount);
@@ -104,15 +94,12 @@ public class ExcelBookService {
             }
         }
 
-        // Lưu sách và thông tin nhập kho
         bookService.transferData(bookList);
         importService.importBooks(importDetails, importDate);
 
         return bookList.size();
     }
 
-
-    // Hàm hỗ trợ đọc giá trị từ ô Excel, tránh lỗi null
     private String getStringValue(Cell cell) {
         if (cell == null || cell.getCellType() == CellType.BLANK) return "";
         return cell.getCellType() == CellType.STRING ? cell.getStringCellValue().trim() : "";

@@ -126,6 +126,7 @@
 								<span th:case="'outdate'" class="status-outdate">Quá hạn</span>
 							</span>
 						</td>
+
 						<td>
 			                <form th:if="${borrow.status == 'pending'}" th:action="@{/home/confirm-borrow}" method="post">
 			                    <input type="hidden" name="borrowId" th:value="${borrow.id}">

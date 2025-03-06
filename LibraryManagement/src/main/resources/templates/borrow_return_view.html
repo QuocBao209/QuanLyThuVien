@@ -50,7 +50,7 @@
 	                    <td th:text="${#dates.format(borrowReturn.startDate, 'dd/MM/yyyy')}"></td>
 	                    <td th:text="${#dates.format(borrowReturn.endDate, 'dd/MM/yyyy')}"></td>
 	                    <td>
-	                        <span th:switch="${borrow.status}">
+	                        <span th:switch="${borrowReturn.status}">
 								<span th:case="'pending'" class="status-pending">Đang chờ</span>
 								<span th:case="'borrowed'" class="status-borrowed">Đang mượn</span>
 								<span th:case="'returned'" class="status-returned">Đã trả</span>
