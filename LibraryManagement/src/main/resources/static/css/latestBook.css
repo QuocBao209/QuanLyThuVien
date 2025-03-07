@@ -4,49 +4,103 @@
     padding: 0;
     box-sizing: border-box;
 }
-
-/* Header */
-header {
+.search-filter-container {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #007BFF;
-    color: white;
-    padding: 15px 50px;
+    justify-content: space-between; /* Tách ô tìm kiếm và ô lọc */
+    margin-bottom: 15px;
+
+}
+/* Ô tìm kiếm */
+.search-container {
+    display: inline-block;
+    justify-content:left;
+    margin-bottom: 15px;
 }
 
-.logo {
-    font-size: 24px;
-    font-weight: bold;
-}
-
-nav ul {
-    list-style: none;
-    display: flex;
-}
-
-nav ul li {
-    margin: 0 15px;
-}
-
-nav ul li a {
-    color: white;
-    text-decoration: none;
-    font-size: 16px;
-    transition: 0.3s;
-}
-
-nav ul li a:hover {
-    text-decoration: underline;
-}
-
-.search-bar {
-    padding: 8px;
+.search-container input {
     width: 250px;
+    padding: 10px;
+    border: 1px solid #400040;
+    border-radius: 5px;
+    font-size: 14px;
+}
+.search-btn {
+    padding: 10px;
+    margin-right: 10px;
+    margin-left: 20px;
+    background-color: #007bff;
+    color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
 }
 
+.search-btn:hover {
+    background-color: #0056b3;
+}
+
+
+/* Container filter */
+.filter-container {
+    display: inline-block;
+    justify-content:right;
+    margin-bottom: 15px;
+}
+
+/* Nút chọn thể loại */
+.filter-btn {
+    padding: 10px 15px;
+    border: 2px solid #400040;
+    border-radius: 8px;
+    background-color: white;
+    cursor: pointer;
+    font-size: 16px;
+    display: block;
+    width: 200px;
+    text-align: center;
+}
+
+/* Khi hover vào nút */
+.filter-btn:hover {
+    background-color: #f0f0f0;
+}
+
+/* Tùy chỉnh dropdown */
+.filter-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Danh sách thể loại */
+.filter-list {
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    min-width: 200px;
+    margin-top: 5px;
+}
+
+/* Mỗi dòng thể loại */
+.filter-list label {
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+/* Hiệu ứng hover */
+.filter-list label:hover {
+    background-color: #f8f8f8;
+}
+
+/* Checkbox */
+.category-checkbox {
+    margin-right: 8px;
+}
 /* book-container */
 .book-container {
     width: 80%;
@@ -107,11 +161,61 @@ nav ul li a:hover {
     border-radius: 5px;
     display: none;
     z-index: 999;
-    width: 250px;
+    width: 180px;
+    word-wrap: break-word;
 }
 
+/* Căn chỉnh container chứa button */
+.button-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: auto; /* Đẩy button xuống dưới cùng */
+}
 
+/* Định dạng button */
+.book-item button {
+    background-color: #218838;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin-top: 4px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    width: 100%; 
+}
 
+/* Hiệu ứng hover */
+.book-item button:hover {
+    transform: scale(1.1);
+}
 
+.pagination ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    padding: 0;
+    margin-top: 15px;
+}
+
+.pagination ul li {
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    background: #f8f8f8;
+}
+
+.pagination ul li.active {
+    font-weight: bold;
+    background: #007bff;
+    color: white;
+}
 
 

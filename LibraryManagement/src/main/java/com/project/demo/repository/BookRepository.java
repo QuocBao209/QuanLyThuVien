@@ -41,4 +41,12 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     
     // Phân trang danh sách tất cả sách (Bảo
     Page<Book> findByIsDeletedFalse(Pageable pageable);
+
+
+    // Lấy danh sách sách có số lượt mượn nhiều (An)
+    @Query("SELECT b FROM Book b LEFT JOIN b.borrowReturns br " +
+    	       "WHERE b.isDeleted = false " +
+    	       "GROUP BY b " +
+    	       "ORDER BY COUNT(br) DESC")
+    	Page<Book> findBooksSortedByBorrowCount(Pageable pageable);
 }
