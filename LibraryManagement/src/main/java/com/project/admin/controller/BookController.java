@@ -64,6 +64,41 @@ public class BookController {
         ModelAndView modelAndView = new ModelAndView();
 
         try {
+            int currentYear = java.time.Year.now().getValue();
+
+            // Kiểm tra số lượng sách hợp lệ (chỉ nhận số nguyên dương)
+            if (amount <= 0) {
+                modelAndView.addObject("message", "Số lượng sách phải là số nguyên dương.");
+                modelAndView.setViewName("error");
+                return modelAndView;
+            }
+
+            // Kiểm tra năm xuất bản hợp lệ
+            if (publishYear <= 1000 || publishYear > currentYear) {
+                modelAndView.addObject("message", "Năm xuất bản phải lớn hơn 1000 và nhỏ hơn hoặc bằng " + currentYear);
+                modelAndView.setViewName("error");
+                return modelAndView;
+            }
+
+            // Kiểm tra và định dạng tên tác giả
+            List<String> formattedAuthors = new ArrayList<>();
+            for (String author : authorNames) {
+                if (!author.matches("^[a-zA-ZÀ-Ỹà-ỹ.,\\s]+$")) {
+                    modelAndView.addObject("message", "Tên tác giả chỉ được chứa chữ cái, dấu chấm (.) hoặc dấu phẩy (,).");
+                    modelAndView.setViewName("error");
+                    return modelAndView;
+                }
+                formattedAuthors.add(capitalizeEachWord(author));
+            }
+
+            // Kiểm tra và định dạng thể loại
+            if (!categoryName.matches("^[a-zA-ZÀ-Ỹà-ỹ\\s]+$")) {
+                modelAndView.addObject("message", "Thể loại chỉ được chứa chữ cái.");
+                modelAndView.setViewName("error");
+                return modelAndView;
+            }
+            categoryName = capitalizeEachWord(categoryName);
+
             String fileName = "";
             if (!bookImage.isEmpty()) {
                 if (!ALLOWED_IMAGE_TYPES.contains(bookImage.getContentType())) {
@@ -80,7 +115,7 @@ public class BookController {
             }
 
             // Xử lý danh sách tác giả
-            List<Author> authors = authorNames.stream()
+            List<Author> authors = formattedAuthors.stream()
                     .map(name -> authorService.findByName(name)
                             .orElseGet(() -> authorService.saveAuthor(new Author(name))))
                     .collect(Collectors.toList());
@@ -102,7 +137,7 @@ public class BookController {
                 }
 
                 book.setBookName(bookName);
-                book.setAmount(amount);  // CHỈ CẬP NHẬT, KHÔNG CỘNG DỒN
+                book.setAmount(amount);
                 book.setPublishYear(publishYear);
                 book.setAuthors(authors);
                 book.setCategory(category);
@@ -115,7 +150,7 @@ public class BookController {
                 Optional<Book> existingBook = bookService.findExactMatch(bookName, authors, category, publishYear);
                 if (existingBook.isPresent()) {
                     book = existingBook.get();
-                    book.setAmount(book.getAmount() + amount); // Chỉ cộng dồn nếu là sách mới
+                    book.setAmount(book.getAmount() + amount);
                 } else {
                     book = new Book();
                     book.setBookName(bookName);
@@ -143,6 +178,20 @@ public class BookController {
         return modelAndView;
     }
 
+    private String capitalizeEachWord(String str) {
+        String[] words = str.trim().split("\\s+");
+        StringBuilder capitalizedString = new StringBuilder();
+        for (String word : words) {
+            if (!word.isEmpty()) {
+                capitalizedString.append(Character.toUpperCase(word.charAt(0)))
+                        .append(word.substring(1).toLowerCase())
+                        .append(" ");
+            }
+        }
+        return capitalizedString.toString().trim();
+    }
+
+
 
     @PostMapping("/book-list")
     public ModelAndView showBookListForm() {
@@ -168,9 +217,9 @@ public class BookController {
     // Xóa sách
     @PostMapping("/delete-book/{id}")
     public ModelAndView deleteBook(@PathVariable Long id) {
-        bookService.deleteBook(id); // Không xóa hẳn, chỉ đánh dấu là đã xóa
+        bookService.deleteBook(id);
         ModelAndView modelAndView = new ModelAndView("bookList");
-        modelAndView.addObject("books", bookService.getBooks()); // Chỉ lấy sách chưa bị xóa
+        modelAndView.addObject("books", bookService.getBooks());
         return modelAndView;
     }
 
