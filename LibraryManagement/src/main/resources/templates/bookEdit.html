@@ -23,6 +23,11 @@
 
 <!-- Form sửa thông tin sách -->
 <div id="form-container">
+	<!-- Quay lại -->
+	<form action="/admin/book-list" method="post">
+		<button type="submit" class="return-btn">Quay lại</button>
+	</form>
+	
 	<h2>Sửa thông tin sách</h2>
 	<form th:action="@{/admin/submit-book-info}" method="post" enctype="multipart/form-data">
 		<div class="input-group">
@@ -34,7 +39,6 @@
 			<label for="book-title">Tên sách:</label>
 			<input type="text" id="book-title" name="book-title" placeholder="Nhập tên sách"
 				th:value="${book.bookName}" required>
-
 		</div>
 
 		<div class="input-group">
@@ -83,7 +87,7 @@
         </div>
 
         <div class="input-group">
-            <button type="submit">Cập nhật</button>
+            <button type="submit" class="btn">Cập nhật</button>
         </div>
 	</form>
 </div>

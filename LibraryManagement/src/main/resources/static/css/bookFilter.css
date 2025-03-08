@@ -10,7 +10,21 @@
     display: flex;
     justify-content: space-between;
     gap: 20px;
-    margin-top: 20px;
+    
+}
+
+.search-bar {
+    padding: 8px;
+    width: 300px;
+    border: 1px solid black; /* Thêm viền */
+    border-radius: 4px;
+    margin-bottom: 15px; /* Tạo khoảng cách với danh sách sách */
+    margin-left: 30px;
+    display: block; /* Đảm bảo nó nằm trên một dòng riêng */
+}
+
+.searching {
+    text-align: left; /* Căn về bên trái */
 }
 
 /* Filter container */
@@ -72,7 +86,6 @@ button[type="submit"]:hover {
 /* book-container */
 .book-container {
     width: 80%;
-    margin: 20px auto;
     background: #ffffff; 
     padding: 20px;
     border-radius: 8px;

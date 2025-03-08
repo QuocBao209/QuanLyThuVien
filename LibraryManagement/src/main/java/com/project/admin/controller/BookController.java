@@ -25,7 +25,6 @@ public class BookController {
     @Autowired private AuthorService authorService;
     @Autowired private CategoryService categoryService;
     @Autowired private ExcelBookService excelBookService;
-    @Autowired private ImportService importService;
 
     private static final List<String> ALLOWED_IMAGE_TYPES = Arrays.asList("image/jpeg", "image/png", "image/gif");
     private static final long MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -143,7 +142,7 @@ public class BookController {
         return modelAndView;
     }
 
-
+    // Danh sách sách ở Admin
     @PostMapping("/book-list")
     public ModelAndView showBookListForm() {
         ModelAndView modelAndView = new ModelAndView("bookList");
@@ -151,6 +150,7 @@ public class BookController {
         return modelAndView;
     }
 
+    // Chỉnh sửa sách theo id
     @PostMapping("/edit-book/{id}")
     public ModelAndView showBookEditForm(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("bookEdit");
@@ -165,7 +165,7 @@ public class BookController {
         return modelAndView;
     }
 
-    // Xóa sách
+    // Xóa sách theo id
     @PostMapping("/delete-book/{id}")
     public ModelAndView deleteBook(@PathVariable Long id) {
         bookService.deleteBook(id); // Không xóa hẳn, chỉ đánh dấu là đã xóa
@@ -174,7 +174,12 @@ public class BookController {
         return modelAndView;
     }
 
-
+    // Controller xử lý Excel
+    @PostMapping("/import-view")
+    public String importView() {
+    	return "importView";
+    }
+    
     @PostMapping("/upload-excel")
     public ModelAndView uploadExcel(@RequestParam("file") MultipartFile file) {
         ModelAndView modelAndView = new ModelAndView();
@@ -193,7 +198,8 @@ public class BookController {
 
         return modelAndView;
     }
-
+    
+    // Controller xử lý Ảnh
     private void saveBookImage(MultipartFile bookImage, String fileName) throws IOException {
         File uploadDir = new File(IMAGE_UPLOAD_DIR);
         if (!uploadDir.exists()) {
@@ -202,7 +208,8 @@ public class BookController {
         Path filePath = Paths.get(IMAGE_UPLOAD_DIR, fileName);
         Files.write(filePath, bookImage.getBytes());
     }
-
+    
+    // Controller xử lý tìm sách
     @PostMapping("/search-book")
     public ModelAndView searchBook(@RequestParam("keyword") String keyword) {
         ModelAndView modelAndView = new ModelAndView("bookList");

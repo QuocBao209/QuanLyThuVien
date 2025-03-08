@@ -1,0 +1,75 @@
+/* Container chính */
+.option-container {
+    margin-left: 270px; /* Đảm bảo không bị che bởi sidebar */
+    padding: 20px;
+    background: #F4F6F7;
+    min-height: 100vh;
+}
+
+/* Tiêu đề */
+.option-container h2 {
+    font-size: 24px;
+    color: #2C3E50;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Hướng dẫn sử dụng */
+.text-group {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.text {
+    font-size: 18px;
+    color: #333;
+    margin: 5px 0;
+}
+
+.instruction {
+	font-weight: bold;
+	font-size: 24px;
+}
+
+/* Nhóm nút */
+.btn-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+/* Nút bấm */
+.btn-group button {
+    background: #1ABC9C;
+    color: white;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    width: 100px;
+    height: 50px;
+}
+
+.btn-group button:hover {
+    background: #16A085;
+}
+
+/* File input */
+input[type="file"] {
+    display: block;
+    margin: 10px auto;
+    font-size: 16px;
+}
+
+.save-group {
+	display: flex;
+	flex-direction: row;
+}

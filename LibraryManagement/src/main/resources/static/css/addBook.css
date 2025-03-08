@@ -87,7 +87,7 @@ select:focus {
 
 /* Định dạng chung */
 .button-group button {
-    width: 140px; /* Giảm kích thước */
+    width: 180px; /* Giảm kích thước */
     padding: 10px;
     background-color: #28a745; /* Màu xanh */
     color: white;
@@ -105,13 +105,17 @@ select:focus {
     transform: scale(1.05);
 }
 
-/* Nút "Quay lại" có màu đỏ */
-.button-group .back-btn {
-    background-color: #dc3545;
-}
-
-.button-group .back-btn:hover {
-    background-color: #c82333;
+.return-btn {
+	width: 100px; /* Giảm kích thước */
+    padding: 8px;
+    background-color: #28a745; /* Màu xanh */
+    color: white;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.3s ease-in-out, transform 0.2s;
 }
 
 /* Thêm nhiều tác giả */

@@ -14,6 +14,11 @@
 
 <!-- Form thêm sách -->
 <div id="form-container">
+	<!-- Quay lại -->
+	<form action="/admin/add-book-option" method="post">
+		<button type="submit" class="return-btn">Quay lại</button>
+	</form>
+	
 	<h2>Thêm sách</h2>
 
 	<form action="/admin/submit-book-info" method="post" enctype="multipart/form-data">
@@ -59,10 +64,6 @@
 		</div>
 	</form>
 
-	<!-- Quay lại -->
-	<form action="/admin/add-book-option" method="post">
-		<button type="submit">Quay lại</button>
-	</form>
 </div>
 
 <script>

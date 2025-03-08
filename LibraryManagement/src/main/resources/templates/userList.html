@@ -40,15 +40,14 @@
 					<td th:text="${user.email}"></td>
 					<td th:text="${user.phone}"></td>
 					<td>
-					    <select class="status-select" th:data-user-id="${user.userId}"
-					            th:classappend="${user.status == 'Hoạt động' ? 'status-active' : 'status-locked'}"
-					            onchange="changeSelectStyle(this)">
-					        <option value="Hoạt động" th:selected="${user.status == 'Hoạt động'}">Hoạt động</option>
-					        <option value="Khóa" th:selected="${user.status == 'Khóa'}">Khóa</option>
-					    </select>
+						<span th:text="${user.status}"
+							th:class="${user.status == 'Hoạt động' ? 'status-label status-active' : 'status-label status-locked'}">
+						</span>
 					</td>
 		            <td>
-		                <button type="button" class="edit-btn">✏️ Sửa</button>
+		                <form action="" method="post">
+		                	<button type="button" class="block-btn">Khóa</button>
+		                </form>
 		            </td>
 		            <td>
 		            	<form th:action="@{/admin/borrow_return_view}" method="post">
@@ -60,15 +59,5 @@
 		</table>
 	</div>
 </body>
-<script>
-function changeSelectStyle(selectElement) {
-    if (selectElement.value === "Hoạt động") {
-        selectElement.classList.remove("status-locked");
-        selectElement.classList.add("status-active");
-    } else {
-        selectElement.classList.remove("status-active");
-        selectElement.classList.add("status-locked");
-    }
-}
-</script>
+
 </html>

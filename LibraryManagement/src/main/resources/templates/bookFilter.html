@@ -72,6 +72,12 @@
 		<!-- Khu vực hiện kết quả -->
 	    <div class="book-container">
 	        <h2>Thư viện</h2>
+	        
+	        <!-- Tìm kiếm sách -->
+	        <form action="" method="get" class="searching">
+	        	<input type="text" placeholder="Tìm kiếm sách ..." class="search-bar">
+	        </form>
+	        
 	        <div class="book-list" th:if="${bookPage != null and not #lists.isEmpty(bookPage.content)}">
 	            <div th:each="book : ${bookPage.content}" class="book-item">
 	                <img th:src="@{/images/book_images/{img}(img=${book.bookImage})}" alt="Ảnh bìa" width="80">

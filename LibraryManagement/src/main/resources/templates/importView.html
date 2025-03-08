@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Thêm sách</title>
+	<link rel="stylesheet" th:href="@{/css/admin.css}">
+	<link rel="stylesheet" th:href="@{/css/importView.css}">
+</head>
+<body>
+<body>
+	<!-- Sidebar -->
+	<div th:replace="admin :: sidebar"></div>
+	
+	<div class="option-container">
+		<h2>Thêm sách bằng file Excel</h2>
+		
+		<div class="text-group">
+			<p class="instruction">Hướng dẫn sử dụng :</p>
+			<p class="text">- Click nút 'Chọn file' để lấy file Excel chứa thông tin sách từ máy bạn.</p>
+			<p class="text">- Click nút 'Lưu" để lưu danh sách vào database</p>
+			<p class="text">- Click 'Quay lại' để trở về trang Lựa chọn phương thức thêm sách</p>
+		</div>
+
+		<div class="btn-group">
+			<form action="/admin/upload-excel" method="post" enctype="multipart/form-data" class="save-group">
+				<input type="file" name="file" accept=".xlsx, .xls" required>
+				<button type="submit">Lưu</button>	
+			</form>
+			
+			<form action="/admin/add-book-option" method="post">
+				<button type="submit">Quay lại</button>	
+			</form>
+		</div>
+	</div>
+</body>
+</html>
