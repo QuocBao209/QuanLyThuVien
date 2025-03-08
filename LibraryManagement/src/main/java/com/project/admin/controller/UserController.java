@@ -14,6 +14,7 @@ import com.project.admin.service.UserService;
 public class UserController {
 	
 	@Autowired private UserService userService;
+	
 	@PostMapping("/user-list")
 	public ModelAndView userListForm(@RequestParam(value = "keyword", required = false) String keyword) {
 		ModelAndView modelAndView = new ModelAndView("userList");
@@ -35,4 +36,15 @@ public class UserController {
 		userService.updateStatus(userId, newStatus);
 		return "redirect:/admin/user-list";
 	}
+
+	// Xử lý trạng thái tài khoản
+	@PostMapping("/confirm-toggle-status")
+	public String toggleUserStatus(@RequestParam Long userId) {
+	    userService.findById(userId).ifPresent(user -> {
+	        user.setStatus(user.getStatus().equalsIgnoreCase("Hoạt động") ? "Khóa" : "Hoạt động");
+	        userService.save(user);
+	    });
+	    return "forward:/admin/user-list";
+	}
+
 }

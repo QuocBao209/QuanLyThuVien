@@ -137,3 +137,12 @@ td span[style="color: gray;"] {
     cursor: not-allowed;
 }
 
+.renewal-status {
+    font-weight: bold;
+    color: #333;
+    margin-top: 5px;
+}
+
+.renewal-status.expired {
+    color: red;
+}

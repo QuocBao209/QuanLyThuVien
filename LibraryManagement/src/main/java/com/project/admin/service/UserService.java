@@ -20,6 +20,11 @@ public class UserService {
         return userRepository.findAll();
     }
     
+    // Tìm user theo id
+    public Optional<User> findById(Long userId) {
+    	return userRepository.findById(userId);
+    }
+    
     // Lấy danh sách độc giả (role : user)
     public List<User> getAllUsersWithRoleUser() {
         return userRepository.findAllByRole("USER");
@@ -28,7 +33,6 @@ public class UserService {
     public List<User> searchUsers(String keyword) {
         return userRepository.findByRoleAndNameContainingOrRoleAndEmailContaining("USER", keyword, "USER", keyword);
     }
-
 
     // Lưu tất cả người dùng vào cơ sở dữ liệu
     public void transferData(List<User> users) {
@@ -39,12 +43,16 @@ public class UserService {
         });
         userRepository.saveAll(users);
     }
+    
+    // Lưu thông tin một người dùng 
+    public void save(User user) {
+        userRepository.save(user);
+    }
 
     // Phương thức kiểm tra mật khẩu đã được mã hóa hay chưa
     private boolean isPasswordHashed(String password) {
         return password != null && password.startsWith("$2a$");
     }
-
 
     // Đăng ký người dùng mới
     public User registerUser(User user) {

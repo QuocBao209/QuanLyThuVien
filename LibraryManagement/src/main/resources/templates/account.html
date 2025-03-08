@@ -78,7 +78,22 @@
 
 		<!-- Bảng lịch sử mượn / trả bên phải -->
 		<section class="right-container">
+			<!-- Lưu ý cho người dùng -->
+			<section class="notice-container">
+			    <h2>Lưu ý</h2>
+			    <ul>
+			        <li>Mọi tài khoản bị cảnh cáo vi phạm lần 2 sẽ bị <b>'Khóa'</b>.</li>
+			        <li>Thư viện sẽ giữ sách cho bạn sau khi <b>'Xác nhận mượn'</b>. Hạn chót: <b>2 ngày</b> sau ngày 'Xác nhận'. Nếu bạn không đến nhận sách sau thời gian này, hệ thống sẽ hủy yêu cầu và cảnh báo lần 1.</li>
+			        <li>Số sách được mượn tối đa: <b>3 quyển</b>.</li>
+			        <li>Thời hạn mượn mỗi quyển sách: <b>14 ngày</b> kể từ ngày <b>'Nhận sách'</b>. Nếu bạn trả trễ hạn, hệ thống sẽ cảnh báo lần 1.</li>
+			        <li>Bạn có thể <b>Gia hạn</b> trong thời hạn mượn sách. Sau ngày thứ 14, bạn không thể Gia hạn được.</li>
+			        <li>Số ngày Gia hạn: <b>5 ngày</b> (mỗi tài khoản có <b>2 lượt Gia hạn</b>).</li>
+			        <li><b>Cảnh báo</b>: Nếu bạn làm hỏng hoặc mất sách, hệ thống sẽ <b>'Khóa'</b> tài khoản của bạn.</li>
+			    </ul>
+			</section>
+		
 			<h2>Lịch sử mượn / trả sách</h2>
+			
 			<!-- Bộ lọc -->
 			<form action="/home/account" method="get">
 				<div class="searching-group">
@@ -91,10 +106,13 @@
 					</select>
 				</div>
 
-				<input type="text" name="search" placeholder="Nhập tên sách tại đây ...">
+				<div class="searching-action">
+					<input type="text" name="search" placeholder="Nhập tên sách tại đây ...">
 
-				<button type="submit">Tìm kiếm</button>
+					<button type="submit" class="search-btn">Tìm kiếm</button>
+				</div>
 			</form>
+			
 			<!-- Bảng lịch sử -->
 			<table>
 			<thead>
@@ -127,16 +145,16 @@
 						<td th:text="${borrow.endDate != null ? #dates.format(borrow.endDate, 'dd/MM/yyyy') : '------'}"></td>
             			 
 						<td>
-							<span th:switch="${borrow.status}">
-								<span th:case="'pending'" class="status-pending">Đang chờ</span>
-								<span th:case="'borrowed'" class="status-borrowed">Đang mượn</span>
-								<span th:case="'returned'" class="status-returned">Đã trả</span>
-								<span th:case="'outdate'" class="status-outdate">Quá hạn</span>
-							</span>
+						    <span th:classappend="${borrow.status}" 
+						          th:text="${borrow.status == 'pending' ? 'Đang chờ' :
+						                   borrow.status == 'borrowed' ? 'Đang mượn' :
+						                   borrow.status == 'returned' ? 'Đã trả' :
+						                   borrow.status == 'outdate' ? 'Quá hạn' : ''}">
+						    </span>
 						</td>
 						
 						<td>
-			                <form th:if="${borrow.status == 'pending'}" th:action="@{/home/confirm-borrow}" method="post" 
+			                <form th:if="${borrow.status eq 'pending'}" th:action="@{/home/confirm-borrow}" method="post" 
 			                		onsubmit="return confirmBorrowAction(this)">
 			                    <input type="hidden" name="borrowId" th:value="${borrow.id}">
 			                    <button type="submit" class="confirm-btn">Xác nhận</button>
@@ -144,11 +162,20 @@
 			            </td>
 			            
 						<td>
-			                <form th:if="${borrow.status == 'borrowed'}" th:action="@{/home/renew}" method="post">
-			                    <input type="hidden" name="borrowId" th:value="${borrow.id}">
-			                    <button type="submit" class="renew-btn">Gia hạn</button>
-			                </form>
-			            </td>
+						    <form th:if="${borrow.status eq 'borrowed' and borrow.renewCount lt 2}" 
+						    	  th:action="@{/home/renew}" method="post"
+						          onsubmit="return renewCountAction(this)">
+						        <input type="hidden" name="borrowId" th:value="${borrow.id}">
+						        <button type="submit" class="renew-btn">Gia hạn</button>
+						    </form>
+						
+						    <p th:if="${borrow.renewCount ge 0 and borrow.renewCount lt 2}" 
+						       th:text="|Đã gia hạn: ${borrow.renewCount} lần|" 
+						       class="renewal-status">
+						    </p>
+						    
+						    <p th:if="${borrow.renewCount ge 2}" class="renewal-status expired">Đã hết lượt gia hạn</p>
+						</td>
 					</tr>
 			</tbody>
 			</table>
@@ -174,6 +201,10 @@
 	function confirmBorrowAction(form) {
         return confirm("Bạn có chắc chắn xác nhận mượn không? Lưu ý rằng không thể hủy xác nhận sau khi bấm 'OK'!");
     }
+	
+	function renewCountAction(form) {
+		return confirm("Bạn có chắc chắn muốn gia hạn? Lưu ý rằng không thể hoàn trả lượt gia hạn sau khi bấm 'OK' !");
+	}
 </script>
 </html>
 

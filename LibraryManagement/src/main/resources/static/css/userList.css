@@ -101,20 +101,21 @@ table th {
 
 /* Nút chỉnh sửa và xem lịch sử */
 .edit-btn, .history-btn {
-    padding: 5px 10px;
+    padding: 8px 12px;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: 0.3s;
+    width: 80%;
 }
 
 .edit-btn {
-    background-color: #d39e00;
+    background-color: #dc3545;
 }
 
 .edit-btn:hover {
-    background-color: #b38600;
+    filter: brightness(1.1);
 }
 
 .history-btn {

@@ -10,7 +10,7 @@
 <body>
 	<!-- Sidebar -->
 	<div th:replace="admin :: sidebar"></div>
-
+	
 	<!-- Danh sách độc giả -->
 	<div class="container">
 		<h2>Danh sách độc giả</h2>
@@ -44,11 +44,17 @@
 							th:class="${user.status == 'Hoạt động' ? 'status-label status-active' : 'status-label status-locked'}">
 						</span>
 					</td>
+					
 		            <td>
-		                <form action="" method="post">
-		                	<button type="button" class="block-btn">Khóa</button>
-		                </form>
-		            </td>
+					    <form th:action="@{/admin/confirm-toggle-status}" method="post" 
+					    		onsubmit="return confirm('Bạn có chắc chắn Khóa tài khoản này không ?')">
+					        <input type="hidden" name="userId" th:value="${user.userId}" >
+					        <button type="submit" class="edit-btn" 
+					                th:text="${user.status == 'Hoạt động' ? 'Khóa' : 'Mở khóa'}">
+					        </button>
+					    </form>
+					</td>
+
 		            <td>
 		            	<form th:action="@{/admin/borrow_return_view}" method="post">
 		            		<button type="submit" class="history-btn">Xem lịch sử</button>
@@ -59,5 +65,9 @@
 		</table>
 	</div>
 </body>
+
+<script>
+    window.history.replaceState({}, document.title, window.location.href);
+</script>
 
 </html>

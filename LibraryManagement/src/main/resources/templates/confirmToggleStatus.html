@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Xác nhận cập nhật trạng thái</title>
+</head>
+<body>
+    <h2>Xác nhận thay đổi trạng thái</h2>
+    <p>Bạn có chắc muốn <b th:text="${user.status == 'Hoạt động' ? 'khóa' : 'mở khóa'}"></b> tài khoản <b th:text="${user.name}"></b> không?</p>
+
+    <form th:action="@{/admin/toggle-user-status}" method="post">
+        <input type="hidden" name="userId" th:value="${user.userId}" />
+        <input type="hidden" name="confirm" value="true" />
+        <button type="submit">Xác nhận</button>
+        <a href="/admin/user-list">Hủy</a>
+    </form>
+</body>
+</html>

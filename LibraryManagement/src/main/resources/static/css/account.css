@@ -1,11 +1,3 @@
-/* Reset CSS */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-}
-
 body {
     background-color: #f8f9fa;
     color: #333;
@@ -209,6 +201,24 @@ body {
     color: #333;
 }
 
+.searching-action {
+	display: flex;
+	flex-direction: row;
+}
+
+.search-btn {
+	width: 20%;
+    padding: 10px;
+    margin-right: 500px;
+    margin-left: 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
 .status {
     padding: 6px;
     border: 1px solid #ccc;
@@ -220,20 +230,6 @@ input[name="search"] {
     padding: 6px;
     border: 1px solid #ccc;
     border-radius: 5px;
-}
-
-button[type="submit"] {
-    background: #007bff;
-    color: white;
-    border: none;
-    padding: 7px 15px;
-    font-size: 14px;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-button[type="submit"]:hover {
-    background: #0056b3;
 }
 
 /* ----- Bảng lịch sử mượn/trả ----- */
@@ -258,23 +254,98 @@ table tr:hover {
     background: #f1f1f1;
 }
 
-/* Trạng thái */
-td:nth-child(5) {
+/* ----- Màu sắc trạng thái ----- */
+.pending {
+    color: orange;
     font-weight: bold;
 }
 
-/* Màu trạng thái */
-td:nth-child(5):contains("Đã trả") {
-    color: green;
+.borrowed {
+    color: blue;
+    font-weight: bold;
 }
 
-td:nth-child(5):contains("Chưa trả") {
+.returned {
+    color: green;
+    font-weight: bold;
+}
+
+.outdate {
+    color: red;
+    font-weight: bold;
+}
+
+/* ----- Nút "Xác nhận mượn" màu xanh lá ----- */
+.confirm-btn {
+    display: inline-block;
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 7px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.confirm-btn:hover {
+    background: #218838;
+}
+
+/* ----- Nút "Gia hạn" màu vàng ----- */
+.renew-btn {
+    display: inline-block;
+    background: #ffc107;
+    color: black;
+    border: none;
+    padding: 7px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.renew-btn:hover {
+    background: #e0a800;
+}
+
+/* ----- Căn lề cho dòng chữ "Đã gia hạn ..." ----- */
+td.renewal-status {
+    text-align: center;
+    font-weight: bold;
+    color: #856404;
+    background: #fff3cd; /* Màu vàng nhạt để làm nổi bật */
+    padding: 8px;
+    border-radius: 5px;
+}
+
+.renewal-status {
+    font-weight: bold;
+    color: #333;
+    margin-top: 5px;
+}
+
+.renewal-status.expired {
     color: red;
 }
 
-td:nth-child(5):contains("Đang mượn") {
-    color: orange;
+.notice-container {
+    background-color: #f8f9fa;
+    border: 1px solid #ccc;
+    padding: 16px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    text-align: left;
 }
 
+.notice-container h2 {
+    color: #d9534f;
+    text-align: center;
+}
 
+.notice-container ul {
+    padding-left: 20px;
+}
+
+.notice-container li {
+    margin-bottom: 8px;
+}
 

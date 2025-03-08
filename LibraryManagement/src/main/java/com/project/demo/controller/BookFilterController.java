@@ -26,25 +26,6 @@ public class BookFilterController {
 		this.bookService = bookService;
 		this.categoryService = categoryService;
 	}
-
-//	@GetMapping("/book-filter")
-//	public ModelAndView bookFilterPage(
-//			@RequestParam(value = "categoryName", required = false) Set<String> categoryNames,
-//			@RequestParam(value = "timeFilter", required = false) Set<String> timeRanges,
-//			@RequestParam(defaultValue = "0") int page,			// Bảo
-//			@RequestParam(defaultValue = "20") int size) {		// Bảo
-//
-//		ModelAndView mav = new ModelAndView("bookFilter");
-//		
-//		List<Category> categories = categoryService.getAllCategories();
-//		// Gọi phương thức filterBooks đã sửa (trả về Page<Book>)
-//	    Page<Book> bookPage = bookService.filterBooks(categoryNames, timeRanges, page, size);	// Bảo
-//
-//	    mav.addObject("bookPage", bookPage);
-//	    mav.addObject("currentPage", page);
-//	    mav.addObject("categories", categories);
-//		return mav;
-//	}
 	
 	@GetMapping("/book-filter")
 	public ModelAndView bookFilterPage(

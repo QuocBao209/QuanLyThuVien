@@ -49,4 +49,28 @@ public class BorrowReturnController {
 
         return "redirect:/home/account"; // ⚡ Chuyển hướng về trang danh sách mượn
     }
+    
+    @PostMapping("/renew")
+    public String renewBook (@RequestParam("borrowId") Long borrowId, RedirectAttributes redirectAttributes) {
+    	Borrow_Return borrowReturn = borrowReturnRepository.findById(borrowId).orElse(null);
+    	
+    	if (!"borrowed".equals(borrowReturn.getStatus())) {
+    		redirectAttributes.addFlashAttribute("error", "Lỗi: Chỉ có thể gia hạn khi sách đang được mượn.");
+            return "redirect:/home/account";
+    	}
+    	
+    	if (borrowReturn.getRenewCount() >= 2) {
+    		redirectAttributes.addFlashAttribute("error", "Bạn đã hết lượt gia hạn.");
+            return "redirect:/home/account";
+    	}
+    	
+    	// Tăng số lần gia hạn
+    	borrowReturn.setRenewCount(borrowReturn.getRenewCount() + 1);
+    	
+    	// Lưu vào DB
+        borrowReturnRepository.save(borrowReturn);
+
+        redirectAttributes.addFlashAttribute("message", "Gia hạn thành công! Hạn trả sách mới: ");
+        return "redirect:/home/account";
+    }
 }
