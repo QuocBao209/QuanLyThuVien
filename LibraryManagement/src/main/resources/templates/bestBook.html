@@ -15,16 +15,18 @@
 		<!-- Danh sách sách -->
 	<div class="book-container">
 		<h2>Top sách được mượn nhiều nhất</h2>
-		<th:block th:if="${#lists.isEmpty(books)}">
-            <p>Chưa có sách nào được thêm.</p>
-        </th:block>
         
 		<!-- Top 3 sách đứng đầu -->
          <div class="top-books">
-               <div th:each="book, iterStat : ${books}" th:if="${iterStat.index < 3}" class="book-item" onmousemove="showInfo(event, this)" onmouseleave="hideInfo(this)">
+               <div th:each="book, iterStat : ${topBooks}" th:if="${iterStat.index < 3}" class="book-item" onmousemove="showInfo(event, this)" onmouseleave="hideInfo(this)">
 	                <div class="medal" th:text="${iterStat.index + 1}">🥇</div>
-	                <img th:alt="${book.bookName}" th:src="@{/images/book_images/{img}(img=${book.bookImage})}">
+	                <img th:alt="${book.bookName}" th:src="@{/images/book_images/{img}(img=${book.bookImage})}"width="80">
 	                <h4 th:text="${book.bookName}"></h4>
+	                <div class="button-container">
+	                    <form th:action="@{/home/book-detail/{id}(id=${book.bookId})}" method="get">
+	                        <button type="submit">Xem sách</button>
+	                    </form>
+	                </div>
 	                <!-- Tooltip chứa thông tin sách -->
 			    	<div class="book-info">
 				        <img th:alt="${book.bookName}"  th:src="@{/images/book_images/{img}(img=${book.bookImage})}">
@@ -49,10 +51,15 @@
 		<br>
 		
 		<div class="book-list">
-			<div th:each="book, iterStat : ${books}" th:if="${iterStat.index >= 3}" class="book-item" onmousemove="showInfo(event, this)" onmouseleave="hideInfo(this)">
-				<div class="rank-number" th:text="${iterStat.index + 1}"></div>
-				<img th:alt="${book.bookName}"  th:src="@{/images/book_images/{img}(img=${book.bookImage})}">
+			<div th:each="book, iterStat : ${bookPage.content}" th:if="${iterStat.index >= 0}" class="book-item" onmousemove="showInfo(event, this)" onmouseleave="hideInfo(this)">
+				<div class="rank-number" th:text="${bookPage.number * bookPage.size + iterStat.index + 4}"></div>
+				<img th:alt="${book.bookName}"  th:src="@{/images/book_images/{img}(img=${book.bookImage})}"width="80">
 				<h4 th:text="${book.bookName}"></h4>
+					<div class="button-container">
+	                    <form th:action="@{/home/book-detail/{id}(id=${book.bookId})}" method="get">
+	                        <button type="submit">Xem sách</button>
+	                    </form>
+	                </div>
 				<!-- Tooltip chứa thông tin sách -->
 			    	<div class="book-info">
 				        <img th:alt="${book.bookName}"  th:src="@{/images/book_images/{img}(img=${book.bookImage})}">
@@ -68,36 +75,30 @@
 						<p th:text="'Năm xuất bản: ' + ${book.publishYear}"></p>
 			    	</div>
 			</div>
+			
 		</div>
+				<div th:if="${bookPage.totalElements == 0}">
+	            	<p>Không có sách nào trong thư viện</p>
+	       		</div>
+		<!-- Phân trang -->
+	        <div class="pagination" th:if="${bookPage.totalPages > 1}">
+	            <ul>
+	                <li th:if="${bookPage.hasPrevious()}">
+	                    <a th:href="@{/home/best-book(page=${bookPage.number - 1})}">Trước</a>
+	                </li>
+	
+	                <li th:each="i : ${#numbers.sequence(0, bookPage.totalPages - 1)}"
+	                    th:classappend="${i == bookPage.number} ? 'active'">
+	                    <a th:href="@{/home/best-book(page=${i})}" th:text="${i + 1}"></a>
+	                </li>
+	
+	                <li th:if="${bookPage.hasNext()}">
+	                    <a th:href="@{/home/best-book(page=${bookPage.number + 1}, size=${bookPage.size})}">Sau</a>
+	                </li>
+	            </ul>
+	        </div>
 	</div>
 	
-	 <script>
-        function showInfo(event, bookItem) {
-            let infoBox = bookItem.querySelector(".book-info");
-            infoBox.style.display = "block";
-         // Lấy kích thước của tooltip
-            let tooltipWidth = infoBox.offsetWidth;
-            let tooltipHeight = infoBox.offsetHeight;
-
-         // Tính toán vị trí tooltip dựa trên vị trí chuột so với phần tử cha
-            let posX = event.clientX - bookItem.getBoundingClientRect().left + 10;
-            let posY = event.clientY - bookItem.getBoundingClientRect().top + 10;
-
-            // Đảm bảo tooltip không bị tràn khỏi màn hình
-            if (posX + tooltipWidth > window.innerWidth) {
-                posX -= tooltipWidth + 20;
-            }
-            if (posY + tooltipHeight > window.innerHeight) {
-                posY -= tooltipHeight + 20;
-            }
-            infoBox.style.left = posX + "px";
-            infoBox.style.top = posY + "px";
-        }
-
-        function hideInfo(bookItem) {
-            let infoBox = bookItem.querySelector(".book-info");
-            infoBox.style.display = "none";
-        }
-    </script>
+	 <script th:src="@{/js/TooltipController.js}"></script>
 </body>
 </html>
