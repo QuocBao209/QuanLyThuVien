@@ -4,6 +4,8 @@ import com.project.admin.entity.User;
 import com.project.admin.repository.UserRepository;
 import com.project.admin.security.BCryptUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,22 +21,23 @@ public class UserService {
     public List<User> getUsers() {
         return userRepository.findAll();
     }
-    
-    // Tìm user theo id
+
+    // Tìm user theo ID
     public Optional<User> findById(Long userId) {
-    	return userRepository.findById(userId);
+        return userRepository.findById(userId);
     }
-    
-    // Lấy danh sách độc giả (role : user)
+
+    // Lấy danh sách độc giả (role: USER)
     public List<User> getAllUsersWithRoleUser() {
         return userRepository.findAllByRole("USER");
     }
 
+    // Tìm kiếm user theo tên hoặc email
     public List<User> searchUsers(String keyword) {
         return userRepository.findByRoleAndNameContainingOrRoleAndEmailContaining("USER", keyword, "USER", keyword);
     }
 
-    // Lưu tất cả người dùng vào cơ sở dữ liệu
+    // Lưu danh sách người dùng vào database (Kiểm tra hash password trước khi lưu)
     public void transferData(List<User> users) {
         users.forEach(user -> {
             if (!isPasswordHashed(user.getPassword())) {
@@ -43,13 +46,13 @@ public class UserService {
         });
         userRepository.saveAll(users);
     }
-    
-    // Lưu thông tin một người dùng 
+
+    // Lưu thông tin một người dùng
     public void save(User user) {
         userRepository.save(user);
     }
 
-    // Phương thức kiểm tra mật khẩu đã được mã hóa hay chưa
+    // Kiểm tra mật khẩu đã được hash hay chưa
     private boolean isPasswordHashed(String password) {
         return password != null && password.startsWith("$2a$");
     }
@@ -64,16 +67,17 @@ public class UserService {
     public Optional<User> authenticateUser(String username, String password) {
         Optional<User> userOptional = userRepository.findByUsername(username);
         if (userOptional.isPresent() && BCryptUtil.checkPassword(password, userOptional.get().getPassword())) {
-            return userOptional; // Trả về user nếu xác thực thành công
+            return userOptional; // Xác thực thành công
         }
-        return Optional.empty(); // Trả về Optional rỗng nếu không hợp lệ
+        return Optional.empty(); // Sai tài khoản hoặc mật khẩu
     }
 
-    // Kiểm tra xem username đã tồn tại trong database chưa
+    // Kiểm tra xem username đã tồn tại chưa
     public boolean existsByUsername(String username) {
         return userRepository.findByUsername(username).isPresent();
     }
 
+    // Đặt lại mật khẩu người dùng
     public boolean resetPassword(String email, String newPassword) {
         Optional<User> userOptional = userRepository.findByEmail(email);
         if (userOptional.isPresent()) {
@@ -84,26 +88,43 @@ public class UserService {
         }
         return false;
     }
-    
+
     // Tìm người dùng bằng username
     public Optional<User> getUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
-    
-    // Cập nhật status độc giả
+
+    // Cập nhật trạng thái của độc giả
     public void updateStatus(Long userId, String newStatus) {
-    	Optional<User> userOptional = userRepository.findById(userId);
-    	if (userOptional.isPresent()) {
-    		User user = userOptional.get();
-    		user.setStatus(newStatus);
-    		userRepository.save(user);
-    	}
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setStatus(newStatus);
+            userRepository.save(user);
+        }
     }
 
-    // Xác định role tài khoản theo email (Bảo)
+    // Xác định vai trò tài khoản dựa trên email
     public String getUserRole(String email) {
-    	return userRepository.findByEmail(email)
-    			.map(User::getRole)
-    			.orElseThrow(() -> new IllegalArgumentException("Email không tồn tại trong hệ thống!"));		
+        return userRepository.findByEmail(email)
+                .map(User::getRole)
+                .orElseThrow(() -> new IllegalArgumentException("Email không tồn tại trong hệ thống!"));
+    }
+
+    // LẤY NGƯỜI DÙNG HIỆN TẠI (USER ĐANG ĐĂNG NHẬP)
+    public User getCurrentUser() {
+        String username = getCurrentUsername();
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("Người dùng không tồn tại!"));
+    }
+
+    //  LẤY USERNAME CỦA NGƯỜI DÙNG HIỆN TẠI
+    public String getCurrentUsername() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            return ((UserDetails) principal).getUsername();
+        } else {
+            return principal.toString();
+        }
     }
 }

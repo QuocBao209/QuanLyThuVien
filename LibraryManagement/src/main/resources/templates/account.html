@@ -143,16 +143,17 @@
 						<td th:text="${borrow.startDate != null ? #dates.format(borrow.startDate, 'dd/MM/yyyy') : '------'}"></td>
 						
 						<td th:text="${borrow.endDate != null ? #dates.format(borrow.endDate, 'dd/MM/yyyy') : '------'}"></td>
-            			 
+
 						<td>
-						    <span th:classappend="${borrow.status}" 
-						          th:text="${borrow.status == 'pending' ? 'Đang chờ' :
-						                   borrow.status == 'borrowed' ? 'Đang mượn' :
-						                   borrow.status == 'returned' ? 'Đã trả' :
-						                   borrow.status == 'outdate' ? 'Quá hạn' : ''}">
-						    </span>
+							<span th:classappend="${borrow.status}"
+								  th:text="${borrow.status == 'pending' ? 'Đang chờ'
+										   : (borrow.status == 'borrowed' ? 'Đang mượn'
+										   : (borrow.status == 'returned' ? 'Đã trả'
+										   : (borrow.status == 'outdate' ? 'Quá hạn' : '')))}">
+							</span>
 						</td>
-						
+
+
 						<td>
 			                <form th:if="${borrow.status eq 'pending'}" th:action="@{/home/confirm-borrow}" method="post" 
 			                		onsubmit="return confirmBorrowAction(this)">
