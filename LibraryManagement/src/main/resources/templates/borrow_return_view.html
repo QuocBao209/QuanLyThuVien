@@ -67,23 +67,33 @@
 								<span th:case="'outdate'" class="status-outdate">Quá hạn</span>
 							</span>
 	                    </td>
-	                    
-	                    <td>
-						    <form th:action="@{/admin/borrow-confirm}" method="post"
-						          th:if="${borrowReturn.status == 'pending' or borrowReturn.status == 'borrowed'}"
-						          onsubmit="return confirmAction(this)">
-						        <input type="hidden" name="borrowId" th:value="${borrowReturn.id}">
-						        <button type="submit"
-						                th:classappend="${borrowReturn.status == 'pending' ? 'btn-confirm' : 'btn-return'}"
-						                th:text="${borrowReturn.status == 'pending' ? 'Xác nhận mượn' : 'Xác nhận trả'}">
-						        </button>
-						    </form>
-						    
-						    <button th:if="${borrowReturn.status == 'returned'}" class="btn-disabled" disabled>Đã trả</button>
-						    <button th:if="${borrowReturn.status == 'outdate'}" class="btn-disabled" disabled>Quá hạn</button>
-						</td>
-						
-	                    <td>
+
+					<td>
+						<!-- Nút xác nhận mượn -->
+						<form th:action="@{/admin/borrow-confirm}" method="post"
+							  th:if="${borrowReturn.status == 'pending'}"
+							  onsubmit="return confirmAction(this)">
+							<input type="hidden" name="borrowId" th:value="${borrowReturn.id}">
+							<button type="submit" class="btn-confirm">Xác nhận mượn</button>
+						</form>
+
+						<!-- Nút xác nhận trả -->
+						<form th:action="@{/admin/borrow-return}" method="post"
+							  th:if="${borrowReturn.status == 'borrowed'}"
+							  onsubmit="return confirmAction(this)">
+							<input type="hidden" name="borrowId" th:value="${borrowReturn.id}">
+							<button type="submit" class="btn-return">Xác nhận trả</button>
+						</form>
+
+						<!-- Nếu sách đã trả -->
+						<button th:if="${borrowReturn.status == 'returned'}" class="btn-disabled" disabled>Đã trả</button>
+
+						<!-- Nếu sách quá hạn -->
+						<button th:if="${borrowReturn.status == 'outdate'}" class="btn-disabled" disabled>Quá hạn</button>
+					</td>
+
+
+					<td>
 	                        <p th:if="${borrowReturn.renewCount ge 0 and borrowReturn.renewCount lt 2}" 
 						       th:text="|Đã gia hạn: ${borrowReturn.renewCount} lần|" 
 						       class="renewal-status">
