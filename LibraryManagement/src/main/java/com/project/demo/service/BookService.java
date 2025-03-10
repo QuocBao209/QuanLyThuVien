@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -158,5 +159,30 @@ public class BookService {
     // Phân trang danh sách tất cả sách ở bookFilter (kiểu dữ liệu Page) (Bảo)
     public Page<Book> getAllBooks(Pageable pageable) {
         return bookRepository.findByIsDeletedFalse(pageable);
+    }
+    
+    //Phân trang danh sách sách mới nhất (An)
+    public Page<Book> getLatestBooks(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("publishYear").descending());
+        return bookRepository.findByIsDeletedFalse(pageable);
+    }
+    
+    //Phân trang danh sách sách đề cử ( không lấy top 3) (An)
+    public Page<Book> getPagedBooksSortedByBorrowCountExcludingTop3(int page, int size) {
+        List<Book> top3Books = getTop3Books(); // Lấy danh sách top 3
+        
+        Page<Book> pagedBooks = bookRepository.findBooksSortedByBorrowCount(PageRequest.of(page, size + 3)); // Lấy thêm 3 để tránh mất sách khi lọc
+
+        List<Book> filteredBooks = pagedBooks.stream()
+            .filter(book -> !top3Books.contains(book))
+            .toList();
+
+        long totalBooksExcludingTop3 = bookRepository.count() - top3Books.size(); // Đếm tổng số sách trừ top 3
+
+        return new PageImpl<>(filteredBooks, PageRequest.of(page, size), totalBooksExcludingTop3);
+    }
+    //Top 3 sách đề cử(An)
+    public List<Book> getTop3Books() {
+        return bookRepository.findBooksSortedByBorrowCount(PageRequest.of(0, 3)).getContent();
     }
 }

@@ -9,7 +9,7 @@
 <body>
 
 	<header th:fragment="header">
-		<a href="/home" style="text-decoration: none; color: inherit; font-size: 20px;">
+		<a href="/home" style="text-decoration: none; color: inherit;">
 			📚 Thư viện Điện tử
 		</a>
 		<nav>
@@ -20,6 +20,18 @@
 				<li><a href="#">Liên hệ</a></li>
 			</ul>
 		</nav>
+		<div class="notification">
+        <!-- Biểu tượng chuông dạng SVG -->
+        <div class="notification-wrapper">
+        <div class="notification">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 2C10.3 2 9 3.3 9 5V5.1C6.2 6.2 4.3 8.9 4.3 12V17L3 18.5V19H21V18.5L19.7 17V12C19.7 8.9 17.8 6.2 15 5.1V5C15 3.3 13.7 2 12 2ZM12 22C13.1 22 14 21.1 14 20H10C10 21.1 10.9 22 12 22Z"/>
+            </svg>
+            <span class="badge">99+</span>
+        </div>
+    </div>
+    </div>
+		<input type="text" placeholder="Tìm kiếm sách ..." class="search-bar">
 	</header>
 	
 	<!-- Hero Section -->
