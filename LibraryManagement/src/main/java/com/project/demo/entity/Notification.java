@@ -1,5 +1,6 @@
 package com.project.demo.entity;
 
+import com.project.demo.entity.User;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
@@ -16,11 +17,14 @@ public class Notification {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+
+
     @Column(columnDefinition = "NVARCHAR(255)")
     private String message;
 
     @Column(columnDefinition = "NVARCHAR(50)")
     private String type;
+
     private LocalDateTime createdAt;
     private boolean isRead = false;
 }

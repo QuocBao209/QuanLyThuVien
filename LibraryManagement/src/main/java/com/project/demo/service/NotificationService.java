@@ -1,11 +1,12 @@
-package com.project.admin.service;
+package com.project.demo.service;
 
-import com.project.admin.entity.Notification;
-import com.project.admin.entity.User;
-import com.project.admin.repository.NotificationRepository;
+import com.project.demo.entity.Notification;
+import com.project.demo.entity.User;
+import com.project.demo.repository.NotificationRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class NotificationService {
@@ -15,11 +16,7 @@ public class NotificationService {
         this.notificationRepository = notificationRepository;
     }
 
-    public void save(Notification notification) {
-        notificationRepository.save(notification);
-    }
-
-    public List<Notification> getNotificationsByUser(User user) {
+    public List<Notification> getNotificationsByUser(Optional<User> user) {
         return notificationRepository.findByUserOrderByCreatedAtDesc(user);
     }
 }

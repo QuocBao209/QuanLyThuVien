@@ -1,5 +1,6 @@
 package com.project.admin.entity;
 
+import com.project.admin.entity.User;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
@@ -13,8 +14,9 @@ public class Notification {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id",  nullable = false)
     private User user;
+
 
     @Column(columnDefinition = "NVARCHAR(255)")
     private String message;

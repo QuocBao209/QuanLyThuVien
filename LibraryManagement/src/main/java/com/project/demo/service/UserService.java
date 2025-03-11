@@ -3,6 +3,7 @@ package com.project.demo.service;
 import com.project.demo.entity.User;
 import com.project.demo.repository.UserRepository;
 import com.project.demo.security.BCryptUtil;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,9 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
     // Lấy danh sách người dùng
     public List<User> getUsers() {
         return userRepository.findAll();
@@ -98,4 +102,15 @@ public class UserService {
     			.map(User::getRole)
     			.orElseThrow(() -> new IllegalArgumentException("Email không tồn tại trong hệ thống!"));		
     }
+
+
+
+
+    public Long getUserIdByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .map(User::getUserId)
+                .orElse(null);
+    }
+
+
 }
