@@ -156,7 +156,7 @@
 
 						<td>
 			                <form th:if="${borrow.status eq 'pending'}" th:action="@{/home/confirm-borrow}" method="post" 
-			                		onsubmit="return confirmBorrowAction(this)">
+			                		onsubmit="return confirm('Bạn có chắc chắn muốn gia hạn? Lưu ý rằng không thể hoàn trả lượt gia hạn sau khi bấm \'OK\'!');">
 			                    <input type="hidden" name="borrowId" th:value="${borrow.id}">
 			                    <button type="submit" class="confirm-btn">Xác nhận</button>
 			                </form>
@@ -165,7 +165,7 @@
 						<td>
 						    <form th:if="${borrow.status eq 'borrowed' and borrow.renewCount lt 2}" 
 						    	  th:action="@{/home/renew}" method="post"
-						          onsubmit="return renewCountAction(this)">
+						          onsubmit="return confirm('Bạn có chắc chắn xác nhận mượn không? Lưu ý rằng không thể hủy xác nhận sau khi bấm \'OK\'!');">
 						        <input type="hidden" name="borrowId" th:value="${borrow.id}">
 						        <button type="submit" class="renew-btn">Gia hạn</button>
 						    </form>
@@ -184,7 +184,6 @@
 	</div>
 </body>
 
-<!-- Chức năng pop-up giao diện (không vi phạm nguyên tắc mô hình MVC) -->
 <script type="text/javascript">
 	function openPopup() {
 	    document.getElementById("editAccountPopup").style.display = "flex";
@@ -194,18 +193,9 @@
 	    document.getElementById("editAccountPopup").style.display = "none";
 	}
 	
-	// Đảm bảo popup không tự hiển thị khi tải trang
 	document.addEventListener("DOMContentLoaded", function () {
 	    document.getElementById("editAccountPopup").style.display = "none";
 	});
-	
-	function confirmBorrowAction(form) {
-        return confirm("Bạn có chắc chắn xác nhận mượn không? Lưu ý rằng không thể hủy xác nhận sau khi bấm 'OK'!");
-    }
-	
-	function renewCountAction(form) {
-		return confirm("Bạn có chắc chắn muốn gia hạn? Lưu ý rằng không thể hoàn trả lượt gia hạn sau khi bấm 'OK' !");
-	}
 </script>
 </html>
 

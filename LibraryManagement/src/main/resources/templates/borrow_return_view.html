@@ -80,7 +80,7 @@
 						<!-- Nút xác nhận trả -->
 						<form th:action="@{/admin/borrow-return}" method="post"
 							  th:if="${borrowReturn.status == 'borrowed'}"
-							  onsubmit="return confirmAction(this)">
+							  onsubmit="return confirm('Bạn có chắc chắn muốn thực hiện thao tác này?');">
 							<input type="hidden" name="borrowId" th:value="${borrowReturn.id}">
 							<button type="submit" class="btn-return">Xác nhận trả</button>
 						</form>
@@ -107,11 +107,5 @@
 		</table>
     </div>
 </body>
-
-<script>
-    function confirmAction(form) {
-        return confirm("Bạn có chắc chắn muốn thực hiện thao tác này?");
-    }
-</script>
 
 </html>

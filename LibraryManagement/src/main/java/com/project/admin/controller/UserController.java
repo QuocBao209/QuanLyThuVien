@@ -28,13 +28,12 @@ public class UserController {
 		return modelAndView;
 	}
 
-
 	// Cập nhật status
 	@PostMapping("/update-status")
 	public String updateStatus(@RequestParam("userId") Long userId, 
 							   @RequestParam("status") String newStatus) {
 		userService.updateStatus(userId, newStatus);
-		return "redirect:/admin/user-list";
+		return "forward:/admin/user-list";
 	}
 
 	// Xử lý trạng thái tài khoản

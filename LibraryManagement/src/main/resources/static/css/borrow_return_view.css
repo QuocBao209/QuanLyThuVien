@@ -116,6 +116,7 @@ td span[style="color: gray;"] {
 .btn-confirm {
     background-color: green;
     color: white;
+    border-radius: 5px;
     padding: 5px 10px;
     border: none;
     cursor: pointer;
@@ -124,7 +125,8 @@ td span[style="color: gray;"] {
 .btn-return {
     background-color: red;
     color: white;
-    padding: 5px 10px;
+    border-radius: 5px;
+    padding: 5px 15px;
     border: none;
     cursor: pointer;
 }

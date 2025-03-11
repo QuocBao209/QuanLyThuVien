@@ -4,8 +4,6 @@ import com.project.admin.entity.User;
 import com.project.admin.repository.UserRepository;
 import com.project.admin.security.BCryptUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -110,21 +108,5 @@ public class UserService {
                 .map(User::getRole)
                 .orElseThrow(() -> new IllegalArgumentException("Email không tồn tại trong hệ thống!"));
     }
-
-    // LẤY NGƯỜI DÙNG HIỆN TẠI (USER ĐANG ĐĂNG NHẬP)
-    public User getCurrentUser() {
-        String username = getCurrentUsername();
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException("Người dùng không tồn tại!"));
-    }
-
-    //  LẤY USERNAME CỦA NGƯỜI DÙNG HIỆN TẠI
-    public String getCurrentUsername() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            return ((UserDetails) principal).getUsername();
-        } else {
-            return principal.toString();
-        }
-    }
+   
 }

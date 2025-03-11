@@ -47,6 +47,7 @@ public class BorrowReturnController {
 		}
 		return "forward:/admin/borrow_return_view";
 	}
+	
 	// Xác nhận trả sách (Chuyển từ borrowed → returned hoặc outdate)
 	@PostMapping("/borrow-return")
 	public String returnBook(@RequestParam("borrowId") Long borrowId, RedirectAttributes redirectAttributes) {
