@@ -40,19 +40,10 @@ public class Book {
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private List<Borrow_Return> borrowReturns = new ArrayList<>();
 
-    public void addAuthor(Author author) {
-        authors.add(author);
-        author.getBooks().add(this);
-    }
-
-
-    public void removeAuthor(Author author) {
-        authors.remove(author);
-        author.getBooks().remove(this);
-    }
-
     @Column(nullable = false)
     private boolean isDeleted = false;
+
+    private int borrowCount;
 
     @Override
     public String toString() {
