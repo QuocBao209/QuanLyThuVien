@@ -1,22 +1,28 @@
 package com.project.demo.service;
 
 import com.project.demo.entity.Notification;
-import com.project.demo.entity.User;
 import com.project.demo.repository.NotificationRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class NotificationService {
-    private final NotificationRepository notificationRepository;
+    @Autowired
+    private NotificationRepository notificationRepository;
 
-    public NotificationService(NotificationRepository notificationRepository) {
-        this.notificationRepository = notificationRepository;
+    public List<Notification> getNotificationsByUsername(String username) {
+        return notificationRepository.findNotificationsByUsername(username);
     }
 
-    public List<Notification> getNotificationsByUser(Optional<User> user) {
-        return notificationRepository.findByUserOrderByCreatedAtDesc(user);
+    // Chuyển dữ liệu thông báo vào database
+    public void transferData(List<Notification> notifications) {
+        notificationRepository.saveAll(notifications);
+    }
+
+    // Lấy tất cả thông báo
+    public List<Notification> getAllNotifications() {
+        return notificationRepository.findAll();
     }
 }
