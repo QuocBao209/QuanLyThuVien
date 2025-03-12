@@ -41,6 +41,31 @@
 
 
 
+
+			<div class="notification-wrapper">
+			    <div class="notification-btn">
+			        <svg viewBox="0 0 24 24">
+			            <path fill="white" d="M12 2C10.3 2 9 3.3 9 5V5.1C6.2 6.2 4.3 8.9 4.3 12V17L3 18.5V19H21V18.5L19.7 17V12C19.7 8.9 17.8 6.2 15 5.1V5C15 3.3 13.7 2 12 2ZM12 22C13.1 22 14 21.1 14 20H10C10 21.1 10.9 22 12 22Z"/>
+			        </svg>
+			        <!-- Hiện số lượng thông báo -->
+			        <span class="badge" th:if="${notifications != null and notifications.size() > 0}" th:text="${notifications.size()}"></span>
+			    </div>
+
+			    <!-- Dropdown thông báo -->
+			    <div id="notification-container" class="notification-container">
+			        <h3>Thông báo</h3>
+			        <!-- Hiện danh sách thông báo -->
+			        <ul>
+			            <li th:each="notification : ${notifications}">
+			                <a href="#" class="notification-item" th:text="${notification.message}"></a> <!-- Đang gắn thẻ a tạm thôi -->
+			            </li>
+			        </ul>
+			        <div class="view-all">
+			            <a href="/home/notifications">Xem tất cả</a> <!-- Chưa làm view (khoan test) -->
+			        </div>
+			    </div>
+			</div>
+		</nav>
 	</header>
 	
 	<!-- Hero Section -->
@@ -84,4 +109,24 @@
         <p>&copy; 2025 Thư viện Điện tử. Mọi quyền được bảo lưu.</p>
     </footer>
 </body>
+ <script>
+	 document.addEventListener("DOMContentLoaded", function () {
+		    document.addEventListener("click", function (event) {
+		        var notificationContainer = document.getElementById("notification-container");
+		        var notificationBtn = document.querySelector(".notification-btn");
+
+		        // Kiểm tra nếu click nằm ngoài thông báo và nút thông báo
+		        if (!notificationContainer.contains(event.target) && !notificationBtn.contains(event.target)) {
+		            notificationContainer.style.display = "none";
+		        }
+		    });
+
+		    document.querySelector(".notification-btn").addEventListener("click", function (event) {
+		        event.stopPropagation(); // Ngăn chặn sự kiện click lan ra ngoài
+		        var container = document.getElementById("notification-container");
+		        container.style.display = (container.style.display === "block") ? "none" : "block";
+		    });
+		});
+
+</script>
 </html>
