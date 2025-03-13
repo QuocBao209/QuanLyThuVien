@@ -36,7 +36,7 @@ public class LoginController {
 			User user = userOptional.get();
 
 			// Lưu username và role vào session
-			session.setAttribute("loggedInUser", username);
+			session.setAttribute("user", username);
 			session.setAttribute("role", user.getRole());
 
 			mav.setViewName("redirect:/home");
@@ -49,7 +49,7 @@ public class LoginController {
 	}
 
 	// Đăng xuất tài khoản
-	@GetMapping("/logout")
+	@GetMapping("/user-logout")
 	public String logout(HttpSession session) {
 		session.invalidate(); // Xóa toàn bộ session
 		return "redirect:/home";

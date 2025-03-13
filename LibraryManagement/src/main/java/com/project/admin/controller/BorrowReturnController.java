@@ -1,7 +1,9 @@
 package com.project.admin.controller;
 
+import com.project.admin.entity.Book;
 import com.project.admin.entity.Borrow_Return;
 import com.project.admin.entity.Notification;
+import com.project.admin.service.BookService;
 import com.project.admin.service.Borrow_ReturnService;
 import com.project.admin.service.NotificationService;
 import org.springframework.stereotype.Controller;
@@ -21,11 +23,14 @@ import java.util.List;
 public class BorrowReturnController {
 	private final Borrow_ReturnService borrowReturnService;
 	private final NotificationService notificationService;
+	private final BookService bookService;
 
-	public BorrowReturnController(Borrow_ReturnService borrowReturnService, NotificationService notificationService) {
+	public BorrowReturnController(Borrow_ReturnService borrowReturnService, NotificationService notificationService, BookService bookService) {
 		this.borrowReturnService = borrowReturnService;
-        this.notificationService = notificationService;
-    }
+		this.notificationService = notificationService;
+		this.bookService = bookService;
+	}
+
 
 	@PostMapping("/borrow_return_view")
 	public String showBorrowReturns(Model model) {
@@ -44,12 +49,22 @@ public class BorrowReturnController {
 			borrowReturn.setStatus("borrowed");
 			borrowReturnService.save(borrowReturn);
 
+			// Giảm số lượng sách đi 1
+			Book book = borrowReturn.getBook();
+			if (book.getAmount() > 0) {
+				book.setAmount(book.getAmount() - 1);
+				bookService.save(book);
+			} else {
+				redirectAttributes.addFlashAttribute("error", "Sách đã hết!");
+				return "forward:/admin/borrow_return_view";
+			}
+
 			// Lưu thông báo vào database
 			Notification notification = new Notification();
 			notification.setUser(borrowReturn.getUser());
-			notification.setMessage("Bạn đã mượn sách " + borrowReturn.getBook().getBookName() + " thành công!");
+			notification.setMessage("Bạn đã mượn sách " + book.getBookName() + " thành công!");
 			notification.setType("borrow_success");
-			notification.setCreatedAt(LocalDateTime.now()); // Cập nhật đúng kiểu dữ liệu
+			notification.setCreatedAt(LocalDateTime.now());
 			notificationService.save(notification);
 
 			redirectAttributes.addFlashAttribute("message", "Xác nhận mượn thành công!");
@@ -58,6 +73,7 @@ public class BorrowReturnController {
 		}
 		return "forward:/admin/borrow_return_view";
 	}
+
 
 
 	// Xác nhận trả sách (Chuyển từ borrowed → returned hoặc outdate)
@@ -76,11 +92,7 @@ public class BorrowReturnController {
 		}
 
 		LocalDate now = LocalDate.now();
-		LocalDate startDate = new java.sql.Date(borrowReturn.getStartDate().getTime())
-				.toLocalDate();
-
-
-
+		LocalDate startDate = new java.sql.Date(borrowReturn.getStartDate().getTime()).toLocalDate();
 		long daysBorrowed = java.time.temporal.ChronoUnit.DAYS.between(startDate, now);
 
 		borrowReturn.setEndDate(java.util.Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant()));
@@ -92,10 +104,16 @@ public class BorrowReturnController {
 		}
 
 		borrowReturnService.save(borrowReturn);
-		redirectAttributes.addFlashAttribute("message", "Xác nhận trả sách thành công!");
 
+		// Tăng số lượng sách lên 1
+		Book book = borrowReturn.getBook();
+		book.setAmount(book.getAmount() + 1);
+		bookService.save(book);
+
+		redirectAttributes.addFlashAttribute("message", "Xác nhận trả sách thành công!");
 		return "forward:/admin/borrow_return_view";
 	}
+
 
 
 }

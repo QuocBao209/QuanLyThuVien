@@ -67,4 +67,8 @@ public class BookService {
     public void transferData(List<Book> books) {
         bookRepository.saveAll(books);
     }
+
+    public void save(Book book) {
+        bookRepository.save(book);
+    }
 }

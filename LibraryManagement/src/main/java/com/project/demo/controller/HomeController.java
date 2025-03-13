@@ -21,7 +21,7 @@ public class HomeController {
 
 	@GetMapping("")
 	public String showHomePage(Model model, HttpSession session) {
-		String username = (String) session.getAttribute("loggedInUser");
+		String username = (String) session.getAttribute("user");
 
 		if (username != null) {
 			List<Notification> notifications = notificationService.getNotificationsByUsername(username);
