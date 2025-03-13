@@ -23,7 +23,7 @@ public class ExcelBookService {
     @Autowired
     private ImportService importService;
 
-    public int importBooksFromExcel(MultipartFile file) throws IOException {
+    public int importBooksFromExcel(MultipartFile file, Long userId) throws IOException {
         List<Book> bookList = new ArrayList<>();
         List<ImportDetail> importDetails = new ArrayList<>();
         LocalDate importDate = LocalDate.now();
@@ -37,7 +37,7 @@ public class ExcelBookService {
 
             Sheet sheet = workbook.getSheetAt(0);
             Iterator<Row> rowIterator = sheet.iterator();
-            rowIterator.next();
+            rowIterator.next(); // Bỏ qua dòng tiêu đề
 
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
@@ -53,11 +53,13 @@ public class ExcelBookService {
                     continue;
                 }
 
+                // Xử lý category
                 Category category = categoryCache.computeIfAbsent(categoryName, k -> {
                     Category foundCategory = categoryService.findByName(k);
                     return foundCategory != null ? foundCategory : categoryService.saveCategory(new Category(k));
                 });
 
+                // Xử lý danh sách tác giả
                 List<Author> authors = new ArrayList<>();
                 for (String authorName : authorNames.split(",")) {
                     authorName = authorName.trim();
@@ -67,6 +69,7 @@ public class ExcelBookService {
                     authors.add(author);
                 }
 
+                // Kiểm tra sách đã tồn tại chưa
                 String bookKey = bookName.toLowerCase() + "-" + publishYear + "-" + categoryName + "-" + String.join(",", authorNames);
                 Book book = bookCache.get(bookKey);
                 if (book == null) {
@@ -87,6 +90,7 @@ public class ExcelBookService {
                     bookCache.put(bookKey, book);
                 }
 
+                // Thêm vào danh sách chi tiết nhập hàng
                 ImportDetail importDetail = new ImportDetail();
                 importDetail.setBook(book);
                 importDetail.setAmount(amount);
@@ -94,11 +98,15 @@ public class ExcelBookService {
             }
         }
 
+        // Lưu sách vào database
         bookService.transferData(bookList);
-        importService.importBooks(importDetails, importDate);
+
+        // Gọi phương thức nhập sách với userId
+        importService.importBooks(importDetails, importDate, userId);
 
         return bookList.size();
     }
+
 
     private String getStringValue(Cell cell) {
         if (cell == null || cell.getCellType() == CellType.BLANK) return "";

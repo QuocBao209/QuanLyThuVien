@@ -23,11 +23,6 @@ public class UserService {
     public List<User> getUsers() {
         return userRepository.findAll();
     }
-    
-    // Lấy danh sách độc giả (role : user)
-    public List<User> getAllUsersWithRoleUser() {
-        return userRepository.findAllByRole("USER");
-    }
 
     public List<User> searchUsers(String keyword) {
         return userRepository.findByRoleAndNameContainingOrRoleAndEmailContaining("USER", keyword, "USER", keyword);

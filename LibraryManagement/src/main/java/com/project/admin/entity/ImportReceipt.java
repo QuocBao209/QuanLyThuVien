@@ -18,6 +18,10 @@ public class ImportReceipt {
     @Column(name = "import_date", nullable = false)
     private LocalDate importDate;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     @OneToMany(mappedBy = "importReceipt", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ImportDetail> importDetails;
 }

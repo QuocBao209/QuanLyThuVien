@@ -2,6 +2,7 @@ package com.project.admin.controller;
 
 import com.project.admin.entity.*;
 import com.project.admin.service.*;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -230,26 +231,35 @@ public class BookController {
     public String importView() {
     	return "importView";
     }
-    
+
     @PostMapping("/upload-excel")
-    public ModelAndView uploadExcel(@RequestParam("file") MultipartFile file) {
+    public ModelAndView uploadExcel(@RequestParam("file") MultipartFile file, HttpSession session) {
         ModelAndView modelAndView = new ModelAndView();
 
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
+            modelAndView.setViewName("redirect:/admin-login");
+            return modelAndView;
+        }
+
         if (file.isEmpty()) {
-            modelAndView.setViewName("forward: /admin/book-list");
+            modelAndView.setViewName("forward:/admin/book-list?error=File trống!");
             return modelAndView;
         }
 
         try {
-            int importedCount = excelBookService.importBooksFromExcel(file);
+            int importedCount = excelBookService.importBooksFromExcel(file, userId);
             modelAndView.setViewName("forward:/admin/book-list?success=Đã nhập " + importedCount + " sách!");
         } catch (IOException e) {
             modelAndView.setViewName("forward:/admin/book-list?error=Lỗi khi đọc file Excel!");
+        } catch (Exception e) {
+            modelAndView.setViewName("forward:/admin/book-list?error=" + e.getMessage());
         }
 
         return modelAndView;
     }
-    
+
+
     // Controller xử lý Ảnh
     private void saveBookImage(MultipartFile bookImage, String fileName) throws IOException {
         File uploadDir = new File(IMAGE_UPLOAD_DIR);

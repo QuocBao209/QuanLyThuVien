@@ -22,6 +22,7 @@
 	</form>
 
 	<!-- Bảng danh sách nhập hàng -->
+	<!-- Bảng danh sách nhập hàng -->
 	<table class="book-table">
 		<thead>
 		<tr>
@@ -31,6 +32,7 @@
 			<th>Tên sách</th>
 			<th>Số lượng nhập</th>
 			<th>Ngày nhập</th>
+			<th>Người nhập hàng</th> <!-- Thêm cột mới -->
 		</tr>
 		</thead>
 		<tbody>
@@ -44,9 +46,11 @@
 			<td th:text="${importDetail.book.bookName}"></td>
 			<td th:text="${importDetail.amount}"></td>
 			<td th:text="${#temporals.format(importDetail.importReceipt.importDate, 'dd/MM/yyyy')}"></td>
+			<td th:text="${importDetail.importReceipt.user.name}"></td> <!-- Hiển thị tên người nhập -->
 		</tr>
 		</tbody>
 	</table>
+
 </div>
 </body>
 </html>

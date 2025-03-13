@@ -30,21 +30,26 @@ public class LoginController {
 	public ModelAndView loginAdminPage(@RequestParam("username") String username,
 									   @RequestParam("password") String password,
 									   HttpSession session) {
-			ModelAndView mav = new ModelAndView();
-			Optional<User> userOptionnal = userService.authenticateUser(username, password);
-			
-			if (userOptionnal.isPresent()) {
-				User user = userOptionnal.get();
-				
-				session.setAttribute("user", username);
-				session.setAttribute("role", user.getRole());
-				
-				mav.setViewName("admin");
-			}
-			return mav;
+		ModelAndView mav = new ModelAndView();
+		Optional<User> userOptional = userService.authenticateUser(username, password);
+
+		if (userOptional.isPresent()) {
+			User user = userOptional.get();
+
+			session.setAttribute("userId", user.getUserId()); // Lưu userId vào session
+			session.setAttribute("username", user.getUsername());
+			session.setAttribute("role", user.getRole());
+
+			mav.setViewName("admin");
+		} else {
+			mav.setViewName("adminLogin");
+			mav.addObject("error", "Sai tài khoản hoặc mật khẩu!");
+		}
+		return mav;
 	}
-    
-    // Đăng xuất tài khoản admin, xóa session
+
+
+	// Đăng xuất tài khoản admin, xóa session
     @GetMapping("logout")
     public String logoutAdmin(HttpSession session) {
     	session.invalidate();

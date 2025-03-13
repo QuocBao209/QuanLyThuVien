@@ -3,8 +3,10 @@ package com.project.admin.service;
 import com.project.admin.entity.Book;
 import com.project.admin.entity.ImportDetail;
 import com.project.admin.entity.ImportReceipt;
+import com.project.admin.entity.User;
 import com.project.admin.repository.ImportDetailRepository;
 import com.project.admin.repository.ImportReceiptRepository;
+import com.project.admin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,14 +19,19 @@ public class ImportService {
 
     private final ImportReceiptRepository importReceiptRepository;
     private final ImportDetailRepository importDetailRepository;
+    private final UserRepository userRepository;
     private final BookService bookService;
 
     @Transactional
-    public void importBooks(List<ImportDetail> importDetails, LocalDate importDate) {
+    public void importBooks(List<ImportDetail> importDetails, LocalDate importDate, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng với ID: " + userId));
+
         ImportReceipt receipt = importReceiptRepository.findByImportDate(importDate)
                 .orElseGet(() -> {
                     ImportReceipt newReceipt = new ImportReceipt();
                     newReceipt.setImportDate(importDate);
+                    newReceipt.setUser(user);
                     return importReceiptRepository.save(newReceipt);
                 });
 
@@ -51,7 +58,6 @@ public class ImportService {
             bookService.saveBook(book);
         }
     }
-
     public List<ImportReceipt> getAllImportReceipts() {
         return importReceiptRepository.findAll();
     }
