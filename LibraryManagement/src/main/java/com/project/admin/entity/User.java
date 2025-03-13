@@ -26,7 +26,10 @@ public class User {
     private String status;
     private String role;
 
+    @Column(nullable = false, columnDefinition = "INT DEFAULT 0")
     private int borrowCount;
+
+    @Column(nullable = false, columnDefinition = "INT DEFAULT 0")
     private int violationCount;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

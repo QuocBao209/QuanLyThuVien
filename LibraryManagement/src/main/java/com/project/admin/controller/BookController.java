@@ -4,6 +4,7 @@ import com.project.admin.entity.*;
 import com.project.admin.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,14 +26,16 @@ public class BookController {
     @Autowired private AuthorService authorService;
     @Autowired private CategoryService categoryService;
     @Autowired private ExcelBookService excelBookService;
+    @Autowired private ImportService importService;
 
     private static final List<String> ALLOWED_IMAGE_TYPES = Arrays.asList("image/jpeg", "image/png", "image/gif");
     private static final long MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
     private static final String IMAGE_UPLOAD_DIR = "uploads/book_images/";
 
-    // Hiển thị trang import sách
     @PostMapping("/import")
-    public String importBookForm() {
+    public String showImportList(Model model) {
+        List<ImportDetail> importDetails = importService.getAllImportDetails();
+        model.addAttribute("importDetails", importDetails);
         return "import";
     }
     

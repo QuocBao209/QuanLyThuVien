@@ -46,32 +46,36 @@
 			<div id="editAccountPopup" class="popup-overlay">
 			    <div class="popup-content">
 			        <h2>Chỉnh sửa thông tin</h2>
-			        
-			        <form action="/home/edit-account" method="post">
-			            <div class="info-group">
-			                <label>Tên tài khoản:</label>
-			                <input type="text" name="username" th:value="*{username}">
-			            </div>
-			            
-			            <div class="info-group">
-			                <label>Họ và tên:</label>
-			                <input type="text" name="name" th:value="*{name}">
-			            </div>
-			            
-			            <div class="info-group">
-			                <label>Email:</label>
-			                <input type="text" name="email" th:value="*{email}">
-			            </div>
-			            
-			            <div class="info-group">
-			                <label>Số điện thoại:</label>
-			                <input type="text" name="phone" th:value="*{phone}">
-			            </div>
-			            
-			            <button type="submit" class="save-btn">Lưu</button>
-			            <button type="button" class="close-btn" onclick="closePopup()">Hủy</button>
-			        </form>
-			    </div>
+
+					<form th:action="@{/home/edit-account}" th:object="${user}" method="post">
+						<input type="hidden" th:field="*{userId}">
+
+						<div class="info-group">
+							<label>Tên tài khoản:</label>
+							<input type="text" th:field="*{username}" required>
+						</div>
+
+						<div class="info-group">
+							<label>Họ và tên:</label>
+							<input type="text" th:field="*{name}" required>
+						</div>
+
+						<div class="info-group">
+							<label>Email:</label>
+							<input type="email" th:field="*{email}" required>
+						</div>
+
+						<div class="info-group">
+							<label>Số điện thoại:</label>
+							<input type="text" th:field="*{phone}" required>
+						</div>
+
+						<button type="submit" class="save-btn">Lưu</button>
+						<button type="button" class="close-btn" onclick="closePopup()">Hủy</button>
+					</form>
+
+
+				</div>
 			</div>
 
 		</section>

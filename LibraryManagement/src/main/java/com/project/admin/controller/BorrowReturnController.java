@@ -3,9 +3,11 @@ package com.project.admin.controller;
 import com.project.admin.entity.Book;
 import com.project.admin.entity.Borrow_Return;
 import com.project.admin.entity.Notification;
+import com.project.admin.entity.User;
 import com.project.admin.service.BookService;
 import com.project.admin.service.Borrow_ReturnService;
 import com.project.admin.service.NotificationService;
+import com.project.admin.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,12 +26,14 @@ public class BorrowReturnController {
 	private final Borrow_ReturnService borrowReturnService;
 	private final NotificationService notificationService;
 	private final BookService bookService;
+	private final UserService userService;
 
-	public BorrowReturnController(Borrow_ReturnService borrowReturnService, NotificationService notificationService, BookService bookService) {
+	public BorrowReturnController(Borrow_ReturnService borrowReturnService, NotificationService notificationService, BookService bookService, UserService userService) {
 		this.borrowReturnService = borrowReturnService;
 		this.notificationService = notificationService;
 		this.bookService = bookService;
-	}
+        this.userService = userService;
+    }
 
 
 	@PostMapping("/borrow_return_view")
@@ -47,21 +51,28 @@ public class BorrowReturnController {
 			LocalDate now = LocalDate.now();
 			borrowReturn.setStartDate(java.util.Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant()));
 			borrowReturn.setStatus("borrowed");
-			borrowReturnService.save(borrowReturn);
 
-			// Giảm số lượng sách đi 1
+			// Giảm số lượng sách đi 1 và tăng số lượng mượn của sách
 			Book book = borrowReturn.getBook();
 			if (book.getAmount() > 0) {
 				book.setAmount(book.getAmount() - 1);
+				book.setBorrowCount(book.getBorrowCount() + 1); // Cập nhật số lượng mượn sách
 				bookService.save(book);
 			} else {
 				redirectAttributes.addFlashAttribute("error", "Sách đã hết!");
 				return "forward:/admin/borrow_return_view";
 			}
 
+			// Tăng số lượt mượn của người dùng
+			User user = borrowReturn.getUser();
+			user.setBorrowCount(user.getBorrowCount() + 1); // Cập nhật số lượt mượn của user
+			userService.save(user);
+
+			borrowReturnService.save(borrowReturn);
+
 			// Lưu thông báo vào database
 			Notification notification = new Notification();
-			notification.setUser(borrowReturn.getUser());
+			notification.setUser(user);
 			notification.setMessage("Bạn đã mượn sách " + book.getBookName() + " thành công!");
 			notification.setType("borrow_success");
 			notification.setCreatedAt(LocalDateTime.now());
@@ -73,6 +84,8 @@ public class BorrowReturnController {
 		}
 		return "forward:/admin/borrow_return_view";
 	}
+
+
 
 
 

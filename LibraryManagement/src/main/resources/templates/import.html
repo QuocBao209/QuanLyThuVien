@@ -1,47 +1,52 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý tài khoản</title>
-    <link rel="stylesheet" th:href="@{/css/import.css}">
-    <link rel="stylesheet" th:href="@{/css/admin.css}">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Quản lý Nhập Hàng</title>
+	<link rel="stylesheet" th:href="@{/css/import.css}">
+	<link rel="stylesheet" th:href="@{/css/admin.css}">
 </head>
 <body>
-	<!-- Sidebar -->
-	<div th:replace="admin :: sidebar"></div>
-	
-	<!-- Form danh sách -->
-    <div class="container">
-        <h2>Danh sách Nhập hàng</h2>
+<!-- Sidebar -->
+<div th:replace="admin :: sidebar"></div>
 
-		<form th:action="@{/admin/search-book}" method="post">
-			<input type="text" name="keyword" placeholder="Nhập tên sách hoặc tên tác giả ...">
-			<button type="submit" class="search-btn">🔍 Tìm kiếm</button>
-		</form>
+<!-- Nội dung chính -->
+<div class="container">
+	<h2>Danh sách Nhập hàng</h2>
 
-		<table>
-            <thead>
-                <tr>
-                    <th>ID sách</th>
-                    <th>Ảnh</th>
-                    <th>Tên sách</th>
-                    <th>Số lượng</th>
-                    <th>Ngày nhập khẩu</th>
-                </tr>
-            </thead>
-			<tbody>
-			    <tr th:each="book : ${books}"> 
-			        <td th:text="${book.bookId}"></td> <!-- ID sách -->
-			        <td>
-			            <img th:src="@{/images/book_images/{img}(img=${book.bookImage})}" alt="Ảnh bìa" width="80"> <!-- Ảnh -->
-			        </td>
-			        <td th:text="${book.bookName}"></td> <!-- Tên sách -->
-			        <td th:text="${book.amount}"></td> <!-- Số lượng -->
-			        <td th:text="${#dates.format(book.importDate, 'dd/MM/yyyy')}"></td> <!-- Ngày nhập khẩu -->
-			    </tr>
-			</tbody>
-		</table>
-    </div>
+	<!-- Form tìm kiếm -->
+	<form th:action="@{/admin/search-book}" method="post">
+		<input type="text" name="keyword" placeholder="Nhập tên sách hoặc tác giả ...">
+		<button type="submit" class="search-btn">🔍 Tìm kiếm</button>
+	</form>
+
+	<!-- Bảng danh sách nhập hàng -->
+	<table class="book-table">
+		<thead>
+		<tr>
+			<th>Mã hóa đơn</th>
+			<th>ID sách</th>
+			<th>Ảnh sách</th>
+			<th>Tên sách</th>
+			<th>Số lượng nhập</th>
+			<th>Ngày nhập</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr th:each="importDetail : ${importDetails}">
+			<td th:text="${importDetail.importReceipt.invoiceId}"></td>
+			<td th:text="${importDetail.book.bookId}"></td>
+			<td>
+				<img th:src="@{/images/book_images/{img}(img=${importDetail.book.bookImage})}"
+					 alt="Ảnh bìa" width="80" onerror="this.onerror=null; this.src='/images/default-book.png'">
+			</td>
+			<td th:text="${importDetail.book.bookName}"></td>
+			<td th:text="${importDetail.amount}"></td>
+			<td th:text="${#temporals.format(importDetail.importReceipt.importDate, 'dd/MM/yyyy')}"></td>
+		</tr>
+		</tbody>
+	</table>
+</div>
 </body>
 </html>

@@ -8,9 +8,9 @@ import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;
 
@@ -20,12 +20,11 @@ public class AccountController {
 
     @Autowired
     private UserService userService;
-    
+
     @Autowired
     private Borrow_ReturnService borrowService;
-    
-    
-    // Xử lý hiện thông tin của User và hiện thông tin sách trên table (Bảo)
+
+    // Xử lý hiện thông tin của User và hiện thông tin sách trên table
     @GetMapping("/account")
     public ModelAndView accountForm(HttpSession session) {
         ModelAndView mav = new ModelAndView("account");
@@ -44,5 +43,31 @@ public class AccountController {
 
         return mav;
     }
+
+    @PostMapping("/edit-account")
+    public String editAccount(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
+        if (user.getUserId() == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Lỗi: ID không hợp lệ!");
+            return "redirect:/home/account";
+        }
+
+        Optional<User> userOptional = userService.getUserById(user.getUserId());
+
+        if (userOptional.isPresent()) {
+            User existingUser = userOptional.get();
+            existingUser.setUsername(user.getUsername());
+            existingUser.setName(user.getName());
+            existingUser.setEmail(user.getEmail());
+            existingUser.setPhone(user.getPhone());
+            userService.updateUser(existingUser);
+
+            redirectAttributes.addFlashAttribute("successMessage", "Cập nhật thành công!");
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy tài khoản!");
+        }
+
+        return "redirect:/home/account";
+    }
+
 
 }

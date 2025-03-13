@@ -1,5 +1,8 @@
 package com.project.demo.entity;
 
+import com.project.demo.entity.Author;
+import com.project.demo.entity.Borrow_Return;
+import com.project.demo.entity.Category;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -43,7 +46,9 @@ public class Book {
     @Column(nullable = false)
     private boolean isDeleted = false;
 
+    @Column(nullable = false, columnDefinition = "INT DEFAULT 0")
     private int borrowCount;
+
 
     @Override
     public String toString() {

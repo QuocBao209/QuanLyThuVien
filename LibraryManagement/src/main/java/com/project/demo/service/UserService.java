@@ -103,14 +103,12 @@ public class UserService {
     			.orElseThrow(() -> new IllegalArgumentException("Email không tồn tại trong hệ thống!"));		
     }
 
-
-
-
-    public Long getUserIdByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .map(User::getUserId)
-                .orElse(null);
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findById(id);
     }
 
+    public void updateUser(User user) {
+        userRepository.save(user);
+    }
 
 }

@@ -23,47 +23,47 @@
 
 		<table>
             <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Ảnh</th>
-                    <th>Tên sách</th>
-                    <th>Tác giả</th>
-                    <th>Thể loại</th>
-                    <th>Số lượng</th>
-                    <th>Sửa</th>
-                    <th>Xóa</th>
-                </tr>
-            </thead>
-			<tbody>
-				<tr th:each="book : ${books}"> 
-					<td th:text="${book.bookId}"></td>
-					<td>
-						<img th:src="@{/images/book_images/{img}(img=${book.bookImage})}" alt="Ảnh bìa" width="80">
-					</td>
-					<td th:text="${book.bookName}"></td>
-					<td>
-						<span th:each="author, iterStat : ${book.authors}">
-							<span th:text="${author.authorName}"></span>
-							<span th:if="${!iterStat.last}">, </span>
-						</span>
-					</td>
-	
-					<td th:text="${book.category.categoryName}"></td>
-					
-					<td th:text="${book.amount}"></td>
-					
-					<td>
-						<form th:action="@{/admin/edit-book/{id}(id=${book.bookId})}" method="post">
-						    	<button type="submit" class="btn btn-edit">Sửa</button>
-						</form>
-					</td> 
-					<td>
-						<form th:action="@{/admin/delete-book/{id}(id=${book.bookId})}" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sách này?');">
-						    	<button type="submit" class="btn btn-remove">Xóa</button>
-						</form>
-					</td> 
+				<tr>
+					<th>ID</th>
+					<th>Ảnh</th>
+					<th>Tên sách</th>
+					<th>Tác giả</th>
+					<th>Thể loại</th>
+					<th>Số lượng</th>
+					<th>Số lượng mượn</th>
+					<th>Sửa</th>
+					<th>Xóa</th>
 				</tr>
+				</thead>
+			<tbody>
+			<tr th:each="book : ${books}">
+				<td th:text="${book.bookId}"></td>
+				<td>
+					<img th:src="@{/images/book_images/{img}(img=${book.bookImage})}" alt="Ảnh bìa" width="80">
+				</td>
+				<td th:text="${book.bookName}"></td>
+				<td>
+            <span th:each="author, iterStat : ${book.authors}">
+                <span th:text="${author.authorName}"></span>
+                <span th:if="${!iterStat.last}">, </span>
+            </span>
+				</td>
+				<td th:text="${book.category.categoryName}"></td>
+				<td th:text="${book.amount}"></td>
+				<td th:text="${book.borrowCount}"></td> <!-- Hiển thị số lượng mượn -->
+				<td>
+					<form th:action="@{/admin/edit-book/{id}(id=${book.bookId})}" method="post">
+						<button type="submit" class="btn btn-edit">Sửa</button>
+					</form>
+				</td>
+				<td>
+					<form th:action="@{/admin/delete-book/{id}(id=${book.bookId})}" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sách này?');">
+						<button type="submit" class="btn btn-remove">Xóa</button>
+					</form>
+				</td>
+			</tr>
 			</tbody>
+
 		</table>
     </div>
 </body>

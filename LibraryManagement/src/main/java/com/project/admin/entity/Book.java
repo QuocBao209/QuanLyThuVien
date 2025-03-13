@@ -43,7 +43,9 @@ public class Book {
     @Column(nullable = false)
     private boolean isDeleted = false;
 
+    @Column(nullable = false, columnDefinition = "INT DEFAULT 0")
     private int borrowCount;
+
 
     @Override
     public String toString() {
