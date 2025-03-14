@@ -21,8 +21,7 @@
 		<button type="submit" class="search-btn">🔍 Tìm kiếm</button>
 	</form>
 
-	<!-- Bảng danh sách nhập hàng -->
-	<!-- Bảng danh sách nhập hàng -->
+
 	<table class="book-table">
 		<thead>
 		<tr>
@@ -46,7 +45,7 @@
 			<td th:text="${importDetail.book.bookName}"></td>
 			<td th:text="${importDetail.amount}"></td>
 			<td th:text="${#temporals.format(importDetail.importReceipt.importDate, 'dd/MM/yyyy')}"></td>
-			<td th:text="${importDetail.importReceipt.user.name}"></td> <!-- Hiển thị tên người nhập -->
+			<td th:text="${importDetail.importReceipt.user.name}"></td>
 		</tr>
 		</tbody>
 	</table>
