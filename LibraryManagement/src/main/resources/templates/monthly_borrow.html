@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Sách mượn theo tháng</title>
+	<link rel="stylesheet" th:href="@{/css/monthly_borrow.css}">
+	<link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+	<!-- Sidebar -->
+	<div th:replace="admin :: sidebar"></div>
+	
+	<div class="main-container">
+		<h2>Sách mượn theo tháng</h2>
+		<div class="toolbar">
+			<form th:action="@{/admin/statistics/books-per-month/book-borrow-stats}" method="post" 
+					onsubmit="updateHiddenFields()" id="statsForm">
+				<!-- Ô tìm kiếm -->
+				<label>Tìm kiếm:</label>
+				<input type="text" id="searchQuery" name="query" 
+					placeholder="Nhập thông tin sách..." th:value="${param.query}" onchange="submitForm()">
+				<span id="errorMsg" class="error-msg" style="display: none;"></span>
+				
+				<!-- Chọn Tháng - Năm -->
+                <label>Tháng - Năm:</label>
+                <select id="month" name="month" onchange="updateHiddenFields(); submitForm();">
+                    <option value="">Chọn tháng</option>
+                    <option th:each="month : ${#numbers.sequence(1, 12)}" th:value="${month}" th:text="${month}" th:selected="${param.month == month}"></option>
+                </select>
+                <select id="year" name="year" onchange="updateHiddenFields(); submitForm();">
+                    <option value="">Chọn năm</option>
+                    <option th:each="year : ${#numbers.sequence(2020, 2025)}" th:value="${year}" th:text="${year}" th:selected="${param.year == year}"></option>
+                </select>
+                <input type="hidden" id="hiddenMonth" name="month" />
+                <input type="hidden" id="hiddenYear" name="year" />
+
+                <!-- Nút tìm kiếm và làm mới -->
+                <button type="submit">Tìm kiếm</button>
+                <button type="button" class="reset-btn" onclick="resetForm()">Làm mới</button>
+                <button type="submit" class="statistics-btn">Thống kê</button>
+            </form>
+		</div>
+		
+		<table class="table">
+			<thead>
+				<tr>
+					<th>ID</th>
+                    <th>Ảnh</th>
+                    <th>Tên sách</th>
+                    <th>Tác giả</th>
+                    <th>Thể loại</th>
+                    <th>Số lượng</th>
+                    <th>Số lượng mượn</th>
+				</tr>
+			</thead>
+			<tbody>
+                <tr th:each="book : ${books}">
+                    <td th:text="${book.bookId}"></td>
+					<td>
+						<img th:src="@{/images/book_images/{img}(img=${book.bookImage})}" alt="Ảnh bìa" width="80">
+					</td>
+					<td th:text="${book.bookName}"></td>
+					<td>
+			            <span th:each="author, iterStat : ${book.authors}">
+			                <span th:text="${author.authorName}"></span>
+			                <span th:if="${!iterStat.last}">, </span>
+			            </span>
+					</td>
+					<td th:text="${book.category.categoryName}"></td>
+					<td th:text="${book.amount}"></td>
+					<td th:text="${book.borrowCount}"></td> <!-- Hiển thị số lượng mượn -->
+                </tr>
+                
+                <!-- Thông báo không có dữ liệu -->
+                <tr th:if="${#lists.isEmpty(stats)}">
+                    <td colspan="9" class="no-data">Không có dữ liệu</td>
+                </tr>
+            </tbody>
+		</table>
+	</div>
+</body>
+
+<script>
+	// Tách tháng/năm từ dropdown và gán vào các tham số ẩn
+	function updateHiddenFields() {
+		const month = document.getElementById('month').value;
+		const year = document.getElementById('year').value;
+		
+		document.getElementById('hiddenMonth').value = month || '';
+		document.getElementById('hiddenYear').value = year || '';
+	}
+	
+	// Tự động gửi form khi thay đổi tìm kiếm hoặc tháng/năm
+    function submitForm() {
+        const month1 = document.getElementById('month1').value;
+        const year1 = document.getElementById('year1').value;
+        const query = document.getElementById('searchQuery').value;
+        const errorMsg = document.getElementById('errorMsg');
+
+        // Ẩn thông báo lỗi trước khi kiểm tra
+        errorMsg.style.display = 'none';
+
+        // Chỉ gửi form tìm kiếm nếu đã chọn tháng và năm
+        if (query && (!month1 || !year1)) {
+            errorMsg.textContent = "Vui lòng chọn tháng và năm trước khi tìm kiếm!";
+            errorMsg.style.display = 'inline';
+            return;
+        }
+        document.getElementById('statsForm').submit();
+    }
+
+    // Làm mới form (xóa bộ lọc)
+    function resetForm() {
+        document.getElementById('searchQuery').value = '';
+        document.getElementById('month1').value = '';
+        document.getElementById('year1').value = '';
+        document.getElementById('hiddenMonth1').value = '';
+        document.getElementById('hiddenYear1').value = '';
+        document.getElementById('statsForm').submit();
+    }
+</script>
+
+</html>

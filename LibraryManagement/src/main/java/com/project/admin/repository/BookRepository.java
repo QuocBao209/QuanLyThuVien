@@ -28,4 +28,15 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query("SELECT b.bookImage FROM Book b WHERE b.bookId = :bookId AND b.isDeleted = false")
     String findBookImagePathById(@Param("bookId") Long bookId);
+    
+    // Thống kế sách theo Tháng
+    @Query("SELECT DISTINCT b FROM Book b " +
+    	       "JOIN b.borrowReturns br " + 
+    	       "WHERE (:query IS NULL OR LOWER(b.bookName) LIKE LOWER(CONCAT('%', :query, '%'))) " +
+    	       "AND (:month IS NULL OR FUNCTION('MONTH', br.startDate) = :month) " +
+    	       "AND (:year IS NULL OR FUNCTION('YEAR', br.startDate) = :year)")
+    	List<Book> findBooksByMonthAndYear(@Param("query") String query,
+    	                                   @Param("month") Integer month,
+    	                                   @Param("year") Integer year);
+
 }

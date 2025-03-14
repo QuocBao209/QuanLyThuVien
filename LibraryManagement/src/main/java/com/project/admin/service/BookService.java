@@ -71,4 +71,9 @@ public class BookService {
     public void save(Book book) {
         bookRepository.save(book);
     }
+    
+    // Thống kê sách theo Tháng
+    public List<Book> getBooksByMonthAndYear(String query, Integer month, Integer year) {
+        return bookRepository.findBooksByMonthAndYear(query, month, year);
+    }
 }

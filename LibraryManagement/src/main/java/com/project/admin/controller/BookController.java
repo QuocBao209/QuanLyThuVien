@@ -277,5 +277,4 @@ public class BookController {
         modelAndView.addObject("books", bookService.searchBooks(keyword));
         return modelAndView;
     }
-
 }
