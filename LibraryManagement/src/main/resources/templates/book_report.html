@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <link rel="stylesheet" th:href="@{/css/book_report.css}">
+    <title>Báo cáo số lượng sách</title>
+    <!-- Tải Chart.js từ CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <!-- Nội dung chính -->
+    <div class="content-container">
+        <h2>Báo cáo số lượng sách</h2>
+        <div class="toolbar">
+            <form id="statsForm" th:action="@{/admin/statistics/book-report}" method="get">
+                <!-- Chọn tháng -->
+                <label>Tháng - Năm:</label>
+                <select id="month" name="month" onchange="this.form.submit();">
+                    <option value="">Chọn tháng</option>
+                    <option th:each="month : ${#numbers.sequence(1, 12)}" th:value="${month}" th:text="${month}" th:selected="${param.month == month}"></option>
+                </select>
+                <select id="year" name="year" onchange="this.form.submit();">
+                    <option value="">Chọn năm</option>
+                    <option th:each="year : ${#numbers.sequence(2020, 2025)}" th:value="${year}" th:text="${year}" th:selected="${param.year == year}"></option>
+                </select>
+                <!-- Nút làm mới -->
+                <button type="button" class="reset-btn" onclick="resetForm()">Làm mới</button>
+            </form>
+        </div>
+
+        <!-- Tổng quan số liệu -->
+        <div class="stats-overview">
+            <div class="stat-box">
+                <h4>Số sách đã mượn</h4>
+                <p th:text="${totalBorrowed} ?: 'N/A'"></p>
+            </div>
+            <div class="stat-box">
+                <h4>Số sách tồn kho</h4>
+                <p th:text="${totalAvailable} ?: 'N/A'"></p>
+            </div>
+            <div class="stat-box">
+                <h4>Số sách bị hư/mất</h4>
+                <p th:text="${totalLost} ?: 'N/A'"></p>
+            </div>
+        </div>
+
+        <!-- Biểu đồ -->
+        <div class="chart-container" th:if="${#lists.isEmpty(labels)} == false">
+            <canvas id="bookChart"></canvas>
+        </div>
+        <div class="no-data" th:if="${#lists.isEmpty(labels)}">
+            Không có dữ liệu để hiển thị biểu đồ.
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        // Làm mới form (xóa bộ lọc)
+        function resetForm() {
+            document.getElementById('month').value = '';
+            document.getElementById('year').value = '';
+            document.getElementById('statsForm').submit();
+        }
+
+        // Dữ liệu biểu đồ từ Controller (truyền qua Thymeleaf)
+        const labels = /*[[${labels}]]*/ [];
+        const data = /*[[${data}]]*/ [];
+
+        // Vẽ biểu đồ cột với Chart.js (chỉ vẽ nếu có dữ liệu)
+        if (labels.length > 0) {
+            const ctx = document.getElementById('bookChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar', // Biểu đồ cột
+                data: {
+                    labels: labels, // Nhãn (thể loại sách)
+                    datasets: [{
+                        label: 'Số lượng sách mượn',
+                        data: data, // Số lượng sách mượn theo thể loại
+                        backgroundColor: '#1ABC9C',
+                        borderColor: '#16a085',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Số lượng sách mượn',
+                                color: '#ECF0F1'
+                            },
+                            ticks: {
+                                color: '#ECF0F1'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Thể loại sách',
+                                color: '#ECF0F1'
+                            },
+                            ticks: {
+                                color: '#ECF0F1'
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#ECF0F1'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: '#34495E',
+                            titleColor: '#ECF0F1',
+                            bodyColor: '#ECF0F1'
+                        }
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+    </script>
+</body>
+</html>
