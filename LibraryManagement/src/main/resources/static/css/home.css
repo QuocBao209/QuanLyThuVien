@@ -93,22 +93,37 @@ nav ul li a:hover {
 .notification-container {
     display: none;
     position: absolute;
-    top: 50px;
+    top: 40px;
     right: 0;
-    width: 320px;
+    width: 320px; /* Chiều rộng cố định */
+    max-height: 400px; /* Giới hạn chiều cao toàn bộ container */
     background: #fff;
-    color: black; /* Chỉnh lại màu chữ chính */
+    color: black;
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
     padding: 10px;
     z-index: 1000;
+    overflow: hidden; /* Ngăn nội dung tràn ra ngoài container */
+}
+
+.notification-list {
+    max-height: 300px; /* Chiều cao tối đa cho danh sách, nhỏ hơn container để chừa chỗ cho h3 và view-all */
+    overflow-y: auto; /* Bật scroll dọc */
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    width: 100%; /* Đảm bảo danh sách chiếm toàn bộ chiều rộng container */
+}
+
+.notification-container.hidden {
+    display: none;
 }
 
 .notification-container h3 {
     margin: 0;
     padding: 10px;
-    font-size: 16px;
+    font-size: 18px;
     border-bottom: 1px solid #ddd;
     color: #333;
     font-weight: bold;
@@ -116,33 +131,54 @@ nav ul li a:hover {
 }
 
 .notification-container ul {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
     list-style: none;
     padding: 0;
     margin: 0;
-    max-height: 300px;
-    overflow-y: auto;
 }
 
 .notification-container li {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
+    background: #f9f9f9;
+    padding: 10px; /* Giảm padding để tiết kiệm không gian */
+    margin: 5px 0; /* Giảm margin để tránh vượt quá max-height */
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    transition: background 0.3s, opacity 0.3s;
+    word-wrap: break-word; /* Ngăn nội dung dài tràn ngang */
+    max-width: 100%; /* Giới hạn chiều rộng của li */
 }
 
-.notification-container li:last-child {
-    border-bottom: none;
+.unread {
+    font-weight: bold;
+    background-color: #e6f7ff;
+    border-left: 5px solid #007bff;
 }
 
-.notification-item {
-    text-decoration: none;
-    color: #222; /* Đậm hơn để dễ đọc */
-    display: block;
-    padding: 10px;
-    transition: background 0.3s;
+.notification-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    align-items: flex-start; /* Đổi thành flex-start để căn trái, tránh tràn */
+    overflow: hidden; /* Ngăn nội dung tràn ra ngoài */
 }
 
-.notification-item:hover {
-     background: #f0f0f0;
-    color: #007bff; /* Nhấn mạnh khi hover */
+.message {
+    font-size: 16px;
+    text-align: left;
+    word-wrap: break-word; /* Đảm bảo nội dung dài xuống dòng */
+    max-width: 100%; /* Giới hạn chiều rộng */
+}
+
+.time {
+    font-size: 14px;
+    color: gray;
+    text-align: left;
+    white-space: nowrap; /* Giữ thời gian trên một dòng */
 }
 
 .view-all {
@@ -150,7 +186,6 @@ nav ul li a:hover {
     padding: 10px;
     border-top: 1px solid #ddd;
     background: #f9f9f9;
-    
 }
 
 .view-all a {

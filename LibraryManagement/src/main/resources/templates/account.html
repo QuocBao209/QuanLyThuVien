@@ -42,6 +42,10 @@
 				<button class="logout-btn">Đăng xuất</button>
 			</form>
 			
+			<!-- Hiển thị thông báo thành công hoặc lỗi -->
+            <div th:if="${successMessage}" class="success-message" th:text="${successMessage}"></div>
+            <div th:if="${errorMessage}" class="error-message" th:text="${errorMessage}"></div>
+			
 			<!-- Form chỉnh sửa khi bấm "Thay đổi thông tin" -->
 			<div id="editAccountPopup" class="popup-overlay">
 			    <div class="popup-content">
@@ -52,7 +56,7 @@
 
 						<div class="info-group">
 							<label>Tên tài khoản:</label>
-							<input type="text" th:field="*{username}" required>
+							<input type="text" th:field="*{username}" disabled="disabled">
 						</div>
 
 						<div class="info-group">
@@ -159,8 +163,9 @@
 
 
 						<td>
-			                <form th:if="${borrow.status eq 'pending'}" th:action="@{/home/confirm-borrow}" method="post" 
-			                		onsubmit="return confirm('Bạn có chắc chắn muốn gia hạn? Lưu ý rằng không thể hoàn trả lượt gia hạn sau khi bấm \'OK\'!');">
+			                <form th:if="${borrow.status eq 'pending' and borrow.userConfirmDate == null}" 
+			                		th:action="@{/home/confirm-borrow}" method="post" 
+			                		onsubmit="return confirm('Bạn có chắc chắn xác nhận mượn? Lưu ý rằng không thể hoàn trả lượt gia hạn sau khi bấm \'OK\'!');">
 			                    <input type="hidden" name="borrowId" th:value="${borrow.id}">
 			                    <button type="submit" class="confirm-btn">Xác nhận</button>
 			                </form>
@@ -169,7 +174,7 @@
 						<td>
 						    <form th:if="${borrow.status eq 'borrowed' and borrow.renewCount lt 2}" 
 						    	  th:action="@{/home/renew}" method="post"
-						          onsubmit="return confirm('Bạn có chắc chắn xác nhận mượn không? Lưu ý rằng không thể hủy xác nhận sau khi bấm \'OK\'!');">
+						          onsubmit="return confirm('Bạn có muốn gia hạn? Lưu ý rằng không thể hủy xác nhận sau khi bấm \'OK\'!');">
 						        <input type="hidden" name="borrowId" th:value="${borrow.id}">
 						        <button type="submit" class="renew-btn">Gia hạn</button>
 						    </form>
@@ -186,6 +191,8 @@
 			</table>
 		</section>
 	</div>
+	
+	<script th:src="@{/js/notification.js}"></script>
 </body>
 
 <script type="text/javascript">
@@ -199,9 +206,21 @@
 	
 	document.addEventListener("DOMContentLoaded", function () {
 	    document.getElementById("editAccountPopup").style.display = "none";
+	    
+	    const successMessage = document.querySelector(".success-message");
+	    if (successMessage) {
+	        closePopup();
+	        setTimeout(function () {
+	            successMessage.style.display = "none";
+	        }, 1500);
+	    }
+	
+	    const errorMessage = document.querySelector(".error-message");
+	    if (errorMessage) {
+	        setTimeout(function () {
+	        	errorMessage.style.display = "none";
+	        }, 1500);
+	    }
 	});
 </script>
 </html>
-
-
-

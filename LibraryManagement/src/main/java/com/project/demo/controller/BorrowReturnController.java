@@ -2,6 +2,9 @@ package com.project.demo.controller;
 
 import com.project.demo.entity.Borrow_Return;
 import com.project.demo.repository.Borrow_ReturnRepository;
+
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,16 +22,19 @@ public class BorrowReturnController {
     @Autowired
     private Borrow_ReturnRepository borrowReturnRepository;
 
-    // ⚡ Đổi đường dẫn để tránh trùng với AccountController
-    @GetMapping("/borrow-list")
-    public String borrowListPage(Model model) {
-        List<Borrow_Return> borrowList = borrowReturnRepository.findAll();
-        model.addAttribute("borrowedBooks", borrowList);
-        return "borrow-list"; // ⚡ Tên view cũng đổi cho rõ ràng hơn
-    }
+//    // ⚡ Đổi đường dẫn để tránh trùng với AccountController
+//    @GetMapping("/borrow-list")
+//    public String borrowListPage(Model model) {
+//        List<Borrow_Return> borrowList = borrowReturnRepository.findAll();
+//        model.addAttribute("borrowedBooks", borrowList);
+//        return "borrow-list"; // ⚡ Tên view cũng đổi cho rõ ràng hơn
+//    }
 
     @PostMapping("/confirm-borrow")
-    public String confirmBorrow(@RequestParam("borrowId") Long borrowId, RedirectAttributes redirectAttributes) {
+    public String confirmBorrow(@RequestParam("borrowId") Long borrowId, RedirectAttributes redirectAttributes, HttpSession session) {
+    	 String username = (String) session.getAttribute("user");
+    	    System.out.println("Session trước khi xác nhận: " + username);
+    	    
         if (borrowId == null) {
             redirectAttributes.addFlashAttribute("error", "Lỗi: ID mượn sách không hợp lệ.");
             return "redirect:/home/account";
@@ -47,6 +53,7 @@ public class BorrowReturnController {
             redirectAttributes.addFlashAttribute("error", "Lỗi: Không tìm thấy thông tin mượn sách.");
         }
 
+        System.out.println("Session sau khi xác nhận: " + session.getAttribute("user"));
         return "redirect:/home/account"; // ⚡ Chuyển hướng về trang danh sách mượn
     }
     

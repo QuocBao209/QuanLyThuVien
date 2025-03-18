@@ -8,103 +8,92 @@
 </head>
 <body>
 
-<header th:fragment="header">
-	<a href="/home" style="text-decoration: none; color: inherit; transform: translateY(-3px);">
-		📚 Thư viện Điện tử
-	</a>
-	<nav>
-		<ul>
-			<li><a href="/home">Trang chủ</a></li>
-			<li><a href="/home/account">Tài khoản</a></li>
-			<li><a href="/home/book-filter">Danh sách thư viện</a></li>
-			<li><a href="#">Liên hệ</a></li>
-		</ul>
-
-		<div class="notification-wrapper">
-			<div class="notification-btn">
-				<svg viewBox="0 0 24 24">
-					<path fill="white" d="M12 2C10.3 2 9 3.3 9 5V5.1C6.2 6.2 4.3 8.9 4.3 12V17L3 18.5V19H21V18.5L19.7 17V12C19.7 8.9 17.8 6.2 15 5.1V5C15 3.3 13.7 2 12 2ZM12 22C13.1 22 14 21.1 14 20H10C10 21.1 10.9 22 12 22Z"/>
-				</svg>
-				<!-- Hiện số lượng thông báo -->
-				<span class="badge" th:if="${notifications != null and notifications.size() > 0}" th:text="${notifications.size()}"></span>
-			</div>
-
-			<!-- Dropdown thông báo -->
-			<div id="notification-container" class="notification-container">
-				<h3>Thông báo</h3>
-				<!-- Hiện danh sách thông báo -->
-				<ul>
-					<li th:each="notification : ${notifications}">
-						<a href="#" class="notification-item" th:text="${notification.message}"></a> <!-- Đang gắn thẻ a tạm thôi -->
-					</li>
-				</ul>
-				<div class="view-all">
-					<a href="/home/notifications">Xem tất cả</a> <!-- Chưa làm view (khoan test) -->
-				</div>
-			</div>
-		</div>
-	</nav>
-</header>
-
-<!-- Hero Section -->
-<section class="hero">
-	<h1>Chào mừng đến với Thư viện Điện Tử</h1>
-	<p>Khám phá hàng ngàn đầu sách miễn phí mọi lúc, mọi nơi</p>
-	<button class="cta-btn">Tìm kiếm sách ngay</button>
-</section>
-
-<!-- Danh mục sách nổi bật -->
-<section class="book-categories">
-	<h2>Sách Nổi Bật</h2>
-	<div class="book-list">
-		<form action="/home/latest-book" method="get">
-			<button class="book" name="bookType" value="Sách mới nhất">📖 Sách mới nhất</button>
-		</form>
-		<div class="filter-list">
-			<form action="/home/book-filter" method="get">
-				<button class="book" name="bookType" value="Sách theo chủ đề">📙 Sách theo chủ đề</button>
+	<header th:fragment="header">
+	    <a href="/home" style="text-decoration: none; color: inherit; transform: translateY(-3px);">
+	        📚 Thư viện Điện tử
+	    </a>
+	    <nav>
+	        <ul>
+	            <li><a href="/home">Trang chủ</a></li>
+	            <li><a href="/home/account">Tài khoản</a></li>
+	            <li><a href="/home/book-filter">Danh sách thư viện</a></li>
+	            <li><a href="#">Liên hệ</a></li>
+	        </ul>
+	
+	        <div class="notification-wrapper">
+	            <div class="notification-btn" onclick="toggleNotificationDropdown()">
+	                <svg viewBox="0 0 24 24">
+	                    <path fill="white" d="M12 2C10.3 2 9 3.3 9 5V5.1C6.2 6.2 4.3 8.9 4.3 12V17L3 18.5V19H21V18.5L19.7 17V12C19.7 8.9 17.8 6.2 15 5.1V5C15 3.3 13.7 2 12 2ZM12 22C13.1 22 14 21.1 14 20H10C10 21.1 10.9 22 12 22Z"/>
+	                </svg>
+	                <span id="notification-count" class="badge" th:if="${unreadCount > 0}" th:text="${unreadCount}"></span>
+	            </div>
+	
+	            <div id="notification-container" class="notification-container hidden">
+	                <h3>Thông báo</h3>
+	                <ul class="notification-list">
+	                    <li th:each="notification : ${notifications}" 
+	                        th:classappend="${!notification.isRead} ? 'unread'" 
+	                        th:data-id="${notification.id}"
+	                        onclick="markAsRead(this)">
+	                        <div class="notification-box">
+	                            <div class="message" th:text="${notification.message}"></div>
+	                            <div class="time" th:text="${#temporals.format(notification.createdAt, 'dd/MM/yyyy HH:mm')}"></div>
+	                        </div>
+	                        <form th:id="'form-' + ${notification.id}" method="post" action="/home/mark-notification-read">
+	                            <input type="hidden" name="notificationId" th:value="${notification.id}">
+	                            <input type="hidden" name="redirectUrl" th:value="${currentUrl}">
+	                        </form>
+	                    </li>
+	                </ul>
+	                <div class="view-all">
+	                    <a href="/home/notifications">Xem tất cả</a>
+	                </div>
+	            </div>
+	        </div>
+	    </nav>
+	</header>
+	
+	<!-- Hero Section -->
+	<section class="hero">
+		<h1>Chào mừng đến với Thư viện Điện Tử</h1>
+		<p>Khám phá hàng ngàn đầu sách miễn phí mọi lúc, mọi nơi</p>
+		<button class="cta-btn">Tìm kiếm sách ngay</button>
+	</section>
+	
+	<!-- Danh mục sách nổi bật -->
+	<section class="book-categories">
+		<h2>Sách Nổi Bật</h2>
+		<div class="book-list">
+			<form action="/home/latest-book" method="get">
+				<button class="book" name="bookType" value="Sách mới nhất">📖 Sách mới nhất</button>
 			</form>
-			<div class="book-highlight">📢 Xem tất cả sách tại đây!</div> <!-- Dòng chữ luôn hiển thị -->
+			<div class="filter-list">
+				<form action="/home/book-filter" method="get">
+					<button class="book" name="bookType" value="Sách theo chủ đề">📙 Sách theo chủ đề</button>
+				</form>
+				<div class="book-highlight">📢 Xem tất cả sách tại đây!</div> <!-- Dòng chữ luôn hiển thị -->
+			</div>
+			<form action="/home/best-book" method="get">
+				<button class="book" name="bookType" value="Sách đọc nhiều">📘 Sách đọc nhiều</button>
+			</form>
 		</div>
-		<form action="/home/best-book" method="get">
-			<button class="book" name="bookType" value="Sách đọc nhiều">📘 Sách đọc nhiều</button>
-		</form>
-	</div>
-</section>
-
-<!-- Góc độc giả -->
-<section class="reader-corner">
-	<h2>Góc độc giả</h2>
-	<p>Cảm nhận và đánh giá từ độc giả</p>
-	<div class="reviews">
-		<div class="review">“Thư viện tuyệt vời, nhiều sách hay!” - An</div>
-		<div class="review">“Tìm kiếm dễ dàng, giao diện đẹp!” - Bình</div>
-	</div>
-</section>
-
-<!-- Footer -->
-<footer th:fragment="footer">
-	<p>&copy; 2025 Thư viện Điện tử. Mọi quyền được bảo lưu.</p>
-</footer>
+	</section>
+	
+	<!-- Góc độc giả -->
+	<section class="reader-corner">
+		<h2>Góc độc giả</h2>
+		<p>Cảm nhận và đánh giá từ độc giả</p>
+		<div class="reviews">
+			<div class="review">“Thư viện tuyệt vời, nhiều sách hay!” - An</div>
+			<div class="review">“Tìm kiếm dễ dàng, giao diện đẹp!” - Bình</div>
+		</div>
+	</section>
+	
+	<!-- Footer -->
+	<footer th:fragment="footer">
+		<p>&copy; 2025 Thư viện Điện tử. Mọi quyền được bảo lưu.</p>
+	</footer>
+	
+	<script th:src="@{/js/notification.js}"></script>
 </body>
-<script>
-	document.addEventListener("DOMContentLoaded", function () {
-		document.addEventListener("click", function (event) {
-			var notificationContainer = document.getElementById("notification-container");
-			var notificationBtn = document.querySelector(".notification-btn");
-
-			// Kiểm tra nếu click nằm ngoài thông báo và nút thông báo
-			if (!notificationContainer.contains(event.target) && !notificationBtn.contains(event.target)) {
-				notificationContainer.style.display = "none";
-			}
-		});
-
-		document.querySelector(".notification-btn").addEventListener("click", function (event) {
-			event.stopPropagation(); // Ngăn chặn sự kiện click lan ra ngoài
-			var container = document.getElementById("notification-container");
-			container.style.display = (container.style.display === "block") ? "none" : "block";
-		});
-	});
-
-</script>
 </html>

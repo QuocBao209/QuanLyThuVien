@@ -10,4 +10,6 @@ public interface Borrow_ReturnRepository extends JpaRepository<Borrow_Return, Lo
     List<Borrow_Return> findByStatus(String status);
     
     List<Borrow_Return> findByUserConfirmDateIsNotNull();
+    
+    List<Borrow_Return> findByUser_UserId(Long userId);
 }

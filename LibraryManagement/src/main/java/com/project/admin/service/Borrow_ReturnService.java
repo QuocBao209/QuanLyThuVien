@@ -6,7 +6,6 @@ import com.project.admin.repository.BookRepository;
 import com.project.admin.repository.Borrow_ReturnRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +37,11 @@ public class Borrow_ReturnService {
 
     public void transferData(List<Borrow_Return> borrowReturns) {
         borrowReturnRepository.saveAll(borrowReturns);
+    }
+    
+    // Lấy danh sách các sách mượn/trả đúng đối tượng User
+    public List<Borrow_Return> findByUser_UserId(Long userId) {
+        return borrowReturnRepository.findByUser_UserId(userId);
     }
     
     // Lấy danh sách các sách chỉ khi User bấm Xác nhận mượn
