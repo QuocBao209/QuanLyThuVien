@@ -78,12 +78,39 @@
 						</form>
 
 						<!-- Nút xác nhận trả -->
-						<form th:action="@{/admin/borrow-return}" method="post"
-							  th:if="${borrowReturn.status == 'borrowed'}"
-							  onsubmit="return confirm('Bạn có chắc chắn muốn thực hiện thao tác này?');">
-							<input type="hidden" name="borrowId" th:value="${borrowReturn.id}">
-							<button type="submit" class="btn-return">Xác nhận trả</button>
-						</form>
+					    <button th:if="${borrowReturn.status == 'borrowed'}"
+					            type="button"
+					            class="btn-return"
+					            th:attr="data-borrow-id=${borrowReturn.id}, 
+					                     data-book-name=${borrowReturn.book.bookName}"
+					            onclick="openPopup(this)">
+					        Xác nhận trả
+					    </button>
+					    
+					    <!-- Popup Xác nhận Trả -->
+				        <div id="returnPopup" class="popup hidden">
+				            <div class="popup-content">
+				                <h3>Xác nhận tình trạng sách</h3>
+				                <form id="returnForm" th:action="@{/admin/borrow-return}" method="post">
+				                    <input type="hidden" name="borrowId" id="borrowId">
+				                    
+				                    <p><strong>Tên sách:</strong> <span id="bookName"></span></p>
+				                    <p><strong>Tác giả:</strong> <span id="authorName"></span></p>
+				                    
+				                    <label>
+				                        <input type="radio" name="status" value="good" checked> Nguyên vẹn
+				                    </label>
+				                    <label>
+				                        <input type="radio" name="status" value="damaged"> Hư hỏng / Mất sách
+				                    </label>
+				                    
+				                    <div class="popup-btn">
+				                        <button type="submit" class="btn-return">Xác nhận</button>
+				                        <button type="button" onclick="closePopup()">Hủy</button>
+				                    </div>
+				                </form>
+				            </div>
+				        </div>
 
 						<!-- Nếu sách đã trả -->
 						<button th:if="${borrowReturn.status == 'returned'}" class="btn-disabled" disabled>Đã trả</button>
@@ -105,7 +132,26 @@
 	                </tr>
             </tbody>
 		</table>
+    
     </div>
 </body>
+
+<script>
+function openPopup(button) {
+    let borrowId = button.getAttribute("data-borrow-id");
+    let bookName = button.getAttribute("data-book-name");
+    let authorName = button.getAttribute("data-author-name");
+
+    document.getElementById("borrowId").value = borrowId;
+    document.getElementById("bookName").innerText = bookName;
+    document.getElementById("authorName").innerText = authorName;
+
+    document.getElementById("returnPopup").classList.remove("hidden");
+}
+
+function closePopup() {
+    document.getElementById("returnPopup").classList.add("hidden");
+}
+</script>
 
 </html>
