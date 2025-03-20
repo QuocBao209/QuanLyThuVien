@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách vi phạm</title>
+    <link rel="stylesheet" th:href="@{/css/violation_list.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+	<!-- Sidebar -->
+	<div th:replace="admin :: sidebar"></div>
+	
+	<!-- Danh sách độc giả -->
+	<div class="container">
+		<h2>Danh sách vi phạm</h2>
+
+		<form th:action="@{/admin/violation-list}" method="post" class="search-container">
+			<input type="text" name="keyword" placeholder="Nhập tên hoặc email độc giả ..." />
+			<button type="submit" class="search-btn">🔍 Tìm kiếm</button>
+		</form>
+
+		<table>
+			<thead>
+				<tr>
+					<th>ID</th>
+                    <th>Họ Tên</th>
+                    <th>Email</th>
+                    <th>Số điện thoại</th>
+                    <th>Số lần vi phạm</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:if="${users.isEmpty()}">
+			        <td colspan="5" style="text-align: center; color: red; font-weight: bold;">Không có dữ liệu</td>
+			    </tr>
+			    
+				<tr th:each="user : ${users}">
+					<td th:text="${user.userId}"></td>
+					<td th:text="${user.name}"></td>
+					<td th:text="${user.email}"></td>
+					<td th:text="${user.phone}"></td>
+					<td th:text="${user.violationCount}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>
