@@ -98,6 +98,11 @@ public class BorrowReturnController {
 
 	    Borrow_Return borrowReturn = borrowReturnService.findById(borrowId);
 	    if (borrowReturn != null && "pending".equals(borrowReturn.getStatus())) {
+			Book book = borrowReturn.getBook();
+			book.setAmount(book.getAmount() - 1);
+			book.setBorrowCount(book.getBorrowCount() + 1);
+			bookService.save(book);
+
 	        borrowReturn.setStartDate(new Date());
 	        borrowReturn.setStatus("borrowed");
 	        borrowReturnService.save(borrowReturn);
