@@ -22,12 +22,7 @@
 <div th:replace="admin :: sidebar"></div>
 
 <!-- Form sửa thông tin sách -->
-<div id="form-container">
-	<!-- Quay lại -->
-	<form action="/admin/book-list" method="post">
-		<button type="submit" class="return-btn">Quay lại</button>
-	</form>
-	
+<div id="form-container">	
 	<h2>Sửa thông tin sách</h2>
 	
 	<form th:action="@{/admin/submit-book-info}" method="post" enctype="multipart/form-data">

@@ -81,7 +81,7 @@
                         <!-- Nút xác nhận mượn -->
                         <form th:action="@{/admin/borrow-confirm}" method="post"
                               th:if="${borrowReturn.status == 'pending'}"
-                              onsubmit="return confirmAction(this)">
+                              >
                             <input type="hidden" name="borrowId" th:value="${borrowReturn.id}">
                             <button type="submit" class="btn-confirm">Xác nhận mượn</button>
                         </form>
