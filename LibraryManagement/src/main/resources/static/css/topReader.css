@@ -1,0 +1,129 @@
+@charset "UTF-8";
+
+.reader-container {
+    width: calc(100% - 270px);
+    min-height: 100vh;
+    margin-left: 270px;
+    background-color: #E3F2FD;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+/* Top books (3 sách đầu tiên) */
+.top-readers {
+    display: flex;
+    justify-content: center; /* Căn giữa toàn bộ */
+    align-items: flex-end; /* Căn theo đáy */
+    gap: 10px;
+    position: relative;
+}
+
+/* Tất cả các sách có kích thước bằng nhau */
+.top-readers {
+    display: flex;
+    justify-content: center; /* Căn giữa */
+    align-items: flex-end; /* Canh theo đáy */
+    gap: 20px;
+    position: relative;
+}
+
+/* Giữ kích thước đồng đều cho các sách */
+.top-readers .reader-item {
+    min-width: 150px;
+    min-height: 60px;
+    text-align: center;
+    background: #fff;
+    padding: 10px;
+    line-height: 0.3; 
+    border-radius: 8px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+/* Tạo kiểu bậc thang */
+.top-readers .reader-item:nth-child(1) {
+    transform: translateY(0px); /* Cao nhất */
+    z-index: 2;
+    order:2;
+}
+
+.top-readers .reader-item:nth-child(2) {
+    transform: translateY(40px); /* Trung bình */
+    z-index: 3;
+    order:1;
+}
+
+.top-readers .reader-item:nth-child(3) {
+    transform: translateY(80px); /* Thấp nhất */
+    z-index: 1;
+    order:3;
+}
+
+/* Huy chương */
+.medal {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 22px;
+    font-weight: bold;
+    color: #fff;
+    background: gold;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #fff;
+}
+
+/* Huy chương bạc */
+.top-readers .reader-item:nth-child(2) .medal {
+    background: silver;
+}
+
+/* Huy chương đồng */
+.top-readers .reader-item:nth-child(3) .medal {
+    background: #cd7f32;
+}
+
+/* Table styles */
+.table {
+    width: 100%;
+    max-width: 1000px;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+}
+
+.table th, .table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+.table th {
+    background: #34495E;
+    color: #ECF0F1;
+    font-weight: bold;
+}
+
+.table td {
+    background: #fff;
+    color: #333;
+}
+
+.table tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+.table tr:hover {
+    background: #e9ecef;
+}

@@ -10,7 +10,6 @@ body {
     color: #333;
     text-align: center;
 }
-
 /* Header */
 header {
     display: flex;
@@ -18,9 +17,20 @@ header {
     align-items: center; /* Căn giữa theo chiều dọc */
     background-color: #007bff;
     color: white;
-    padding: 15px 50px;
+    padding: 10px 45px;
+}
+header a{
+    font-size: 23px;
 }
 
+.body-container{
+	background-image: url('/images/book_images/—Pngtree—cartoon dream reading life change_996131.jpg'); /* Đường dẫn ảnh */
+    background-size: cover; /* Ảnh phủ toàn bộ màn hình */
+    background-repeat: no-repeat; /* Không lặp ảnh */
+    background-attachment: fixed; /* Giữ ảnh cố định khi cuộn */
+    background-position: center; /* Căn giữa ảnh */
+	
+}
 /* Căn giữa nav */
 nav {
     flex: 1; /* Để nav chiếm toàn bộ khoảng trống còn lại */
@@ -197,7 +207,7 @@ nav ul li a:hover {
 
 /* Hero Section */
 .hero {
-    background: url('/images/library-banner.jpg') no-repeat center center/cover;
+    /* background: url('/images/book_images/co_gai_den_tu_hom_qua.jpg') no-repeat center center/cover; */
     color: rgb(255, 255, 255);
     padding: 60px 20px;
     text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5); /* Thêm hiệu ứng đổ bóng cho chữ */
@@ -241,7 +251,10 @@ nav ul li a:hover {
 }
 
 .book-categories h2 {
+	color: #ffffff;
+	font-weight: bold; /* Làm đậm chữ */
 	margin-bottom: 20px;
+	text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.7); /* Thêm hiệu ứng đổ bóng cho h1 */
 }
 
 .book-list {
@@ -281,8 +294,20 @@ nav ul li a:hover {
 .reader-corner {
    /*  background-color: #f1f1f1; */
     padding: 30px 20px;
+    
 }
-
+.reader-corner h2 {
+   color: #ffffff;
+	font-weight: bold; /* Làm đậm chữ */
+	text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.7); /* Thêm hiệu ứng đổ bóng cho h1 */
+    
+}
+.reader-corner p {
+   color: #ffffff;
+	font-weight: bold; /* Làm đậm chữ */
+	text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.7); /* Thêm hiệu ứng đổ bóng cho h1 */
+    
+}
 .reviews {
     display: flex;
     justify-content: center;
@@ -306,13 +331,12 @@ nav ul li a:hover {
 footer {
     background-color: #007bff;
     color: white;
-    padding: 15px;
-    margin-top: 20px;
+    padding: 20px;
 }
 
 .book-highlight {
     font-size: 18px;
-    color: #d9534f; /* Màu đỏ nổi bật */
+    color: #ff0000; /* Màu đỏ nổi bật */
     font-weight: bold;
     text-align: center;
     margin-top: 10px;
