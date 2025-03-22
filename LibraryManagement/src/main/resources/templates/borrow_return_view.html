@@ -6,21 +6,30 @@
     <title>Quản lý tài khoản</title>
     <link rel="stylesheet" th:href="@{/css/borrow_return_view.css}">
     <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <script>
+        function openReturnForm(borrowId) {
+            document.getElementById("returnForm-" + borrowId).style.display = "flex";
+        }
+
+        function closeReturnForm(borrowId) {
+            document.getElementById("returnForm-" + borrowId).style.display = "none";
+        }
+    </script>
 </head>
 <body>
-	<!-- Sidebar -->
-	<div th:replace="admin :: sidebar"></div>
-	
-	<!-- Form danh sách -->
-    <div class="container">
-    	<h3>Người dùng: <span th:text="${user.name}"></span></h3>
-    	
-		<form th:action="@{/admin/search-book}" method="post" class="search-container">
-			<input type="text" name="keyword" placeholder="Nhập tên sách hoặc tên tác giả ...">
-			<button type="submit" class="search-btn">🔍 Tìm kiếm</button>
-		</form>
+    <!-- Sidebar -->
+    <div th:replace="admin :: sidebar"></div>
 
-		<table>
+    <!-- Form danh sách -->
+    <div class="container">
+        <form th:action="@{/admin/search-book}" method="post" class="search-container">
+            <input type="text" name="keyword" placeholder="Nhập tên sách hoặc tên tác giả ...">
+            <button type="submit" class="search-btn">🔍 Tìm kiếm</button>
+        </form>
+
+        <h2 th:text="|Người dùng : ${borrowReturns[0].user.name}|"></h2>
+
+        <table>
             <thead>
                 <tr>
                     <th>ID</th>
@@ -35,77 +44,96 @@
                     <th>Gia hạn</th>
                 </tr>
             </thead>
-			<tbody>
-				<tr th:each="borrowReturn : ${borrowReturns}">
-	                    <td th:text="${borrowReturn.book.bookId}"></td>
-	                    
-	                    <td>
-	                        <img th:src="@{/images/book_images/{img}(img=${borrowReturn.book.bookImage})}" 
-	                             alt="Ảnh bìa" width="80">
-	                    </td>
-	                    
-	                    <td th:text="${borrowReturn.book.bookName}"></td>
-	                    
-	                    <td>
-	                        <span th:each="author, iterStat : ${borrowReturn.book.authors}">
-	                            <span th:text="${author.authorName}"></span>
-	                            <span th:if="${!iterStat.last}">, </span>
-	                        </span>
-	                    </td>
-	                    
-	                    <td th:text="${borrowReturn.userConfirmDate != null ? #dates.format(borrowReturn.userConfirmDate, 'dd/MM/yyyy') : 'Đang chờ xác nhận'}"></td>
+            <tbody>
+                <tr th:each="borrowReturn : ${borrowReturns}">
+                    <td th:text="${borrowReturn.book.bookId}"></td>
 
-						<td th:text="${borrowReturn.startDate != null ? #dates.format(borrowReturn.startDate, 'dd/MM/yyyy') : '------'}"></td>
-						
-						<td th:text="${borrowReturn.endDate != null ? #dates.format(borrowReturn.endDate, 'dd/MM/yyyy') : '------'}"></td>
-	                    
-	                    <td>
-	                        <span th:switch="${borrowReturn.status}">
-								<span th:case="'pending'" class="status-pending">Đang chờ</span>
-								<span th:case="'borrowed'" class="status-borrowed">Đang mượn</span>
-								<span th:case="'returned'" class="status-returned">Đã trả</span>
-								<span th:case="'outdate'" class="status-outdate">Quá hạn</span>
-							</span>
-	                    </td>
-					
-					<td>
-						<!-- Nút xác nhận mượn -->
-						<form th:action="@{/admin/borrow-confirm}" method="post"
-							  th:if="${borrowReturn.status == 'pending'}"
-							  onsubmit="return confirmAction(this)">
-							<input type="hidden" name="borrowId" th:value="${borrowReturn.id}">
-							<button type="submit" class="btn-confirm">Xác nhận mượn</button>
-						</form>
+                    <td>
+                        <img th:src="@{/images/book_images/{img}(img=${borrowReturn.book.bookImage})}" 
+                             alt="Ảnh bìa" width="80">
+                    </td>
 
-						<!-- Nút xác nhận trả -->
-						<form th:action="@{/admin/borrow-return}" method="post"
-							  th:if="${borrowReturn.status == 'borrowed'}"
-							  onsubmit="return confirm('Bạn có chắc chắn muốn thực hiện thao tác này?');">
-							<input type="hidden" name="borrowId" th:value="${borrowReturn.id}">
-							<button type="submit" class="btn-return">Xác nhận trả</button>
-						</form>
+                    <td th:text="${borrowReturn.book.bookName}"></td>
 
-						<!-- Nếu sách đã trả -->
+                    <td>
+                        <span th:each="author, iterStat : ${borrowReturn.book.authors}">
+                            <span th:text="${author.authorName}"></span>
+                            <span th:if="${!iterStat.last}">, </span>
+                        </span>
+                    </td>
+
+                    <td th:text="${borrowReturn.userConfirmDate != null ? #dates.format(borrowReturn.userConfirmDate, 'dd/MM/yyyy') : 'Đang chờ xác nhận'}"></td>
+
+                    <td th:text="${borrowReturn.startDate != null ? #dates.format(borrowReturn.startDate, 'dd/MM/yyyy') : '------'}"></td>
+
+                    <td th:text="${borrowReturn.endDate != null ? #dates.format(borrowReturn.endDate, 'dd/MM/yyyy') : '------'}"></td>
+
+                    <td>
+                        <span th:switch="${borrowReturn.status}">
+                            <span th:case="'pending'" class="status-pending">Đang chờ</span>
+                            <span th:case="'borrowed'" class="status-borrowed">Đang mượn</span>
+                            <span th:case="'returned'" class="status-returned">Đã trả</span>
+                            <span th:case="'outdate'" class="status-outdate">Quá hạn</span>
+                        </span>
+                    </td>
+
+                    <td>
+                        <!-- Nút xác nhận mượn -->
+                        <form th:action="@{/admin/borrow-confirm}" method="post"
+                              th:if="${borrowReturn.status == 'pending'}"
+                              >
+                            <input type="hidden" name="borrowId" th:value="${borrowReturn.id}">
+                            <button type="submit" class="btn-confirm">Xác nhận mượn</button>
+                        </form>
+
+                        <!-- Nút mở form trả sách -->
+                        <button th:if="${borrowReturn.status == 'borrowed'}" 
+                                class="btn-return" 
+                                th:onclick="|openReturnForm(${borrowReturn.id})|">
+                            Xác nhận trả
+                        </button>
+                        
+                        <!-- Nếu sách đã trả -->
 						<button th:if="${borrowReturn.status == 'returned'}" class="btn-disabled" disabled>Đã trả</button>
 
 						<!-- Nếu sách quá hạn -->
 						<button th:if="${borrowReturn.status == 'outdate'}" class="btn-disabled" disabled>Quá hạn</button>
-					</td>
-
-
-					<td>
-	                        <p th:if="${borrowReturn.renewCount ge 0 and borrowReturn.renewCount lt 2}" 
-						       th:text="|Đã gia hạn: ${borrowReturn.renewCount} lần|" 
-						       class="renewal-status">
-						    </p>
+                    </td>
+                    
+                    <td>
+	                     <p th:if="${borrowReturn.renewCount ge 0 and borrowReturn.renewCount lt 2}" 
+						    th:text="|Đã gia hạn: ${borrowReturn.renewCount} lần|" 
+						    class="renewal-status">
+						 </p>
 						    
-						    <p th:if="${borrowReturn.renewCount ge 2}" class="renewal-status expired">Đã hết lượt gia hạn</p>
-	                    </td>
-	                    
-	                </tr>
+						 <p th:if="${borrowReturn.renewCount ge 2}" class="renewal-status expired">Đã hết lượt gia hạn</p>
+	                </td>
+                </tr>
             </tbody>
-		</table>
+        </table>
+    </div>
+
+    <!-- Form pop-up xác nhận trả sách -->
+    <div th:each="borrowReturn : ${borrowReturns}" 
+         th:id="|returnForm-${borrowReturn.id}|" 
+         class="return-form">
+        <div class="return-form-content">
+            <h3>Xác nhận trả sách</h3>
+            <form th:action="@{/admin/borrow-return}" method="post">
+                <input type="hidden" name="borrowId" th:value="${borrowReturn.id}">
+
+                <label for="condition">Tình trạng sách:</label>
+                <select name="bookCondition" id="condition">
+                    <option value="good">Tốt</option>
+                    <option value="damaged">Hư hỏng / Mất sách</option>
+                </select>
+
+                <div class="button-group">
+                    <button type="submit" class="btn-submit">Xác nhận</button>
+                    <button type="button" class="btn-cancel" th:onclick="|closeReturnForm(${borrowReturn.id})|">Hủy</button>
+                </div>
+            </form>
+        </div>
     </div>
 </body>
-
 </html>

@@ -15,7 +15,7 @@
     <div class="container">
         <h2>Danh sách thư viện</h2>
 
-		<form th:action="@{/admin/search-book}" method="post">
+		<form th:action="@{/admin/search-book}" method="post" class="search-container">
 			<input type="text" name="keyword" placeholder="Nhập tên sách hoặc tên tác giả ...">
 			<button type="submit" class="search-btn">🔍 Tìm kiếm</button>
 		</form>

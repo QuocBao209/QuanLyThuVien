@@ -33,11 +33,20 @@ public class BookController {
     private static final long MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
     private static final String IMAGE_UPLOAD_DIR = "uploads/book_images/";
 
+    
+    // Danh sách nhập hàng
     @PostMapping("/import")
     public String showImportList(Model model) {
+        List<ImportReceipt> importReceipts = importService.getAllImportReceipts();
+        model.addAttribute("importReceipts", importReceipts);
+        return "import";
+    }
+    
+    @PostMapping("/import-receipt-detail")
+    public String showImportDetailList(Model model) {
         List<ImportDetail> importDetails = importService.getAllImportDetails();
         model.addAttribute("importDetails", importDetails);
-        return "import";
+        return "importDetails";
     }
     
     // Hiển thị lựa chọn thêm sách

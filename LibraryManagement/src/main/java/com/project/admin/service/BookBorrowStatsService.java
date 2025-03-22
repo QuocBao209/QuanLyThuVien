@@ -24,8 +24,8 @@ public class BookBorrowStatsService {
     private Borrow_ReturnRepository borrowReturnRepository;
 
     public Map<String, Integer> getBorrowStatsByCategory(Integer month, Integer year) {
-        // Lấy tất cả Borrow_Return với status "đang mượn"
-        List<Borrow_Return> borrowReturns = borrowReturnRepository.findByStatus("đang mượn");
+        // Lấy tất cả Borrow_Return với status "borrowed"
+        List<Borrow_Return> borrowReturns = borrowReturnRepository.findByStatus("borrowed");
 
         // Lọc theo thời gian nếu có month và year
         if (month != null && year != null) {
@@ -40,7 +40,7 @@ public class BookBorrowStatsService {
                         startCal.setTime(br.getStartDate());
                         return !startCal.before(calendar) && startCal.before(endCalendar);
                     })
-                    .collect(Collectors.toList());
+                    .toList();
         }
 
         // Tính số lượng sách mượn theo thể loại
@@ -76,8 +76,8 @@ public class BookBorrowStatsService {
     }
 
     public int getTotalBorrowed(Integer month, Integer year) {
-        // Lấy tất cả Borrow_Return với status "đang mượn"
-        List<Borrow_Return> borrowReturns = borrowReturnRepository.findByStatus("đang mượn");
+        // Lấy tất cả Borrow_Return với status "borrowed"
+        List<Borrow_Return> borrowReturns = borrowReturnRepository.findByStatus("borrowed");
 
         if (month != null && year != null) {
             Calendar calendar = Calendar.getInstance();
@@ -91,7 +91,7 @@ public class BookBorrowStatsService {
                         startCal.setTime(br.getStartDate());
                         return !startCal.before(calendar) && startCal.before(endCalendar);
                     })
-                    .collect(Collectors.toList());
+                    .toList();
         }
 
         // Đếm số lượng sách đang được mượn
@@ -104,10 +104,5 @@ public class BookBorrowStatsService {
                 .stream()
                 .mapToInt(Book::getIsDamaged)
                 .sum();
-    }
-
-    public List<Borrow_Return> getStatsByMonthYear(int month, int year) {
-        // Logic từ các bước trước (nếu cần)
-        return new ArrayList<>();
     }
 }

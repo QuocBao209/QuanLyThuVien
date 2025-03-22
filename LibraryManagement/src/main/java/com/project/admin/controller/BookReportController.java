@@ -42,6 +42,6 @@ public class BookReportController {
         model.addAttribute("totalAvailable", totalAvailable);
         model.addAttribute("totalDamaged", totalDamaged);
 
-        return "book-report"; // Trả về view Thymeleaf
+        return "book_report"; // Trả về view Thymeleaf
     }
 }

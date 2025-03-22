@@ -120,4 +120,14 @@ public class UserService {
         return users.stream().skip(3).toList(); // Lấy phần còn lại
     }
 
+   
+    // Lấy danh sách người dùng có vi phạm
+    public List<User> getUsersWithViolations() {
+        return userRepository.findUsersWithViolations();
+    }
+
+    // Tìm kiếm người dùng có vi phạm theo từ khóa (tên hoặc email)
+    public List<User> searchUsersWithViolations(String keyword) {
+        return userRepository.searchUsersWithViolations(keyword);
+    }
 }

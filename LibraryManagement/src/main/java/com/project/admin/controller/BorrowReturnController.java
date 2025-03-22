@@ -37,7 +37,7 @@ public class BorrowReturnController {
         this.userService = userService;
     }
 
-
+	
 	@PostMapping("/borrow_return_view")
 	public String showBorrowReturns(@RequestParam("userId") Long userId, Model model) {
 	    // Lấy thông tin user
@@ -59,11 +59,50 @@ public class BorrowReturnController {
 	    return showBorrowReturns(userId, model);
 	}
 
+//	@PostMapping("/borrow-confirm")
+//	public String confirmBorrow(@RequestParam("borrowId") Long borrowId, RedirectAttributes redirectAttributes) {
+//		if (borrowId == null) {
+//	        redirectAttributes.addFlashAttribute("error", "Thiếu borrowId!");
+//	        return "redirect:/admin/borrow_return_view";
+//	    }
+//	    System.out.println("Borrow ID: " + borrowId);
+//	    
+//	    Borrow_Return borrowReturn = borrowReturnService.findById(borrowId);
+//	    if (borrowReturn != null && "pending".equals(borrowReturn.getStatus())) {
+//	        // Logic xác nhận mượn
+//	        borrowReturn.setStartDate(new Date());
+//	        borrowReturn.setStatus("borrowed");
+//	        borrowReturnService.save(borrowReturn);
+//
+//	        User user = borrowReturn.getUser();
+//	        Notification notification = new Notification();
+//	        notification.setUser(user);
+//	        notification.setMessage("Bạn đã mượn sách " + borrowReturn.getBook().getBookName() + " thành công!");
+//	        notification.setType("borrow_success");
+//	        notification.setCreatedAt(LocalDateTime.now());
+//	        notificationService.save(notification);
+//
+//	        redirectAttributes.addFlashAttribute("message", "Xác nhận mượn thành công!");
+//	    }
+//	    
+//	    // Chuyển hướng về danh sách mượn chung thay vì sử dụng userId
+//	    return "redirect:/admin/borrow_return_view";
+//	}
+	
 	@PostMapping("/borrow-confirm")
-	public String confirmBorrow(@RequestParam("borrowId") Long borrowId, RedirectAttributes redirectAttributes) {
+	public String confirmBorrow(@RequestParam("borrowId") Long borrowId, Model model) {
+	    if (borrowId == null) {
+	        model.addAttribute("error", "Thiếu borrowId!");
+	        return "borrow_return_view";
+	    }
+
 	    Borrow_Return borrowReturn = borrowReturnService.findById(borrowId);
 	    if (borrowReturn != null && "pending".equals(borrowReturn.getStatus())) {
-	        // Logic xác nhận mượn
+			Book book = borrowReturn.getBook();
+			book.setAmount(book.getAmount() - 1);
+			book.setBorrowCount(book.getBorrowCount() + 1);
+			bookService.save(book);
+
 	        borrowReturn.setStartDate(new Date());
 	        borrowReturn.setStatus("borrowed");
 	        borrowReturnService.save(borrowReturn);
@@ -76,12 +115,18 @@ public class BorrowReturnController {
 	        notification.setCreatedAt(LocalDateTime.now());
 	        notificationService.save(notification);
 
-	        redirectAttributes.addFlashAttribute("message", "Xác nhận mượn thành công!");
+	        model.addAttribute("message", "Xác nhận mượn thành công!");
+	        model.addAttribute("user", user);
+	        model.addAttribute("borrowReturns", borrowReturnService.findByUser_UserId(user.getUserId()));
+
+	        return "borrow_return_view";
 	    }
-	    
-	    // Đổi cú pháp đường dẫn
-	    return "redirect:/admin/borrow_return_view?userId=" + borrowReturn.getUser().getUserId();
+
+	    model.addAttribute("error", "Mượn thất bại!");
+	    return "borrow_return_view";
 	}
+
+
 
 	// Xác nhận trả sách (Chuyển từ borrowed → returned hoặc outdate)
 	@PostMapping("/borrow-return")

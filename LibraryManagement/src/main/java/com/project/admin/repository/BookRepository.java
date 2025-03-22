@@ -7,11 +7,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.awt.print.Pageable;
 import java.util.Optional;
 import java.util.List;
 
+@Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
 
     List<Book> findByBookNameAndIsDeletedFalse(String bookName);
@@ -24,19 +26,19 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     List<Book> findByBookNameContainingIgnoreCaseAndIsDeletedFalseOrAuthors_AuthorNameContainingIgnoreCaseAndIsDeletedFalse(String title, String author);
 
-
-
     @Query("SELECT b.bookImage FROM Book b WHERE b.bookId = :bookId AND b.isDeleted = false")
     String findBookImagePathById(@Param("bookId") Long bookId);
-    
-    // Thống kế sách theo Tháng
-    @Query("SELECT DISTINCT b FROM Book b " +
-    	       "JOIN b.borrowReturns br " + 
-    	       "WHERE (:query IS NULL OR LOWER(b.bookName) LIKE LOWER(CONCAT('%', :query, '%'))) " +
-    	       "AND (:month IS NULL OR FUNCTION('MONTH', br.startDate) = :month) " +
-    	       "AND (:year IS NULL OR FUNCTION('YEAR', br.startDate) = :year)")
-    	List<Book> findBooksByMonthAndYear(@Param("query") String query,
-    	                                   @Param("month") Integer month,
-    	                                   @Param("year") Integer year);
 
+    @Query("SELECT b FROM Book b WHERE b.isDeleted = false AND b.isDamaged > 0")
+    List<Book> findByIsDeletedFalseAndIsDamagedGreaterThan(@Param("damage") int damage);
+
+    // Thống kê sách theo Tháng
+    @Query("SELECT DISTINCT b FROM Book b " +
+            "JOIN b.borrowReturns br " +
+            "WHERE (:query IS NULL OR LOWER(b.bookName) LIKE LOWER(CONCAT('%', :query, '%'))) " +
+            "AND (:month IS NULL OR FUNCTION('MONTH', br.startDate) = :month) " +
+            "AND (:year IS NULL OR FUNCTION('YEAR', br.startDate) = :year)")
+    List<Book> findBooksByMonthAndYear(@Param("query") String query,
+                                       @Param("month") Integer month,
+                                       @Param("year") Integer year);
 }

@@ -88,7 +88,7 @@ body {
 /* Table styles */
 .table {
     width: 100%;
-    max-width: 1000px;
+    max-width: 1030px;
     border-collapse: collapse;
     background: #fff;
     border-radius: 5px;
@@ -121,9 +121,3 @@ body {
     background: #e9ecef;
 }
 
-.no-data {
-    text-align: center;
-    color: #888;
-    font-style: italic;
-    padding: 20px;
-}
