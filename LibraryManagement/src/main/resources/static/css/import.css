@@ -89,3 +89,17 @@ th {
 tr:hover {
     background: #f1f1f1;
 }
+
+.history-btn {
+	padding: 10px;
+	background-color: #008000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.history-btn:hover {
+	transform: translateY(-3px); /* Hiệu ứng nhấc lên khi hover */
+}
