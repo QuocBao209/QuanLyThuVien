@@ -27,7 +27,11 @@
 	                <p th:text="'Số lượt mượn: ' + ${reader.borrowCount}"></p>
                </div>
           </div>
-          
+          <br>
+          <br>
+          <br>
+          <br>
+          <br>
           <table class="table">
             <thead>
 				<tr>
@@ -41,14 +45,15 @@
 				</thead>
 			<tbody>
 			<tr th:each="reader, iterStat : ${reader}">
-				<td th:text="${iterStat.idex + 4}"></td>
+				<td th:text="${iterStat.index + 4}"></td>
 				<td th:text="${reader.userId}"></td>
 				<td th:text="${reader.name}"></td>
-				<td th:text="${reader.phone"></td>
+				<td th:text="${reader.phone}"></td>
 				<td th:text="${reader.email}"></td>
+				<td th:text="${reader.borrowCount}"></td>
 			</tr>
 			 <!-- Thông báo không có dữ liệu -->
-                <tr th:if="${#lists.isEmpty(stats)}">
+                <tr th:if="${#lists.isEmpty(reader)}">
                     <td colspan="9" class="no-data">Không có dữ liệu</td>
                 </tr>
 			</tbody>
