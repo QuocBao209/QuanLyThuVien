@@ -128,56 +128,65 @@ public class BorrowReturnController {
 
 
 
-	// Xác nhận trả sách (Chuyển từ borrowed → returned hoặc outdate)
 	@PostMapping("/borrow-return")
-	public String returnBook(@RequestParam("borrowId") Long borrowId, RedirectAttributes redirectAttributes) {
-	    Borrow_Return borrowReturn = borrowReturnService.findById(borrowId);
+	public String returnBook(@RequestParam("borrowId") Long borrowId,
+							 @RequestParam("bookCondition") String bookCondition,
+							 RedirectAttributes redirectAttributes) {
+		Borrow_Return borrowReturn = borrowReturnService.findById(borrowId);
 
-	    if (borrowReturn == null) {
-	        redirectAttributes.addFlashAttribute("error", "Không tìm thấy đơn mượn sách!");
-	        return "redirect:/admin/borrow_return_view";
-	    }
+		if (borrowReturn == null) {
+			redirectAttributes.addFlashAttribute("error", "Không tìm thấy đơn mượn sách!");
+			return "redirect:/admin/borrow_return_view";
+		}
 
-	    if (!"borrowed".equals(borrowReturn.getStatus())) {
-	        redirectAttributes.addFlashAttribute("error", "Sách chưa được mượn hoặc đã trả!");
-	        return "redirect:/admin/borrow_return_view?userId=" + borrowReturn.getUser().getUserId();
-	    }
+		if (!"borrowed".equals(borrowReturn.getStatus())) {
+			redirectAttributes.addFlashAttribute("error", "Sách chưa được mượn hoặc đã trả!");
+			return "redirect:/admin/borrow_return_view?userId=" + borrowReturn.getUser().getUserId();
+		}
 
-	    LocalDate now = LocalDate.now();
-	    LocalDate startDate = new java.sql.Date(borrowReturn.getStartDate().getTime()).toLocalDate();
-	    long daysBorrowed = java.time.temporal.ChronoUnit.DAYS.between(startDate, now);
+		LocalDate now = LocalDate.now();
+		LocalDate startDate = new java.sql.Date(borrowReturn.getStartDate().getTime()).toLocalDate();
+		long daysBorrowed = java.time.temporal.ChronoUnit.DAYS.between(startDate, now);
 
-	    borrowReturn.setEndDate(java.util.Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		borrowReturn.setEndDate(java.util.Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
-	    String statusMessage;
-	    if (daysBorrowed > 15) {
-	        borrowReturn.setStatus("outdate");
-	        statusMessage = "Bạn đã trả sách " + borrowReturn.getBook().getBookName() + " quá hạn (" + daysBorrowed + " ngày).";
-	    } else {
-	        borrowReturn.setStatus("returned");
-	        statusMessage = "Bạn đã trả sách " + borrowReturn.getBook().getBookName() + " thành công!";
-	    }
+		Book book = borrowReturn.getBook();
+		User user = borrowReturn.getUser();
 
-	    borrowReturnService.save(borrowReturn);
+		String statusMessage;
 
-	    // Tăng số lượng sách lên 1
-	    Book book = borrowReturn.getBook();
-	    book.setAmount(book.getAmount() + 1);
-	    bookService.save(book);
+		if (daysBorrowed > 15) {
+			borrowReturn.setStatus("outdate");
+			user.setViolationCount(user.getViolationCount() + 1); // Quá hạn -> tăng vi phạm
+			statusMessage = "Bạn đã trả sách " + book.getBookName() + " quá hạn (" + daysBorrowed + " ngày).";
+		} else {
+			borrowReturn.setStatus("returned");
+			statusMessage = "Bạn đã trả sách " + book.getBookName() + " thành công!";
+		}
 
-	    // Tạo và lưu thông báo
-	    User user = borrowReturn.getUser();
-	    Notification notification = new Notification();
-	    notification.setUser(user);
-	    notification.setMessage(statusMessage);
-	    notification.setType(daysBorrowed > 15 ? "return_outdate" : "return_success");
-	    notification.setCreatedAt(LocalDateTime.now());
-	    notification.setRead(false); // Thông báo mới, chưa đọc
-	    notificationService.save(notification);
+		if ("damaged".equals(bookCondition)) {
+			book.setIsDamaged(book.getIsDamaged() + 1);
+			user.setViolationCount(user.getViolationCount() + 1);
+			statusMessage += " Tuy nhiên, sách bị hư hỏng hoặc mất!";
+		} else {
+			book.setAmount(book.getAmount() + 1); // Nếu sách tốt, tăng số lượng sách
+		}
 
-	    redirectAttributes.addFlashAttribute("message", "Xác nhận trả sách thành công!");
-	    
-	    // Đổi cú pháp đường dẫn
-	    return "redirect:/admin/borrow_return_view?userId=" + borrowReturn.getUser().getUserId();
+		borrowReturnService.save(borrowReturn);
+		bookService.save(book);
+		userService.save(user);
+
+		// Tạo thông báo
+		Notification notification = new Notification();
+		notification.setUser(user);
+		notification.setMessage(statusMessage);
+		notification.setType(daysBorrowed > 15 ? "return_outdate" : "return_success");
+		notification.setCreatedAt(LocalDateTime.now());
+		notification.setRead(false);
+		notificationService.save(notification);
+
+		redirectAttributes.addFlashAttribute("message", "Xác nhận trả sách thành công!");
+		return "redirect:/admin/borrow_return_view?userId=" + user.getUserId();
 	}
+
 }
