@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Độc giả đọc nhiều nhất</title>
+	<link rel="stylesheet" th:href="@{/css/topReader.css}">
+	<link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+
+<!-- Sidebar -->
+<div th:replace="admin :: sidebar"></div>
+
+		<!-- Danh sách độc giả -->
+	<div class="reader-container">
+		<h2>Top độc giả đọc nhiều nhất</h2>
+        
+		<!-- Top 3 độc giả đứng đầu -->
+         <div class="top-readers">
+               <div th:each="reader, iterStat : ${topReader}" th:if="${iterStat.index < 3}" class="reader-item" >
+	                <div class="medal" th:text="${iterStat.index + 1}">🥇</div>
+	                <h4 th:text="${reader.name}"></h4>
+	                <p th:text="'ID: ' + ${reader.userId}"></p>
+	                <p th:text="'SĐT: ' + ${reader.phone}"></p>
+	                <p th:text="'Mail: ' + ${reader.email}"></p>
+	                <p th:text="'Số lượt mượn: ' + ${reader.borrowCount}"></p>
+               </div>
+          </div>
+          
+          <table class="table">
+            <thead>
+				<tr>
+					<th>STT</th>
+					<th>ID</th>
+					<th>Tên</th>
+					<th>Số điện thoại</th>
+					<th>Email</th>
+					<th>Số lượt mượn</th>
+				</tr>
+				</thead>
+			<tbody>
+			<tr th:each="reader, iterStat : ${reader}">
+				<td th:text="${iterStat.idex + 4}"></td>
+				<td th:text="${reader.userId}"></td>
+				<td th:text="${reader.name}"></td>
+				<td th:text="${reader.phone"></td>
+				<td th:text="${reader.email}"></td>
+			</tr>
+			 <!-- Thông báo không có dữ liệu -->
+                <tr th:if="${#lists.isEmpty(stats)}">
+                    <td colspan="9" class="no-data">Không có dữ liệu</td>
+                </tr>
+			</tbody>
+
+		</table>
+	</div>
+</body>
+</html>

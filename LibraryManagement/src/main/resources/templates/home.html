@@ -9,7 +9,7 @@
 <body>
 
 	<header th:fragment="header">
-	    <a href="/home" style="text-decoration: none; color: inherit; transform: translateY(-3px);">
+	    <a href="/home" style="text-decoration: none; color: inherit; transform: translateY(-3px);position: absolute;">
 	        📚 Thư viện Điện tử
 	    </a>
 	    <nav>
@@ -52,6 +52,8 @@
 	    </nav>
 	</header>
 	
+	
+	<div class="body-container">
 	<!-- Hero Section -->
 	<section class="hero">
 		<h1>Chào mừng đến với Thư viện Điện Tử</h1>
@@ -79,14 +81,14 @@
 	
 	<!-- Góc độc giả -->
 	<section class="reader-corner">
-		<h2>Góc độc giả</h2>
-		<p>Cảm nhận và đánh giá từ độc giả</p>
+			<h2>Góc độc giả</h2>
+			<p>Cảm nhận và đánh giá từ độc giả</p>
 		<div class="reviews">
 			<div class="review">“Thư viện tuyệt vời, nhiều sách hay!” - An</div>
 			<div class="review">“Tìm kiếm dễ dàng, giao diện đẹp!” - Bình</div>
 		</div>
 	</section>
-	
+	</div>
 	<!-- Footer -->
 	<footer th:fragment="footer">
 		<p>&copy; 2025 Thư viện Điện tử. Mọi quyền được bảo lưu.</p>

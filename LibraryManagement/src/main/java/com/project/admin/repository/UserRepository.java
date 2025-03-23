@@ -14,6 +14,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
     List<User> findAllByRole(String role); // Sửa lại
     List<User> findByRoleAndNameContainingOrRoleAndEmailContaining(String role1, String name, String role2, String email);
+
+    // top user mượn sách nhiều nhất
+    List<User> findByRoleOrderByBorrowCountDesc(String role);
+
     
     // Lấy danh sách người dùng có số lần vi phạm > 0
     @Query("SELECT u FROM User u WHERE u.violationCount > 0")
@@ -22,6 +26,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // Tìm kiếm người dùng có vi phạm theo tên hoặc email
     @Query("SELECT u FROM User u WHERE u.violationCount > 0 AND (LOWER(u.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(u.email) LIKE LOWER(CONCAT('%', :keyword, '%')))")
     List<User> searchUsersWithViolations(String keyword);
+
 }
 
 
