@@ -131,17 +131,17 @@ public class BorrowReturnController {
 	@PostMapping("/borrow-return")
 	public String returnBook(@RequestParam("borrowId") Long borrowId,
 							 @RequestParam("bookCondition") String bookCondition,
-							 RedirectAttributes redirectAttributes) {
+							 Model model) {
 		Borrow_Return borrowReturn = borrowReturnService.findById(borrowId);
 
 		if (borrowReturn == null) {
-			redirectAttributes.addFlashAttribute("error", "Không tìm thấy đơn mượn sách!");
-			return "redirect:/admin/borrow_return_view";
+			model.addAttribute("error", "Không tìm thấy đơn mượn sách!");
+			return "borrow_return_view";
 		}
 
 		if (!"borrowed".equals(borrowReturn.getStatus())) {
-			redirectAttributes.addFlashAttribute("error", "Sách chưa được mượn hoặc đã trả!");
-			return "redirect:/admin/borrow_return_view?userId=" + borrowReturn.getUser().getUserId();
+			model.addAttribute("error", "Sách chưa được mượn hoặc đã trả!");
+			return "borrow_return_view";
 		}
 
 		LocalDate now = LocalDate.now();
@@ -157,7 +157,7 @@ public class BorrowReturnController {
 
 		if (daysBorrowed > 15) {
 			borrowReturn.setStatus("outdate");
-			user.setViolationCount(user.getViolationCount() + 1); // Quá hạn -> tăng vi phạm
+			user.setViolationCount(user.getViolationCount() + 1);
 			statusMessage = "Bạn đã trả sách " + book.getBookName() + " quá hạn (" + daysBorrowed + " ngày).";
 		} else {
 			borrowReturn.setStatus("returned");
@@ -169,7 +169,7 @@ public class BorrowReturnController {
 			user.setViolationCount(user.getViolationCount() + 1);
 			statusMessage += " Tuy nhiên, sách bị hư hỏng hoặc mất!";
 		} else {
-			book.setAmount(book.getAmount() + 1); // Nếu sách tốt, tăng số lượng sách
+			book.setAmount(book.getAmount() + 1);
 		}
 
 		borrowReturnService.save(borrowReturn);
@@ -185,8 +185,13 @@ public class BorrowReturnController {
 		notification.setRead(false);
 		notificationService.save(notification);
 
-		redirectAttributes.addFlashAttribute("message", "Xác nhận trả sách thành công!");
-		return "redirect:/admin/borrow_return_view?userId=" + user.getUserId();
+		model.addAttribute("message", "Xác nhận trả sách thành công!");
+		model.addAttribute("user", user);
+		model.addAttribute("borrowReturns", borrowReturnService.findByUser_UserId(user.getUserId()));
+
+
+		return "borrow_return_view";
 	}
+
 
 }
