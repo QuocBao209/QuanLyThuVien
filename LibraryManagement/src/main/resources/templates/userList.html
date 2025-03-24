@@ -50,7 +50,8 @@
 					    		class="confirm-form">
 					        <input type="hidden" name="userId" th:value="${user.userId}" >
 					        <button type="submit" class="edit-btn" 
-					                th:text="${user.status == 'Hoạt động' ? 'Khóa' : 'Mở khóa'}">
+					                th:text="${user.status == 'Hoạt động' ? 'Khóa' : 'Mở khóa'}"
+					                th:class="${user.status == 'Hoạt động' ? 'edit-btn' : 'unlock-btn'}">
 					        </button>
 					    </form>
 					</td>
@@ -67,18 +68,26 @@
 	</div>
 </body>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
-    window.history.replaceState({}, document.title, window.location.href);
-    
     document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll(".confirm-form").forEach(form => {
             form.addEventListener("submit", function (event) {
                 event.preventDefault(); // Ngăn form gửi ngay lập tức
 
+                let button = this.querySelector("button"); // Lấy nút trong form
+                let actionText = button.innerText.trim(); // Lấy chữ trên nút (Khóa / Mở khóa)
+
+                let title = actionText === "Khóa" ? "Xác nhận khóa tài khoản" : "Xác nhận mở khóa tài khoản";
+                let text = actionText === "Khóa" 
+                    ? "Bạn có chắc chắn muốn khóa tài khoản này?" 
+                    : "Bạn có chắc chắn muốn mở khóa tài khoản này?";
+
                 Swal.fire({
-                    title: "Xác nhận xóa tài khoản",
-                    text: "Bạn có chắc chắc xóa tài khoản này?",
-                    icon: "question",
+                    title: title,
+                    text: text,
+                    icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#3085d6",
                     cancelButtonColor: "#d33",
@@ -86,7 +95,7 @@
                     cancelButtonText: "Hủy"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        form.submit(); // Nếu người dùng bấm Xóa, gửi form
+                        form.submit(); // Nếu người dùng bấm Đồng ý, gửi form
                     }
                 });
             });

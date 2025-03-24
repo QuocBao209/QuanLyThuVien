@@ -175,7 +175,7 @@
 						          th:action="@{/home/renew}" method="post"
 						          class="renew-form">
 						        <input type="hidden" name="borrowId" th:value="${borrow.id}">
-						        <button type="button" class="renew-btn">Gia hạn</button>
+						        <button type="submit" class="renew-btn">Gia hạn</button>
 						    </form>
 						
 						    <p th:if="${borrow.renewCount ge 0 and borrow.renewCount lt 2}" 

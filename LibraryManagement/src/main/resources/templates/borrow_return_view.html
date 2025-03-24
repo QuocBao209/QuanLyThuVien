@@ -62,7 +62,7 @@
                         </span>
                     </td>
 
-                    <td th:text="${borrowReturn.userConfirmDate != null ? #dates.format(borrowReturn.userConfirmDate, 'dd/MM/yyyy') : 'Đang chờ xác nhận'}"></td>
+                    <td th:text="${borrowReturn.userConfirmDate != null ? #dates.format(borrowReturn.userConfirmDate, 'dd/MM/yyyy') : '------'}"></td>
 
                     <td th:text="${borrowReturn.startDate != null ? #dates.format(borrowReturn.startDate, 'dd/MM/yyyy') : '------'}"></td>
 
@@ -136,6 +136,8 @@
         </div>
     </div>
 </body>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script >
 	document.addEventListener("DOMContentLoaded", function () {
