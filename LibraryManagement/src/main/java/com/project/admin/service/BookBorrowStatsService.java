@@ -25,7 +25,7 @@ public class BookBorrowStatsService {
 
     public Map<String, Integer> getBorrowStatsByCategory(Integer month, Integer year) {
         // Lấy tất cả Borrow_Return với status "borrowed"
-        List<Borrow_Return> borrowReturns = borrowReturnRepository.findByStatus("borrowed");
+        List<Borrow_Return> borrowReturns = borrowReturnRepository.findByStatusIn(List.of("borrowed", "returned", "outdate"));
 
         // Lọc theo thời gian nếu có month và year
         if (month != null && year != null) {
@@ -76,8 +76,8 @@ public class BookBorrowStatsService {
     }
 
     public int getTotalBorrowed(Integer month, Integer year) {
-        // Lấy tất cả Borrow_Return với status "borrowed"
-        List<Borrow_Return> borrowReturns = borrowReturnRepository.findByStatus("borrowed");
+
+        List<Borrow_Return> borrowReturns = borrowReturnRepository.findByStatusIn(List.of("borrowed", "returned", "outdate"));
 
         if (month != null && year != null) {
             Calendar calendar = Calendar.getInstance();
@@ -94,9 +94,10 @@ public class BookBorrowStatsService {
                     .toList();
         }
 
-        // Đếm số lượng sách đang được mượn
+        // Đếm số lượng sách phù hợp
         return borrowReturns.size();
     }
+
 
     public int getTotalDamaged() {
         // Tổng số sách bị hư/mất (isDamaged) của tất cả sách chưa bị xóa

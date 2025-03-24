@@ -15,6 +15,5 @@ public interface Borrow_ReturnRepository extends JpaRepository<Borrow_Return, Lo
     
     List<Borrow_Return> findByUser_UserId(Long userId);
 
-    @Query("SELECT br FROM Borrow_Return br WHERE br.status = :status AND MONTH(br.startDate) = :month AND YEAR(br.startDate) = :year")
-    List<Borrow_Return> findByStatusAndMonthYear(@Param("status") String status, @Param("month") Integer month, @Param("year") Integer year);
+    List<Borrow_Return> findByStatusIn(List<String> statuses);
 }

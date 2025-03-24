@@ -20,21 +20,21 @@
 			<button type="submit" class="search-btn">🔍 Tìm kiếm</button>
 		</form>
 
-
 		<table>
-            <thead>
-				<tr>
-					<th>ID</th>
-					<th>Ảnh</th>
-					<th>Tên sách</th>
-					<th>Tác giả</th>
-					<th>Thể loại</th>
-					<th>Số lượng</th>
-					<th>Số lượng mượn</th>
-					<th>Sửa</th>
-					<th>Xóa</th>
-				</tr>
-				</thead>
+			<thead>
+			<tr>
+				<th>ID</th>
+				<th>Ảnh</th>
+				<th>Tên sách</th>
+				<th>Tác giả</th>
+				<th>Thể loại</th>
+				<th>Số lượng</th>
+				<th>Số lượng mượn</th>
+				<th>Số lượng hư hại</th> <!-- Cột mới -->
+				<th>Sửa</th>
+				<th>Xóa</th>
+			</tr>
+			</thead>
 			<tbody>
 			<tr th:each="book : ${books}">
 				<td th:text="${book.bookId}"></td>
@@ -43,14 +43,15 @@
 				</td>
 				<td th:text="${book.bookName}"></td>
 				<td>
-		            <span th:each="author, iterStat : ${book.authors}">
-		                <span th:text="${author.authorName}"></span>
-		                <span th:if="${!iterStat.last}">, </span>
-		            </span>
+                <span th:each="author, iterStat : ${book.authors}">
+                    <span th:text="${author.authorName}"></span>
+                    <span th:if="${!iterStat.last}">, </span>
+                </span>
 				</td>
 				<td th:text="${book.category.categoryName}"></td>
 				<td th:text="${book.amount}"></td>
-				<td th:text="${book.borrowCount}"></td> <!-- Hiển thị số lượng mượn -->
+				<td th:text="${book.borrowCount}"></td>
+				<td th:text="${book.isDamaged}"></td> <!-- Hiển thị số lượng sách hư hại -->
 				<td>
 					<form th:action="@{/admin/edit-book/{id}(id=${book.bookId})}" method="post">
 						<button type="submit" class="btn btn-edit">Sửa</button>
@@ -64,8 +65,8 @@
 				</td>
 			</tr>
 			</tbody>
-
 		</table>
+
     </div>
 </body>
 
