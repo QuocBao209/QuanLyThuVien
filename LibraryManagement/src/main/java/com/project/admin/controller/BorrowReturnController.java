@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -48,6 +49,18 @@ public class BorrowReturnController {
 
 	    // Lấy danh sách Borrow_Return của user đó
 	    List<Borrow_Return> borrowReturns = borrowReturnService.findByUser_UserId(userId); 
+	    
+	    // Sắp xếp danh sách theo thứ tự mong muốn
+	    borrowReturns.sort(Comparator.comparingInt(b -> {
+	        switch (b.getStatus()) {
+	            case "pending": return 1;
+	            case "borrowed": return 2;
+	            case "returned": return 3;
+	            case "outdate": return 4;
+	            default: return 5;
+	        }
+	    }));
+	    
 	    model.addAttribute("user", user);
 	    model.addAttribute("borrowReturns", borrowReturns);
 	    return "borrow_return_view";

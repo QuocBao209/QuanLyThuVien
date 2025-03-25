@@ -13,39 +13,30 @@
 	
 	<div class="main-container">
 		<h2>Sách mượn theo tháng</h2>
+		<!-- Toolbar -->
 		<div class="toolbar">
 			<form th:action="@{/admin/statistics/books-per-month/book-borrow-stats}" method="post" 
-					onsubmit="updateHiddenFields()" id="statsForm">
-				<!-- Ô tìm kiếm -->
-				<label>Tìm kiếm:</label>
-				<input type="text" id="searchQuery" name="query" 
-					placeholder="Nhập thông tin sách..." th:value="${param.query}" onchange="submitForm()">
-				<span id="errorMsg" class="error-msg" style="display: none;"></span>
-				
-				<!-- Chọn Tháng - Năm -->
-                <label>Tháng - Năm:</label>
-                <select id="month" name="month">
-                    <option value="" th:selected="${param.month == null}">Chọn tháng</option>
-                    <option th:each="m : ${#numbers.sequence(1, 12)}" 
-                    		th:value="${m}" 
-                    		th:text="${m}" 
-                    		th:selected="${param.month != null and param.month == m}"></option>
-                </select>
-                <select id="year" name="year">
-                    <option value="" th:selected="${param.year == null}">Chọn năm</option>
-                    <option th:each="y : ${#numbers.sequence(2020, #dates.year(#dates.createNow()))}" 
-                    th:value="${y}" 
-                    th:text="${y}" 
-                    th:selected="${param.year != null and param.year == y}"></option>
-                </select>
-                <input type="hidden" id="hiddenMonth" name="month" />
-                <input type="hidden" id="hiddenYear" name="year" />
+					onsubmit="return validateForm()" id="statsForm">
+				<!-- Nhóm ô tìm kiếm -->
+				<div class="input-group">
+					<label>Tìm kiếm:</label>
+					<input type="text" id="searchQuery" name="query" 
+						placeholder="Nhập thông tin sách..." th:value="${param.query}">
+					
+					<!-- Nhóm ô Tháng - Năm -->
+					<label>Tháng:</label>
+					<input type="number" id="month" name="month" placeholder="Nhập tháng (1-12)" th:value="${param.month}">
+					<label>Năm:</label>
+					<input type="number" id="year" name="year" placeholder="Nhập năm (VD: 2023)" th:value="${param.year}">
+					
+					<!-- Nút tìm kiếm và làm mới -->
+					<button type="submit">Tìm kiếm</button>
+					<button type="button" class="reset-btn" onclick="resetForm()">Làm mới</button>
+				</div>
 
-                <!-- Nút tìm kiếm và làm mới -->
-                <button type="submit">Tìm kiếm</button>
-                <button type="button" class="reset-btn" onclick="resetForm()">Làm mới</button>
-                <button type="submit" class="statistics-btn">Thống kê</button>
-            </form>
+				<!-- Thông báo lỗi -->
+				<span id="errorMsg" class="error-msg"></span>
+			</form>
 		</div>
 		
 		<table class="table">
@@ -75,10 +66,9 @@
 					</td>
 					<td th:text="${book.category.categoryName}"></td>
 					<td th:text="${book.amount}"></td>
-					<td th:text="${book.borrowCount}"></td> <!-- Hiển thị số lượng mượn -->
+					<td th:text="${book.borrowCount}"></td>
                 </tr>
                 
-                <!-- Thông báo không có dữ liệu -->
                 <tr th:if="${#lists.isEmpty(books)}">
 				    <td colspan="9" class="no-data">Không có dữ liệu</td>
 				</tr>
@@ -88,31 +78,40 @@
 </body>
 
 <script>
-//Cập nhật giá trị tháng/năm vào input ẩn trước khi submit
-function updateHiddenFields() {
-	document.getElementById('hiddenMonth').value = document.getElementById('month').value;
-	document.getElementById('hiddenYear').value = document.getElementById('year').value;
+function validateForm() {
+    const month = document.getElementById('month').value.trim();
+    const year = document.getElementById('year').value.trim();
+    const errorMsg = document.getElementById('errorMsg');
+
+    if (month && !year) {
+        errorMsg.textContent = "Vui lòng nhập năm khi đã nhập tháng!";
+        errorMsg.style.display = "block";
+        return false;
+    }
+    
+    errorMsg.style.display = "none";
+    return true;
 }
 
-// Giữ lại giá trị tháng/năm sau khi tải lại trang
-window.onload = function () {
-	const urlParams = new URLSearchParams(window.location.search);
-	const selectedMonth = urlParams.get('month');
-	const selectedYear = urlParams.get('year');
-
-	if (selectedMonth) {
-		document.getElementById('month').value = selectedMonth;
-	}
-	if (selectedYear) {
-		document.getElementById('year').value = selectedYear;
-	}
-};
-
-// Làm mới form (xóa bộ lọc nhưng không submit ngay)
 function resetForm() {
-    window.location.href = '/admin/statistics/books-per-month/book-borrow-stats';
+    const form = document.getElementById('statsForm');
+    form.reset();
+    document.getElementById('searchQuery').value = '';
+    document.getElementById('month').value = '';
+    document.getElementById('year').value = '';
+    form.submit();
 }
 
+window.onload = function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = urlParams.get('query');
+    const month = urlParams.get('month');
+    const year = urlParams.get('year');
+
+    if (query) document.getElementById('searchQuery').value = query;
+    if (month) document.getElementById('month').value = month;
+    if (year) document.getElementById('year').value = year;
+};
 </script>
 
 </html>

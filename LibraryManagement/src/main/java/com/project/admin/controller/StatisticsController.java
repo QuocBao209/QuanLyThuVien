@@ -20,6 +20,7 @@ public class StatisticsController {
 
 	@Autowired private BookService bookService;
 	@Autowired private UserService userService;
+	
 	@PostMapping("/statistics/books-per-month")
 	public String monthlyBorrowForm(Model model) {
 	    List<Book> books = bookService.getBooksByMonthAndYear(null, null, null); // Lấy toàn bộ danh sách
@@ -42,6 +43,7 @@ public class StatisticsController {
         
         return "monthly_borrow";
     }
+    
     //Top user mượn nhiều
     @PostMapping("/statistics/top-readers")
     public ModelAndView getTopBorrowers() {

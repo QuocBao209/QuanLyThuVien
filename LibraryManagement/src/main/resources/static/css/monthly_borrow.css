@@ -40,13 +40,37 @@ body {
     margin-right: 10px;
 }
 
-.toolbar input[type="text"], .toolbar select {
+.toolbar input[type="text"] {
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 5px;
     background: #fff;
     color: #333;
     margin-right: 10px;
+    width: 150px;
+}
+
+/* Nhóm ô nhập liệu */
+.toolbar .input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+.toolbar input[type="text"]#searchQuery {
+    width: 200px;
+}
+
+.toolbar input[type="number"]#month,
+.toolbar input[type="number"]#year {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: #fff;
+    color: #333;
+    margin-right: 10px;
+    width: 150px;
 }
 
 .toolbar button {
@@ -71,18 +95,13 @@ body {
     background: #5a6268;
 }
 
-.statistics-btn {
-	background: #6c757d;
-}
-
-.statistics-btn:hover {
-    background: #5a6268;
-}
-
 .error-msg {
-    color: #dc3545;
+    color: #FFC107; /* Màu vàng cảnh báo */
     font-size: 14px;
-    margin-left: 10px;
+    display: block;
+    margin-top: 5px;
+    margin-left: 350px; /* Căn chỉnh thẳng hàng với ô Năm */
+    width: 100%;
 }
 
 /* Table styles */
@@ -120,4 +139,6 @@ body {
 .table tr:hover {
     background: #e9ecef;
 }
+
+
 
