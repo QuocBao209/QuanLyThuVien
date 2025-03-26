@@ -15,23 +15,7 @@
 		<!-- Danh sách độc giả -->
 	<div class="reader-container">
 		<h2>Top độc giả đọc nhiều nhất</h2>
-        
-		<!-- Top 3 độc giả đứng đầu -->
-         <div class="top-readers">
-               <div th:each="reader, iterStat : ${topReader}" th:if="${iterStat.index < 3}" class="reader-item" >
-	                <div class="medal" th:text="${iterStat.index + 1}">🥇</div>
-	                <h4 th:text="${reader.name}"></h4>
-	                <p th:text="'ID: ' + ${reader.userId}"></p>
-	                <p th:text="'SĐT: ' + ${reader.phone}"></p>
-	                <p th:text="'Mail: ' + ${reader.email}"></p>
-	                <p th:text="'Số lượt mượn: ' + ${reader.borrowCount}"></p>
-               </div>
-          </div>
-          <br>
-          <br>
-          <br>
-          <br>
-          <br>
+
           <table class="table">
             <thead>
 				<tr>
@@ -44,6 +28,14 @@
 				</tr>
 				</thead>
 			<tbody>
+			<tr th:each="reader, iterStat : ${topReader}" class="reader-item" >
+	                <td class="medal" th:text="${iterStat.index + 1}">🥇</td>
+	                <td th:text="${reader.userId}"></td>
+	                <td th:text="${reader.name}"></td>
+	                <td th:text="${reader.phone}"></td>
+	                <td th:text="${reader.email}"></td>
+	                <td th:text="${reader.borrowCount}"></td>
+           	</tr>
 			<tr th:each="reader, iterStat : ${reader}">
 				<td th:text="${iterStat.index + 4}"></td>
 				<td th:text="${reader.userId}"></td>
