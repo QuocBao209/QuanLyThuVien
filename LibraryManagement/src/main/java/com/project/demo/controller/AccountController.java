@@ -1,5 +1,6 @@
 package com.project.demo.controller;
 
+import com.project.demo.entity.Borrow_Return;
 import com.project.demo.entity.Notification;
 import com.project.demo.entity.User;
 import com.project.demo.service.Borrow_ReturnService;
@@ -15,8 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/home")
@@ -59,7 +62,7 @@ public class AccountController {
         notifications.sort((n1, n2) -> n2.getCreatedAt().compareTo(n1.getCreatedAt()));
         
         mav.addObject("user", user);
-        mav.addObject("borroweBooks", borrowService.getBorrowsByUser(user));
+        mav.addObject("borrowedBooks", getSortedBorrowReturns(user));
         mav.addObject("notifications", notifications);
         
         // Thêm unreadCount
@@ -71,7 +74,29 @@ public class AccountController {
         
         return mav;
     }
+    
+    // Sắp xếp thứ tự theo trạng thái mượn / trả
+    private List<Borrow_Return> getSortedBorrowReturns(User user) {
+        return borrowService.getBorrowsByUser(user)
+            .stream()
+            .sorted(Comparator
+                .comparing((Borrow_Return br) -> br.getUserConfirmDate() == null ? 0 : 1) // Sách chưa có userConfirmDate lên đầu
+                .thenComparing(br -> getStatusOrder(br.getStatus())) // Sắp xếp tiếp theo theo trạng thái
+            )
+            .collect(Collectors.toList());
+    }
 
+    private int getStatusOrder(String status) {
+        switch (status) {
+            case "pending": return 1;
+            case "borrowed": return 2;
+            case "returned": return 3;
+            case "outdate": return 4;
+            default: return 5;
+        }
+    }
+
+    // Chỉnh sửa tài khoản
     @PostMapping("/edit-account")
     public String editAccount(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
         if (user.getUserId() == null) {

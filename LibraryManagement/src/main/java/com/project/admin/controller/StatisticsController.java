@@ -20,9 +20,12 @@ public class StatisticsController {
 
 	@Autowired private BookService bookService;
 	@Autowired private UserService userService;
+	
 	@PostMapping("/statistics/books-per-month")
-	public String monthlyBorrowForm() {
-		return "monthly_borrow";
+	public String monthlyBorrowForm(Model model) {
+	    List<Book> books = bookService.getBooksByMonthAndYear(null, null, null); // Lấy toàn bộ danh sách
+	    model.addAttribute("books", books);
+	    return "monthly_borrow";
 	}
 	
 	// Thống kê sách theo Tháng
@@ -32,9 +35,15 @@ public class StatisticsController {
                                  @RequestParam(required = false) Integer year,
                                  Model model) {
         List<Book> books = bookService.getBooksByMonthAndYear(query, month, year);
+        
+        // Lưu giá trị để hiển thị lại trên giao diện
         model.addAttribute("books", books);
+        model.addAttribute("month", month); // Giữ giá trị tháng
+        model.addAttribute("year", year);   // Giữ giá trị năm
+        
         return "monthly_borrow";
     }
+    
     //Top user mượn nhiều
     @PostMapping("/statistics/top-readers")
     public ModelAndView getTopBorrowers() {

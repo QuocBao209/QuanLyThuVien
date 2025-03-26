@@ -17,6 +17,7 @@ body {
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     width: 90%;
+    height: auto;
     max-width: 1000px;
     margin-left: 200px;
 }
@@ -100,23 +101,32 @@ table th {
 }
 
 /* Nút chỉnh sửa và xem lịch sử */
-.edit-btn, .history-btn {
+.edit-btn, .history-btn, .unlock-btn {
     padding: 8px 12px;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: 0.3s;
-    width: 80%;
+    width: 100%;
 }
 
+/* Nút Khóa */
 .edit-btn {
-    background-color: #dc3545;
+    background-color: #dc3545; /* Màu đỏ */
+    color: white;
 }
 
-.edit-btn:hover {
+/* Nút Mở khóa */
+.unlock-btn {
+    background-color: #28a745; /* Màu xanh lá cây */
+    color: white;
+}
+
+.edit-btn:hover, .unlock-btn:hover {
     filter: brightness(1.1);
 }
+
 
 .history-btn {
     background-color: #0000ff;

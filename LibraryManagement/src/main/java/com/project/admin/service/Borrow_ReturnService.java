@@ -103,7 +103,6 @@ public class Borrow_ReturnService {
     }
 
     public int getTotalBorrowed(Integer month, Integer year) {
-        // Lấy tất cả Borrow_Return đã xác nhận (userConfirmDate không null)
         List<Borrow_Return> borrowReturns = getConfirmedBorrowReturns();
 
         if (month != null && year != null) {
