@@ -41,4 +41,15 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findBooksByMonthAndYear(@Param("query") String query,
                                        @Param("month") Integer month,
                                        @Param("year") Integer year);
+    
+    // Lấy tất cả danh sách khi không nhập Tháng/Năm
+    @Query("SELECT b FROM Book b WHERE (:query IS NULL OR b.bookName LIKE %:query%)")
+    List<Book> findAllBooks(String query);
+
+    // Thống kê sách theo khoảng thời gian từ Tháng/Năm đến Tháng/Năm
+    @Query("SELECT b FROM Book b JOIN Borrow_Return br ON b.id = br.book.id " +
+           "WHERE (:query IS NULL OR b.bookName LIKE %:query%) " +
+           "AND (YEAR(br.startDate) > :fromYear OR (YEAR(br.startDate) = :fromYear AND MONTH(br.startDate) >= :fromMonth)) " +
+           "AND (YEAR(br.startDate) < :toYear OR (YEAR(br.startDate) = :toYear AND MONTH(br.startDate) <= :toMonth))")
+    List<Book> findBooksByDateRange(String query, Integer fromMonth, Integer fromYear, Integer toMonth, Integer toYear);
 }

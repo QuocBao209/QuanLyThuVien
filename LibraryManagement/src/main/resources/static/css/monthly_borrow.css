@@ -29,50 +29,60 @@ body {
     padding: 15px;
     border-radius: 5px;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column; /* Display in column layout */
+    gap: 20px; /* Add gap between sections */
+}
+
+/* Nhóm ô tìm kiếm */
+.toolbar .input-group {
+    display: flex;
+    flex-direction: column; /* Stack the label and input vertically */
+    gap: 10px;
 }
 
 .toolbar label {
     color: #ECF0F1;
     font-size: 14px;
-    margin-right: 10px;
 }
 
+/* Nhóm ô Tháng và Năm */
+.toolbar .month-year-group {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Create 4 columns for each month/year input */
+    gap: 15px;
+}
+
+.toolbar .month-year {
+    display: flex;
+    flex-direction: column; /* Stack label and input vertically */
+    gap: 5px;
+}
+
+.toolbar input[type="number"],
 .toolbar input[type="text"] {
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 5px;
     background: #fff;
     color: #333;
-    margin-right: 10px;
-    width: 150px;
+    margin-bottom: 8px;
 }
 
-/* Nhóm ô nhập liệu */
-.toolbar .input-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-
-.toolbar input[type="text"]#searchQuery {
+.toolbar input[type="number"] {
     width: 200px;
 }
 
-.toolbar input[type="number"]#month,
-.toolbar input[type="number"]#year {
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background: #fff;
-    color: #333;
-    margin-right: 10px;
-    width: 150px;
+.toolbar input[type="text"] {
+    width: 455px;
 }
 
+/* Vùng button */
+.toolbar .button-group {
+    display: flex;
+    gap: 10px;
+}
+
+/* Nút tìm kiếm và làm mới */
 .toolbar button {
     padding: 8px 16px;
     background: #1ABC9C;
@@ -95,14 +105,16 @@ body {
     background: #5a6268;
 }
 
+/* Thông báo lỗi */
 .error-msg {
     color: #FFC107; /* Màu vàng cảnh báo */
     font-size: 14px;
     display: block;
-    margin-top: 5px;
-    margin-left: 350px; /* Căn chỉnh thẳng hàng với ô Năm */
+    margin-top: 10px;
     width: 100%;
+    text-align: center;
 }
+
 
 /* Table styles */
 .table {

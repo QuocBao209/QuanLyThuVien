@@ -23,23 +23,30 @@ public class StatisticsController {
 	
 	@PostMapping("/statistics/books-per-month")
 	public String monthlyBorrowForm(Model model) {
-	    List<Book> books = bookService.getBooksByMonthAndYear(null, null, null); // Lấy toàn bộ danh sách
+	    List<Book> books = bookService.getBooksByMonthAndYear(null, null, null, null, null); // Lấy toàn bộ danh sách
 	    model.addAttribute("books", books);
 	    return "monthly_borrow";
 	}
 	
-	// Thống kê sách theo Tháng
+	// Thống kê sách theo Tháng - Năm
     @PostMapping("/statistics/books-per-month/book-borrow-stats")
     public String getBorrowStats(@RequestParam(required = false) String query,
-                                 @RequestParam(required = false) Integer month,
-                                 @RequestParam(required = false) Integer year,
+                                 @RequestParam(required = false) Integer fromMonth,
+                                 @RequestParam(required = false) Integer fromYear,
+                                 @RequestParam(required = false) Integer toMonth,
+                                 @RequestParam(required = false) Integer toYear,
                                  Model model) {
-        List<Book> books = bookService.getBooksByMonthAndYear(query, month, year);
+    	
+    	// Lọc sách theo khoảng thời gian
+    	 List<Book> books = bookService.getBooksByMonthAndYear(query, fromMonth, fromYear, toMonth, toYear);
         
-        // Lưu giá trị để hiển thị lại trên giao diện
+        // Lưu dữ liệu vào model để hiển thị lại trên giao diện
         model.addAttribute("books", books);
-        model.addAttribute("month", month); // Giữ giá trị tháng
-        model.addAttribute("year", year);   // Giữ giá trị năm
+        model.addAttribute("query", query);
+        model.addAttribute("fromMonth", fromMonth);
+        model.addAttribute("fromYear", fromYear);
+        model.addAttribute("toMonth", toMonth);
+        model.addAttribute("toYear", toYear);
         
         return "monthly_borrow";
     }
