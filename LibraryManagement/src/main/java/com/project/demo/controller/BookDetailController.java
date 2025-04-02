@@ -89,36 +89,45 @@ public class BookDetailController {
 	    return mav;
 	}
 
-	
-	// Xử lý nút Mượn sách (Bảo) ( tương tác giữa account và nút "Mượn sách")
+//Giới hạn mượn sách ( it me u dump dump bao)
 	@PostMapping("/submit-borrow/{id}")
 	public String submitBorrow(@PathVariable Long id, HttpSession session) {
-	    String username = (String) session.getAttribute("user");
-	    
-	    if (username == null) {
-	        return "redirect:/login"; // Nếu chưa đăng nhập, chuyển hướng về trang login
-	    }
-	    
-	    Optional<User> userOptional = userService.getUserByUsername(username);
-	    Optional<Book> bookOptional = bookService.getOptionalBookById(id);
-	    
-	    if (userOptional.isPresent() && bookOptional.isPresent()) {
-	        Borrow_Return borrow = new Borrow_Return();
-	        borrow.setUser(userOptional.get());
-	        borrow.setBook(bookOptional.get());
-	        
-	        // Đặt tất cả các trường ngày là null
-	        borrow.setUserConfirmDate(null);
-	        borrow.setStartDate(null);
-	        borrow.setEndDate(null);
-	        
-	        borrow.setStatus("pending"); // Trạng thái ban đầu là "Đang chờ"
-	        borrow.setRenewCount(0);
-	        
-	        borrowService.saveBorrow(borrow);
-	    }
-	    
-	    return "redirect:/home/account"; // Sau khi mượn, chuyển hướng về trang tài khoản
+		String username = (String) session.getAttribute("user");
+
+		if (username == null) {
+			return "redirect:/login";
+		}
+
+		Optional<User> userOptional = userService.getUserByUsername(username);
+		Optional<Book> bookOptional = bookService.getOptionalBookById(id);
+
+		if (userOptional.isPresent() && bookOptional.isPresent()) {
+			User user = userOptional.get();
+
+			// Kiểm tra số lượt mượn đang hoạt động của người dùng
+			int activeBorrowsCount = borrowService.countActiveBorrowSessionsByUser(user.getUserId());
+			if (activeBorrowsCount >= 3) {
+				return "redirect:/home/book-detail/" + id + "?error=max_borrow_sessions_reached"; // Giới hạn số lần mượn
+			}
+
+			// Tạo bản ghi mượn sách mới
+			Borrow_Return borrow = new Borrow_Return();
+			borrow.setUser(user);
+			borrow.setBook(bookOptional.get());
+
+			// Đặt ngày mượn là null ban đầu
+			borrow.setUserConfirmDate(null);
+			borrow.setStartDate(null);
+			borrow.setEndDate(null);
+
+			borrow.setStatus("pending"); // Trạng thái ban đầu là "Đang chờ"
+			borrow.setRenewCount(0);
+
+			borrowService.saveBorrow(borrow);
+		}
+
+		return "redirect:/home/account"; // Chuyển hướng về trang tài khoản sau khi mượn
 	}
+
 
 }

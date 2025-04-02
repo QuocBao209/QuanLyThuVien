@@ -32,8 +32,8 @@ public class BookReportController {
         int totalDamaged = bookBorrowStatsService.getTotalDamaged();
 
         // Dữ liệu cho biểu đồ (số lượng sách mượn theo thể loại)
-        List<String> labels = new ArrayList<>(borrowStatsByCategory.keySet()); // Thể loại sách
-        List<Integer> data = new ArrayList<>(borrowStatsByCategory.values()); // Số lượng sách mượn theo thể loại
+        List<String> labels = new ArrayList<>(borrowStatsByCategory.keySet());
+        List<Integer> data = new ArrayList<>(borrowStatsByCategory.values());
 
         // Thêm dữ liệu vào model
         model.addAttribute("labels", labels);
@@ -42,6 +42,6 @@ public class BookReportController {
         model.addAttribute("totalAvailable", totalAvailable);
         model.addAttribute("totalDamaged", totalDamaged);
 
-        return "book_report"; // Trả về view Thymeleaf
+        return "book_report"; 
     }
 }

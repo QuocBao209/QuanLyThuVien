@@ -46,7 +46,7 @@ public class BorrowReturnController {
         	LocalDate userConfirmDate = LocalDate.now();
             borrowReturn.setUserConfirmDate(java.util.Date.from(userConfirmDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
-            borrowReturnRepository.save(borrowReturn); // Lưu vào DB ✅
+            borrowReturnRepository.save(borrowReturn);
 
             redirectAttributes.addFlashAttribute("message", "Yêu cầu mượn sách đã được gửi! Vui lòng chờ admin duyệt.");
         } else {
@@ -54,7 +54,7 @@ public class BorrowReturnController {
         }
 
         System.out.println("Session sau khi xác nhận: " + session.getAttribute("user"));
-        return "redirect:/home/account"; // ⚡ Chuyển hướng về trang danh sách mượn
+        return "redirect:/home/account";
     }
     
     @PostMapping("/renew")

@@ -33,22 +33,26 @@
             <button type="button" class="reset-btn" onclick="resetForm()">Làm mới</button>
         </form>
     </div>
-
     <!-- Tổng quan số liệu -->
     <div class="stats-overview">
         <div class="stat-box">
-            <h4>Số sách đã mượn</h4>
-            <p th:text="${totalBorrowed} ?: 'N/A'"></p>
+            <h4>Tổng số sách</h4>
+            <p th:text="${totalBooks} ?: 'N/A'"></p>
         </div>
         <div class="stat-box">
-            <h4>Số sách tồn kho</h4>
+            <h4>Số sách đang mượn</h4>
+            <p th:text="${totalBorrowing} ?: 'N/A'"></p>
+        </div>
+        <div class="stat-box">
+            <h4>Số sách sẵn sàng</h4>
             <p th:text="${totalAvailable} ?: 'N/A'"></p>
         </div>
         <div class="stat-box">
-            <h4>Số sách bị hư/mất</h4>
+            <h4>Số sách bị hư hại</h4>
             <p th:text="${totalDamaged} ?: 'N/A'"></p>
         </div>
     </div>
+
 
     <!-- Biểu đồ -->
     <div class="chart-container" th:if="${#lists.isEmpty(labels)} == false">
@@ -69,22 +73,40 @@
 
     // Dữ liệu biểu đồ từ Controller (truyền qua Thymeleaf)
     const labels = /*[[${labels}]]*/ [];
-    const data = /*[[${data}]]*/ [];
+    const borrowingData = /*[[${borrowingData}]]*/ [];
+    const totalBooksData = /*[[${totalBooksData}]]*/ [];
+    const damagedBooksData = /*[[${damagedBooksData}]]*/ [];
 
     // Vẽ biểu đồ cột với Chart.js (chỉ vẽ nếu có dữ liệu)
     if (labels.length > 0) {
         const ctx = document.getElementById('bookChart').getContext('2d');
         new Chart(ctx, {
-            type: 'bar', // Biểu đồ cột
+            type: 'bar',
             data: {
-                labels: labels, // Nhãn (thể loại sách)
-                datasets: [{
-                    label: 'Số lượng sách mượn',
-                    data: data, // Số lượng sách mượn theo thể loại
-                    backgroundColor: '#1ABC9C',
-                    borderColor: '#16a085',
-                    borderWidth: 1
-                }]
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Số sách đang mượn',
+                        data: borrowingData,
+                        backgroundColor: '#1ABC9C',
+                        borderColor: '#16a085',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Tổng số sách sẵn sàng',
+                        data: totalBooksData,
+                        backgroundColor: '#3498DB',
+                        borderColor: '#2980B9',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Số sách hư hại',
+                        data: damagedBooksData,
+                        backgroundColor: '#E74C3C',
+                        borderColor: '#C0392B',
+                        borderWidth: 1
+                    }
+                ]
             },
             options: {
                 scales: {
@@ -92,7 +114,7 @@
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: 'Số lượng sách mượn',
+                            text: 'Số lượng sách',
                             color: '#ECF0F1'
                         },
                         ticks: {
@@ -134,5 +156,6 @@
         });
     }
 </script>
+
 </body>
 </html>
