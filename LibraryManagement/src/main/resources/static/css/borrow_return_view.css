@@ -12,7 +12,7 @@ body {
 /* Container styling */
 .container {
     width: 1150px;
-    height: 100vh;
+    height: auto;
     margin: 20px auto;
     background: #fff;
     padding: 20px;
@@ -134,6 +134,7 @@ td span[style="color: gray;"] {
 .btn-disabled {
     background-color: gray;
     color: white;
+    border-radius: 5px;
     padding: 5px 10px;
     border: none;
     cursor: not-allowed;

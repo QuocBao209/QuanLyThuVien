@@ -3,19 +3,21 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Sách mượn theo tháng</title>
-	<link rel="stylesheet" th:href="@{/css/monthly_borrow.css}">
+	<title>Độc giả đọc nhiều nhất</title>
+	<link rel="stylesheet" th:href="@{/css/topReader.css}">
 	<link rel="stylesheet" th:href="@{/css/admin.css}">
 </head>
 <body>
-	<!-- Sidebar -->
-	<div th:replace="admin :: sidebar"></div>
-	
-	<div class="main-container">
-		<h2>Sách mượn theo tháng</h2>
+
+<!-- Sidebar -->
+<div th:replace="admin :: sidebar"></div>
+
+		<!-- Danh sách độc giả -->
+	<div class="reader-container">
+		<h2>Top độc giả đọc nhiều nhất</h2>
 		<!-- Toolbar -->
 		<div class="toolbar">
-		    <form th:action="@{/admin/statistics/books-per-month/book-borrow-stats}" method="post" 
+		    <form th:action="@{/admin/statistics/top-readers}" method="post" 
 		            onsubmit="return validateForm()" id="statsForm">
 		        
 		        <!-- Nhóm ô tìm kiếm -->
@@ -56,41 +58,40 @@
 		    </form>
 		</div>
 
-		
-		<table class="table">
-			<thead>
+          <table class="table">
+            <thead>
 				<tr>
+					<th>STT</th>
 					<th>ID</th>
-                    <th>Ảnh</th>
-                    <th>Tên sách</th>
-                    <th>Tác giả</th>
-                    <th>Thể loại</th>
-                    <th>Số lượng</th>
-                    <th>Số lượng mượn</th>
+					<th>Tên</th>
+					<th>Số điện thoại</th>
+					<th>Email</th>
+					<th>Số lượt mượn</th>
 				</tr>
-			</thead>
+				</thead>
 			<tbody>
-                <tr th:each="book : ${books}">
-                    <td th:text="${book.bookId}"></td>
-					<td>
-						<img th:src="@{/images/book_images/{img}(img=${book.bookImage})}" alt="Ảnh bìa" width="80">
-					</td>
-					<td th:text="${book.bookName}"></td>
-					<td>
-			            <span th:each="author, iterStat : ${book.authors}">
-			                <span th:text="${author.authorName}"></span>
-			                <span th:if="${!iterStat.last}">, </span>
-			            </span>
-					</td>
-					<td th:text="${book.category.categoryName}"></td>
-					<td th:text="${book.amount}"></td>
-					<td th:text="${book.borrowCount}"></td>
+			<tr th:each="reader, iterStat : ${topReader}" class="reader-item" >
+	                <td class="medal" th:text="${iterStat.index + 1}">🥇</td>
+	                <td th:text="${reader.userId}"></td>
+	                <td th:text="${reader.name}"></td>
+	                <td th:text="${reader.phone}"></td>
+	                <td th:text="${reader.email}"></td>
+	                <td th:text="${reader.borrowCount}"></td>
+           	</tr>
+			<tr th:each="reader, iterStat : ${reader}">
+				<td th:text="${iterStat.index + 4}"></td>
+				<td th:text="${reader.userId}"></td>
+				<td th:text="${reader.name}"></td>
+				<td th:text="${reader.phone}"></td>
+				<td th:text="${reader.email}"></td>
+				<td th:text="${reader.borrowCount}"></td>
+			</tr>
+			 <!-- Thông báo không có dữ liệu -->
+                <tr th:if="${#lists.isEmpty(reader)}">
+                    <td colspan="9" class="no-data">Không có dữ liệu</td>
                 </tr>
-                
-                <tr th:if="${#lists.isEmpty(books)}">
-				    <td colspan="9" class="no-data">Không có dữ liệu</td>
-				</tr>
-            </tbody>
+			</tbody>
+
 		</table>
 	</div>
 </body>

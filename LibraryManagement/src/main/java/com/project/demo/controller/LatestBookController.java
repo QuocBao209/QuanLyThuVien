@@ -44,7 +44,7 @@ public class LatestBookController {
 	@GetMapping("/latest-book")
     public ModelAndView latestBookPage(
     		@RequestParam(defaultValue = "0") int page,
-    		@RequestParam(defaultValue = "5") int size,
+    		@RequestParam(defaultValue = "10") int size,
     		HttpSession session,
             HttpServletRequest request){
         ModelAndView model = new ModelAndView("latestBook");

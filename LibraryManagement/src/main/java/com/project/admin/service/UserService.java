@@ -108,6 +108,18 @@ public class UserService {
                 .map(User::getRole)
                 .orElseThrow(() -> new IllegalArgumentException("Email không tồn tại trong hệ thống!"));
     }
+    
+    //top User mượn sách 
+    public List<User> getTop3UsersByBorrowCount() {
+        List<User> users = userRepository.findByRoleOrderByBorrowCountDesc("USER");
+        return users.stream().limit(3).toList(); // Lấy 3 người đầu tiên
+    }
+
+    public List<User> getRemainingUsersByBorrowCount() {
+        List<User> users = userRepository.findByRoleOrderByBorrowCountDesc("USER");
+        return users.stream().skip(3).toList(); // Lấy phần còn lại
+    }
+
    
     // Lấy danh sách người dùng có vi phạm
     public List<User> getUsersWithViolations() {

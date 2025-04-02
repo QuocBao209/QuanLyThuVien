@@ -73,7 +73,10 @@ public class BookService {
     }
     
     // Thống kê sách theo Tháng
-    public List<Book> getBooksByMonthAndYear(String query, Integer month, Integer year) {
-        return bookRepository.findBooksByMonthAndYear(query, month, year);
+    public List<Book> getBooksByMonthAndYear(String query, Integer fromMonth, Integer fromYear, Integer toMonth, Integer toYear) {
+        if (fromMonth == null || fromYear == null || toMonth == null || toYear == null) {
+            return bookRepository.findAllBooks(query);
+        }
+        return bookRepository.findBooksByDateRange(query, fromMonth, fromYear, toMonth, toYear);
     }
 }
