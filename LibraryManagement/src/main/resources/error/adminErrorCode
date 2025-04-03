@@ -1,14 +1,18 @@
 error_code,message
-NOT_FULL_FIELD,Vui lòng điền đầy đủ thông tin.
-NUMBER_PHONE_ERROR,Số điện thoại không hợp lệ.
-VALIDATION_EMAIL_E001,Email không đúng định dạng.
-BORROW_SUCCESS,Mượn sách thành công.
-BORROW_FAILED,Mượn sách thất bại. Vui lòng thử lại.
-BORROW_LIMIT_EXCEEDED,Bạn đã đạt giới hạn số sách được mượn.
-BORROW_NOT_AVAILABLE,Sách hiện không có sẵn để mượn.
-BORROW_OVERDUE_EXIST,Bạn còn sách quá hạn chưa trả.
-RETURN_SUCCESS,Trả sách thành công.
-RETURN_FAILED,Trả sách thất bại. Vui lòng thử lại.
-RETURN_OVERDUE,Sách đã quá hạn, vui lòng trước trả.
-RETURN_NOT_BORROWED,Bạn chưa mượn sách này nên không thể trả trước khi bị phạt.
-RETURN_DAMAGED,Sách bị hư hỏng, vui lòng bồi thường theo quy định.
+INVALID_BOOK_AMOUNT, Số lượng sách không hợp lệ.
+INVALID_PUBLISH_YEAR, Năm xuất bản không hợp lệ.
+INVALID_AUTHOR_NAME, Tên tác giả không hợp lệ.
+INVALID_CATEGORY_NAME, Tên thể loại không hợp lệ.
+INVALID_IMAGE_TYPE, Kiểu ảnh không hợp lệ.
+IMAGE_TOO_LARGE, Ảnh quá lớn.
+IMAGE_PROCESS_ERROR, Lỗi khi xử lý ảnh.
+BOOK_NOT_EXIST, Sách không tồn tại.
+BOOK_NOT_FOUND, Không tìm thấy sách.
+ERROR_CODE_1, Gửi email thất bại.
+EMAIL_NOT_FOUND_1, Email không tồn tại trong hệ thống!
+INVALID_OTP_1, Mã OTP không hợp lệ hoặc đã hết hạn!
+INVALID_CREDENTIALS_1, Sai tài khoản hoặc mật khẩu!
+INVALID_NAME_FORMAT_1, Tên không được chứa số hoặc ký tự đặc biệt.
+INVALID_PHONE_FORMAT_1, Số điện thoại phải có đúng 10 chữ số.
+INVALID_CMT_FORMAT_1, CMT phải có đúng 12 chữ số.
+USERNAME_EXISTS_1, Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.

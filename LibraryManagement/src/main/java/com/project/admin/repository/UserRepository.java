@@ -27,6 +27,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.violationCount > 0 AND (LOWER(u.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(u.email) LIKE LOWER(CONCAT('%', :keyword, '%')))")
     List<User> searchUsersWithViolations(String keyword);
 
+    boolean existsByEmail(String email);
 }
 
 

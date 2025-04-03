@@ -24,24 +24,38 @@ public class BookReportController {
                                  @RequestParam(value = "month", required = false) Integer month,
                                  @RequestParam(value = "year", required = false) Integer year) {
         // Lấy dữ liệu từ service
-        Map<String, Integer> borrowStatsByCategory = bookBorrowStatsService.getBorrowStatsByCategory(month, year);
+        Map<String, Integer> borrowingStatsByCategory = bookBorrowStatsService.getBorrowStatsByCategory(month, year);
+        Map<String, Integer> totalBooksByCategory = bookBorrowStatsService.getTotalBooksByCategory();
+        Map<String, Integer> damagedBooksByCategory = bookBorrowStatsService.getDamagedBooksByCategory();
 
         // Tổng quan số liệu
-        int totalBorrowed = bookBorrowStatsService.getTotalBorrowed(month, year);
+        int totalBooks = bookBorrowStatsService.getTotalBooks();
+        int totalBorrowing = bookBorrowStatsService.getTotalBorrowing(month, year);
         int totalAvailable = bookBorrowStatsService.getTotalAvailable(month, year);
         int totalDamaged = bookBorrowStatsService.getTotalDamaged();
 
-        // Dữ liệu cho biểu đồ (số lượng sách mượn theo thể loại)
-        List<String> labels = new ArrayList<>(borrowStatsByCategory.keySet());
-        List<Integer> data = new ArrayList<>(borrowStatsByCategory.values());
+        // Dữ liệu cho biểu đồ
+        List<String> labels = new ArrayList<>(borrowingStatsByCategory.keySet());
+        List<Integer> borrowingData = new ArrayList<>();
+        List<Integer> totalBooksData = new ArrayList<>();
+        List<Integer> damagedBooksData = new ArrayList<>();
+
+        for (String category : labels) {
+            borrowingData.add(borrowingStatsByCategory.getOrDefault(category, 0));
+            totalBooksData.add(totalBooksByCategory.getOrDefault(category, 0));
+            damagedBooksData.add(damagedBooksByCategory.getOrDefault(category, 0));
+        }
 
         // Thêm dữ liệu vào model
         model.addAttribute("labels", labels);
-        model.addAttribute("data", data);
-        model.addAttribute("totalBorrowed", totalBorrowed);
+        model.addAttribute("borrowingData", borrowingData);
+        model.addAttribute("totalBooksData", totalBooksData);
+        model.addAttribute("damagedBooksData", damagedBooksData);
+        model.addAttribute("totalBooks", totalBooks);
+        model.addAttribute("totalBorrowing", totalBorrowing);
         model.addAttribute("totalAvailable", totalAvailable);
         model.addAttribute("totalDamaged", totalDamaged);
 
-        return "book_report"; 
+        return "book_report";
     }
 }

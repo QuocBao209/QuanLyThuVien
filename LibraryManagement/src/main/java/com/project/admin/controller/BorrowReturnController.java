@@ -8,6 +8,7 @@ import com.project.admin.service.BookService;
 import com.project.admin.service.Borrow_ReturnService;
 import com.project.admin.service.NotificationService;
 import com.project.admin.service.UserService;
+import com.project.admin.utils.AdminCodes;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,13 +45,12 @@ public class BorrowReturnController {
 	    // Lấy thông tin user
 	    User user = userService.findById(userId).orElse(null);
 	    if (user == null) {
-	        return "error"; // Hoặc redirect với thông báo lỗi
+	        return "error";
 	    }
 
 	    // Lấy danh sách Borrow_Return của user đó
 	    List<Borrow_Return> borrowReturns = borrowReturnService.findByUser_UserId(userId); 
-	    
-	    // Sắp xếp danh sách theo thứ tự mong muốn
+
 	    borrowReturns.sort(Comparator.comparingInt(b -> {
 	        switch (b.getStatus()) {
 	            case "pending": return 1;
@@ -72,48 +72,15 @@ public class BorrowReturnController {
 	    return showBorrowReturns(userId, model);
 	}
 
-//	@PostMapping("/borrow-confirm")
-//	public String confirmBorrow(@RequestParam("borrowId") Long borrowId, RedirectAttributes redirectAttributes) {
-//		if (borrowId == null) {
-//	        redirectAttributes.addFlashAttribute("error", "Thiếu borrowId!");
-//	        return "redirect:/admin/borrow_return_view";
-//	    }
-//	    System.out.println("Borrow ID: " + borrowId);
-//	    
-//	    Borrow_Return borrowReturn = borrowReturnService.findById(borrowId);
-//	    if (borrowReturn != null && "pending".equals(borrowReturn.getStatus())) {
-//	        // Logic xác nhận mượn
-//	        borrowReturn.setStartDate(new Date());
-//	        borrowReturn.setStatus("borrowed");
-//	        borrowReturnService.save(borrowReturn);
-//
-//	        User user = borrowReturn.getUser();
-//	        Notification notification = new Notification();
-//	        notification.setUser(user);
-//	        notification.setMessage("Bạn đã mượn sách " + borrowReturn.getBook().getBookName() + " thành công!");
-//	        notification.setType("borrow_success");
-//	        notification.setCreatedAt(LocalDateTime.now());
-//	        notificationService.save(notification);
-//
-//	        redirectAttributes.addFlashAttribute("message", "Xác nhận mượn thành công!");
-//	    }
-//	    
-//	    // Chuyển hướng về danh sách mượn chung thay vì sử dụng userId
-//	    return "redirect:/admin/borrow_return_view";
-//	}
-	
 	@PostMapping("/borrow-confirm")
 	public String confirmBorrow(@RequestParam("borrowId") Long borrowId, Model model) {
-//	    if (borrowId == null) {
-//	        model.addAttribute("error", "Thiếu borrowId!");
-//	        return "borrow_return_view";
-//	    }
 
 	    Borrow_Return borrowReturn = borrowReturnService.findById(borrowId);
 	    if (borrowReturn != null && "pending".equals(borrowReturn.getStatus())) {
 			Book book = borrowReturn.getBook();
 			book.setAmount(book.getAmount() - 1);
 			book.setBorrowCount(book.getBorrowCount() + 1);
+
 			bookService.save(book);
 
 	        borrowReturn.setStartDate(new Date());
@@ -121,6 +88,9 @@ public class BorrowReturnController {
 	        borrowReturnService.save(borrowReturn);
 
 	        User user = borrowReturn.getUser();
+			user.setBorrowCount(user.getBorrowCount() + 1);
+			userService.save(user);
+
 	        Notification notification = new Notification();
 	        notification.setUser(user);
 	        notification.setMessage("Bạn đã mượn sách " + borrowReturn.getBook().getBookName() + " thành công!");
@@ -128,14 +98,16 @@ public class BorrowReturnController {
 	        notification.setCreatedAt(LocalDateTime.now());
 	        notificationService.save(notification);
 
-	        model.addAttribute("message", "Xác nhận mượn thành công!");
-	        model.addAttribute("user", user);
+
+			model.addAttribute("message", AdminCodes.getSuccessMessage("BORROW_CONFIRM_SUCCESS"));
+			model.addAttribute("user", user);
 	        model.addAttribute("borrowReturns", borrowReturnService.findByUser_UserId(user.getUserId()));
 
 	        return "borrow_return_view";
 	    }
 
-	    model.addAttribute("error", "Mượn thất bại!");
+		model.addAttribute("error", AdminCodes.getErrorMessage("BORROW_CONFIRM_FAILED"));
+
 	    return "borrow_return_view";
 	}
 
@@ -147,15 +119,6 @@ public class BorrowReturnController {
 							 Model model) {
 		Borrow_Return borrowReturn = borrowReturnService.findById(borrowId);
 
-		if (borrowReturn == null) {
-			model.addAttribute("error", "Không tìm thấy đơn mượn sách!");
-			return "borrow_return_view";
-		}
-
-		if (!"borrowed".equals(borrowReturn.getStatus())) {
-			model.addAttribute("error", "Sách chưa được mượn hoặc đã trả!");
-			return "borrow_return_view";
-		}
 
 		LocalDate now = LocalDate.now();
 		LocalDate startDate = new java.sql.Date(borrowReturn.getStartDate().getTime()).toLocalDate();
@@ -199,7 +162,7 @@ public class BorrowReturnController {
 		notification.setRead(false);
 		notificationService.save(notification);
 
-		model.addAttribute("message", "Xác nhận trả sách thành công!");
+		model.addAttribute("message", AdminCodes.getSuccessMessage("RETURN_CONFIRM_SUCCESS"));
 		model.addAttribute("user", user);
 		model.addAttribute("borrowReturns", borrowReturnService.findByUser_UserId(user.getUserId()));
 

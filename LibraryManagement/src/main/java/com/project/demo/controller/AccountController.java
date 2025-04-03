@@ -1,5 +1,6 @@
 package com.project.demo.controller;
 
+import com.project.admin.utils.AdminCodes;
 import com.project.demo.entity.Borrow_Return;
 import com.project.demo.entity.Notification;
 import com.project.demo.entity.User;
@@ -7,6 +8,7 @@ import com.project.demo.service.Borrow_ReturnService;
 import com.project.demo.service.NotificationService;
 import com.project.demo.service.UserService;
 
+import com.project.demo.utils.UserCodes;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
@@ -80,8 +82,8 @@ public class AccountController {
         return borrowService.getBorrowsByUser(user)
             .stream()
             .sorted(Comparator
-                .comparing((Borrow_Return br) -> br.getUserConfirmDate() == null ? 0 : 1) // Sách chưa có userConfirmDate lên đầu
-                .thenComparing(br -> getStatusOrder(br.getStatus())) // Sắp xếp tiếp theo theo trạng thái
+                .comparing((Borrow_Return br) -> br.getUserConfirmDate() == null ? 0 : 1)
+                .thenComparing(br -> getStatusOrder(br.getStatus()))
             )
             .collect(Collectors.toList());
     }
@@ -100,7 +102,7 @@ public class AccountController {
     @PostMapping("/edit-account")
     public String editAccount(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
         if (user.getUserId() == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Lỗi: ID không hợp lệ!");
+            redirectAttributes.addFlashAttribute("errorMessage", UserCodes.getErrorMessage("INVALID_USER_ID"));
             return "redirect:/home/account";
         }
 
@@ -113,9 +115,9 @@ public class AccountController {
             existingUser.setPhone(user.getPhone());
             userService.updateUser(existingUser);
 
-            redirectAttributes.addFlashAttribute("successMessage", "Cập nhật thành công!");
+            redirectAttributes.addFlashAttribute("successMessage", UserCodes.getErrorMessage("UPDATE_SUCCESS"));
         } else {
-            redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy tài khoản!");
+            redirectAttributes.addFlashAttribute("errorMessage", UserCodes.getErrorMessage("USER_NOT_FOUND"));
         }
 
         return "redirect:/home/account";

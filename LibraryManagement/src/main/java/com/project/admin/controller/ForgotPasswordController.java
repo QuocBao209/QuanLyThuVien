@@ -3,6 +3,7 @@ package com.project.admin.controller;
 import com.project.admin.service.EmailService;
 import com.project.admin.service.PasswordResetService;
 import com.project.admin.service.UserService;
+import com.project.admin.utils.AdminCodes;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,23 +23,29 @@ public class ForgotPasswordController {
 
     @GetMapping("/forget-password")
     public String showForgotPasswordPage(@RequestParam(required = false, defaultValue = "user") String from, Model model) {
-        model.addAttribute("from", from); // Đưa `from` vào model để Thymeleaf sử dụng
+        model.addAttribute("from", from);
         return "forgetPassword";
     }
 
 
     @PostMapping("/forget-password")
     public String sendOTP(@RequestParam String email, Model model) {
+        // Kiểm tra xem email có tồn tại trong cơ sở dữ liệu không
+        if (!userService.existsByEmail(email)) {
+            model.addAttribute("error", AdminCodes.getErrorMessage("EMAIL_NOT_FOUND_1"));
+            return "forgetPassword";
+        }
+        // Nếu email tồn tại, tiếp tục xử lý gửi OTP
         String otp = passwordResetService.generateOTP();
         passwordResetService.saveOTP(email, otp);
 
         try {
             emailService.sendEmail(email, "Mã OTP đặt lại mật khẩu", "Mã OTP của bạn: " + otp);
-            model.addAttribute("message", "Mã OTP đã được gửi đến email của bạn!");
+            model.addAttribute("message", AdminCodes.getSuccessMessage("SUCCESS_CODE_1"));
             model.addAttribute("email", email);
             model.addAttribute("otpSent", true);
         } catch (MessagingException e) {
-            model.addAttribute("error", "Gửi email thất bại!");
+            model.addAttribute("error", AdminCodes.getErrorMessage("ERROR_CODE_1"));
         }
 
         return "forgetPassword";
@@ -48,12 +55,12 @@ public class ForgotPasswordController {
     public String resetPassword(@RequestParam String email, @RequestParam String otp,
                                 @RequestParam String newPassword, Model model) {
         if (!passwordResetService.verifyOTP(email, otp)) {
-            model.addAttribute("error", "Mã OTP không hợp lệ hoặc đã hết hạn!");
+            model.addAttribute("error", AdminCodes.getErrorMessage("INVALID_OTP_1"));
         } else if (userService.resetPassword(email, newPassword)) {
-            model.addAttribute("message", "Mật khẩu đã được đặt lại thành công!");
+            model.addAttribute("message", AdminCodes.getSuccessMessage("PASSWORD_RESET_SUCCESS_1"));
             return "adminLogin";
         } else {
-            model.addAttribute("error", "Email không tồn tại trong hệ thống!");
+            model.addAttribute("error", AdminCodes.getErrorMessage("EMAIL_NOT_FOUND_1"));
         }
 
         model.addAttribute("email", email);
