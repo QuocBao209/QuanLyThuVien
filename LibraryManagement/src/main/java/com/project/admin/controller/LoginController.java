@@ -44,7 +44,7 @@ public class LoginController {
 			mav.setViewName("admin");
 		} else {
 			mav.setViewName("adminLogin");
-			mav.addObject("error", AdminCodes.getErrorMessage("INVALID_CREDENTIALS_1"));
+			mav.addObject("errorMessage", AdminCodes.getErrorMessage("INVALID_CREDENTIALS_1"));
 		}
 		return mav;
 	}

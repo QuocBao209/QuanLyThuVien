@@ -162,7 +162,7 @@ public class BorrowReturnController {
 		notification.setRead(false);
 		notificationService.save(notification);
 
-		model.addAttribute("message", AdminCodes.getSuccessMessage("RETURN_CONFIRM_SUCCESS"));
+		model.addAttribute("successMessage", AdminCodes.getSuccessMessage("RETURN_CONFIRM_SUCCESS"));
 		model.addAttribute("user", user);
 		model.addAttribute("borrowReturns", borrowReturnService.findByUser_UserId(user.getUserId()));
 

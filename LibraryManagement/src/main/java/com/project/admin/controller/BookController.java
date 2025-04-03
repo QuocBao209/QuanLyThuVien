@@ -74,22 +74,25 @@ public class BookController {
                                        @RequestParam("category") String categoryName,
                                        @RequestParam("publish-year") int publishYear,
                                        @RequestParam("book-image") MultipartFile bookImage) {
-        ModelAndView modelAndView = new ModelAndView();
+        ModelAndView modelAndView = new ModelAndView("addBook");
+        
+        modelAndView.addObject("categories", categoryService.getCategories());
+        modelAndView.addObject("authors", authorService.getAuthors());
 
         try {
             int currentYear = java.time.Year.now().getValue();
 
             // Kiểm tra số lượng sách hợp lệ (chỉ nhận số nguyên dương)
             if (amount <= 0) {
-                modelAndView.addObject("message", AdminCodes.getErrorMessage("INVALID_BOOK_AMOUNT"));
-                modelAndView.setViewName("error");
+                modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("INVALID_BOOK_AMOUNT"));
+                //modelAndView.setViewName("error");
                 return modelAndView;
             }
 
             // Kiểm tra năm xuất bản hợp lệ
             if (publishYear <= 1000 || publishYear > currentYear) {
-                modelAndView.addObject("message", String.format(AdminCodes.getErrorMessage("INVALID_PUBLISH_YEAR"), currentYear));
-                modelAndView.setViewName("error");
+                modelAndView.addObject("errorMessage", String.format(AdminCodes.getErrorMessage("INVALID_PUBLISH_YEAR"), currentYear));
+                //modelAndView.setViewName("error");
                 return modelAndView;
             }
 
@@ -97,8 +100,8 @@ public class BookController {
             List<String> formattedAuthors = new ArrayList<>();
             for (String author : authorNames) {
                 if (!author.matches("^[a-zA-ZÀ-Ỹà-ỹ.,\\s]+$")) {
-                    modelAndView.addObject("message", AdminCodes.getErrorMessage("INVALID_AUTHOR_NAME"));
-                    modelAndView.setViewName("error");
+                    modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("INVALID_AUTHOR_NAME"));
+                    //modelAndView.setViewName("error");
                     return modelAndView;
                 }
                 formattedAuthors.add(capitalizeEachWord(author));
@@ -106,8 +109,8 @@ public class BookController {
 
             // Kiểm tra và định dạng thể loại
             if (!categoryName.matches("^[a-zA-ZÀ-Ỹà-ỹ\\s]+$")) {
-                modelAndView.addObject("message", AdminCodes.getErrorMessage("INVALID_CATEGORY_NAME"));
-                modelAndView.setViewName("error");
+                modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("INVALID_CATEGORY_NAME"));
+                //modelAndView.setViewName("error");
                 return modelAndView;
             }
             categoryName = capitalizeEachWord(categoryName);
@@ -115,13 +118,13 @@ public class BookController {
             String fileName = "";
             if (!bookImage.isEmpty()) {
                 if (!ALLOWED_IMAGE_TYPES.contains(bookImage.getContentType())) {
-                    modelAndView.addObject("message", AdminCodes.getErrorMessage("INVALID_IMAGE_TYPE"));
-                    modelAndView.setViewName("error");
+                    modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("INVALID_IMAGE_TYPE"));
+                    //modelAndView.setViewName("error");
                     return modelAndView;
                 }
                 if (bookImage.getSize() > MAX_IMAGE_SIZE) {
-                    modelAndView.addObject("message", AdminCodes.getErrorMessage("IMAGE_TOO_LARGE"));
-                    modelAndView.setViewName("error");
+                    modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("IMAGE_TOO_LARGE"));
+                    //modelAndView.setViewName("error");
                     return modelAndView;
                 }
                 fileName = bookImage.getOriginalFilename();
@@ -144,8 +147,8 @@ public class BookController {
             if (bookId != null) { // TRƯỜNG HỢP CHỈNH SỬA SÁCH
                 book = bookService.getBookById(bookId);
                 if (book == null) {
-                    modelAndView.addObject("message", AdminCodes.getErrorMessage("BOOK_NOT_EXIST"));
-                    modelAndView.setViewName("error");
+                    modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("BOOK_NOT_EXIST"));
+                    //modelAndView.setViewName("error");
                     return modelAndView;
                 }
 
@@ -181,11 +184,11 @@ public class BookController {
 
             bookService.saveBook(book);
 
-            modelAndView.addObject("message", AdminCodes.getSuccessMessage("OPERATION_SUCCESS"));
-            modelAndView.setViewName("forward:/admin/book-list");
+            modelAndView.addObject("successMessage", AdminCodes.getSuccessMessage("OPERATION_SUCCESS"));
+            modelAndView.setViewName("forward:/admin/add-book");
         } catch (IOException e) {
-            modelAndView.addObject("message", AdminCodes.getErrorMessage("IMAGE_PROCESS_ERROR"));
-            modelAndView.setViewName("error");
+            modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("IMAGE_PROCESS_ERROR"));
+            //modelAndView.setViewName("error");
         }
 
         return modelAndView;
@@ -218,8 +221,8 @@ public class BookController {
         ModelAndView modelAndView = new ModelAndView("bookEdit");
         Book book = bookService.getBookById(id);
         if (book == null) {
-            modelAndView.addObject("message", AdminCodes.getErrorMessage("BOOK_NOT_FOUND"));
-            modelAndView.setViewName("error");
+            modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("BOOK_NOT_FOUND"));
+            modelAndView.setViewName("bookEdit");
             return modelAndView;
         }
         modelAndView.addObject("authors", authorService.getAuthors());

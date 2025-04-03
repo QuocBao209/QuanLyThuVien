@@ -28,6 +28,11 @@
         </form>
 
         <h2 th:text="|Người dùng : ${borrowReturns[0].user.name}|"></h2>
+        
+        <!-- Thông báo trả thành công -->
+		<div th:if="${successMessage}" class="success-message">
+		    <p th:text="${successMessage}"></p>
+		</div>
 
         <table>
             <thead>

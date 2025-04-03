@@ -32,7 +32,7 @@ public class ForgotPasswordController {
     public String sendOTP(@RequestParam String email, Model model) {
         // Kiểm tra xem email có tồn tại trong cơ sở dữ liệu không
         if (!userService.existsByEmail(email)) {
-            model.addAttribute("error", AdminCodes.getErrorMessage("EMAIL_NOT_FOUND_1"));
+            model.addAttribute("errorMessage", AdminCodes.getErrorMessage("EMAIL_NOT_FOUND_1"));
             return "forgetPassword";
         }
         // Nếu email tồn tại, tiếp tục xử lý gửi OTP
@@ -41,11 +41,11 @@ public class ForgotPasswordController {
 
         try {
             emailService.sendEmail(email, "Mã OTP đặt lại mật khẩu", "Mã OTP của bạn: " + otp);
-            model.addAttribute("message", AdminCodes.getSuccessMessage("SUCCESS_CODE_1"));
+            model.addAttribute("successMessage", AdminCodes.getSuccessMessage("SUCCESS_CODE_1"));
             model.addAttribute("email", email);
             model.addAttribute("otpSent", true);
         } catch (MessagingException e) {
-            model.addAttribute("error", AdminCodes.getErrorMessage("ERROR_CODE_1"));
+            model.addAttribute("errorMessage", AdminCodes.getErrorMessage("ERROR_CODE_1"));
         }
 
         return "forgetPassword";
@@ -55,12 +55,12 @@ public class ForgotPasswordController {
     public String resetPassword(@RequestParam String email, @RequestParam String otp,
                                 @RequestParam String newPassword, Model model) {
         if (!passwordResetService.verifyOTP(email, otp)) {
-            model.addAttribute("error", AdminCodes.getErrorMessage("INVALID_OTP_1"));
+            model.addAttribute("errorMessage", AdminCodes.getErrorMessage("INVALID_OTP_1"));
         } else if (userService.resetPassword(email, newPassword)) {
-            model.addAttribute("message", AdminCodes.getSuccessMessage("PASSWORD_RESET_SUCCESS_1"));
+            model.addAttribute("successMessage", AdminCodes.getSuccessMessage("PASSWORD_RESET_SUCCESS_1"));
             return "adminLogin";
         } else {
-            model.addAttribute("error", AdminCodes.getErrorMessage("EMAIL_NOT_FOUND_1"));
+            model.addAttribute("errorMessage", AdminCodes.getErrorMessage("EMAIL_NOT_FOUND_1"));
         }
 
         model.addAttribute("email", email);

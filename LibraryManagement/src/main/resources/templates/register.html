@@ -9,6 +9,16 @@
 <body>
 	<h2>Đăng ký</h2>
 	
+	<!-- Thông báo lỗi -->
+	<div th:if="${error}" class="success-message">
+	    <p th:text="${error}"></p>
+	</div>
+	
+	<!-- Thông báo thành công -->
+	<div th:if="${message}" class="success-message">
+	    <p th:text="${message}"></p>
+	</div>
+	
 	<form action="/register" method="post">
 	    <div class="input-group">
 	        <label for="cmt">Chứng Minh Thư:</label>

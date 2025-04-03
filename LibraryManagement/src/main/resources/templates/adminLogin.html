@@ -36,6 +36,11 @@
 		    <p><a th:href="@{/forget-password(from='admin')}">Quên mật khẩu</a></p>
 		    <p>Chưa có tài khoản? <a href="/admin-register">Tạo tài khoản</a></p>
 		</div>
+		
+		<!-- Thông báo trả thành công -->
+		<div th:if="${errorMessage}" class="error-message">
+		    <p th:text="${errorMessage}"></p>
+		</div>
 	</form>
 </body>
 </html>

@@ -8,85 +8,81 @@
 	<link rel="stylesheet" th:href="@{/css/admin.css}">
 </head>
 <body>
-<!-- Thông báo thành công -->
-<div th:if="${param.success}" class="alert alert-success">
-    <p th:if="${param.success == 'updated'}">Cập nhật sách thành công!</p>
-</div>
+	<!-- Thông báo thành công -->
+	<!-- Thông báo lỗi -->
+	<div th:if="${errorMessage}" class="error-message">
+	    <p th:text="${errorMessage}"></p>
+	</div>
 
-<div th:if="${param.error}" class="alert alert-danger">
-    <p th:if="${param.error == 'notfound'}">Không tìm thấy sách!</p>
-    <p th:if="${param.error == 'image'}">Lỗi khi cập nhật ảnh sách!</p>
-</div>
-
-<!-- Sidebar -->
-<div th:replace="admin :: sidebar"></div>
-
-<!-- Form sửa thông tin sách -->
-<div id="form-container">	
-	<h2>Sửa thông tin sách</h2>
+	<!-- Sidebar -->
+	<div th:replace="admin :: sidebar"></div>
 	
-	<form th:action="@{/admin/submit-book-info}" method="post" enctype="multipart/form-data">
-		<div class="input-group">
-		    <label for="book-id">ID Sách:</label>
-		    <input type="text" id="book-id" name="book-id" th:value="${book.bookId}" readonly>
-		</div>
-
-		<div class="input-group">
-			<label for="book-title">Tên sách:</label>
-			<input type="text" id="book-title" name="book-title" placeholder="Nhập tên sách"
-				th:value="${book.bookName}" required>
-		</div>
-
-		<div class="input-group">
-		    <label>Tác giả:</label>
-		    <div id="author-container">
-		        <th:block th:each="author : ${book.authors}">
-		            <div class="author-field">
-		                <input type="text" name="authors[]" th:value="${author.authorName}" required>
-		                <button type="button" class="remove-author" onclick="removeAuthor(this)">Xóa</button>
-		            </div>
-		        </th:block>
-		    </div>
-		    <button type="button" id="add-author">Thêm tác giả</button>
-		</div>
-
-        <div class="input-group">
-            <label for="amount">Số lượng:</label>
-            <input type="number" id="amount" name="amount" placeholder="Nhập số lượng sách" min="1"
-                   th:value="${book.amount}" required>
-        </div>
-
-        <div class="input-group">
-            <label for="category">Thể loại:</label>
-            <input type="text" id="category" name="category" placeholder="Nhập tên thể loại"
-				th:value="${book.category.getCategoryName()}" required>
-        </div>
-
-        <div class="input-group">
-            <label for="publish-year">Năm Phát Hành:</label>
-            <input type="number" id="publish-year" name="publish-year" min="1900" max="2025" step="1"
-                   th:value="${book.publishYear}" required>
-        </div>
-
-        <!--
-        <div class="input-group">
-            <label>Ảnh bìa hiện tại:</label>
-            <img th:src="@{/images/{imageName}(imageName=${book.imageName})}" alt="Ảnh bìa sách" width="150px">
-        </div>
-
-        Sửa xong phần ảnh thì bỏ comment
-         -->
-
-        <div class="input-group">
-            <label for="book-image">Thay đổi ảnh bìa:</label>
-            <input type="file" id="book-image" name="book-image" accept="image/*">
-        </div>
-
-        <div class="input-group">
-            <button type="submit" class="btn">Cập nhật</button>
-        </div>
-	</form>
-</div>
+	<!-- Form sửa thông tin sách -->
+	<div id="form-container">	
+		<h2>Sửa thông tin sách</h2>
+		
+		<form th:action="@{/admin/submit-book-info}" method="post" enctype="multipart/form-data">
+			<div class="input-group">
+			    <label for="book-id">ID Sách:</label>
+			    <input type="text" id="book-id" name="book-id" th:value="${book.bookId}" readonly>
+			</div>
+	
+			<div class="input-group">
+				<label for="book-title">Tên sách:</label>
+				<input type="text" id="book-title" name="book-title" placeholder="Nhập tên sách"
+					th:value="${book.bookName}" required>
+			</div>
+	
+			<div class="input-group">
+			    <label>Tác giả:</label>
+			    <div id="author-container">
+			        <th:block th:each="author : ${book.authors}">
+			            <div class="author-field">
+			                <input type="text" name="authors[]" th:value="${author.authorName}" required>
+			                <button type="button" class="remove-author" onclick="removeAuthor(this)">Xóa</button>
+			            </div>
+			        </th:block>
+			    </div>
+			    <button type="button" id="add-author">Thêm tác giả</button>
+			</div>
+	
+	        <div class="input-group">
+	            <label for="amount">Số lượng:</label>
+	            <input type="number" id="amount" name="amount" placeholder="Nhập số lượng sách" min="1"
+	                   th:value="${book.amount}" required>
+	        </div>
+	
+	        <div class="input-group">
+	            <label for="category">Thể loại:</label>
+	            <input type="text" id="category" name="category" placeholder="Nhập tên thể loại"
+					th:value="${book.category.getCategoryName()}" required>
+	        </div>
+	
+	        <div class="input-group">
+	            <label for="publish-year">Năm Phát Hành:</label>
+	            <input type="number" id="publish-year" name="publish-year" min="1900" max="2025" step="1"
+	                   th:value="${book.publishYear}" required>
+	        </div>
+	
+	        <!--
+	        <div class="input-group">
+	            <label>Ảnh bìa hiện tại:</label>
+	            <img th:src="@{/images/{imageName}(imageName=${book.imageName})}" alt="Ảnh bìa sách" width="150px">
+	        </div>
+	
+	        Sửa xong phần ảnh thì bỏ comment
+	         -->
+	
+	        <div class="input-group">
+	            <label for="book-image">Thay đổi ảnh bìa:</label>
+	            <input type="file" id="book-image" name="book-image" accept="image/*">
+	        </div>
+	
+	        <div class="input-group">
+	            <button type="submit" class="btn">Cập nhật</button>
+	        </div>
+		</form>
+	</div>
 </body>
 
 <script>
