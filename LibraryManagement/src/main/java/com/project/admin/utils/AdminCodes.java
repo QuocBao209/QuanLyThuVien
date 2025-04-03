@@ -1,8 +1,9 @@
 package com.project.admin.utils;
 
+import org.springframework.core.io.ClassPathResource;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -12,18 +13,26 @@ public class AdminCodes {
     private static final Map<String, String> SUCCESS_MESSAGES = new HashMap<>();
 
     static {
-        loadMessages("adminErrorCode.txt", ERROR_MESSAGES);
-        loadMessages("adminSuccessCode.txt", SUCCESS_MESSAGES);
+        loadMessages("error/adminErrorCode", ERROR_MESSAGES);
+        loadMessages("error/adminSuccessCode", SUCCESS_MESSAGES);
+
     }
 
     private static void loadMessages(String filePath, Map<String, String> map) {
-        try (Stream<String> stream = Files.lines(Paths.get(filePath))) {
-            stream.skip(1).forEach(line -> {
-                String[] parts = line.split(",", 2);
-                if (parts.length == 2) {
-                    map.put(parts[0].trim(), parts[1].trim());
-                }
-            });
+        try {
+            ClassPathResource resource = new ClassPathResource(filePath);
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()))) {
+                reader.lines().skip(1).forEach(line -> {
+                    String[] parts = line.split(",", 2);
+                    if (parts.length == 2) {
+                        map.put(parts[0].trim(), parts[1].trim());
+                        System.out.println("Loaded error messages: " + ERROR_MESSAGES);
+                        System.out.println("Loaded success messages: " + SUCCESS_MESSAGES);
+
+
+                    }
+                });
+            }
         } catch (IOException e) {
             System.err.println("Lỗi khi đọc file: " + filePath + " - " + e.getMessage());
         }

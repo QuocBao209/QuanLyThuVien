@@ -89,6 +89,7 @@ public class BookController {
                 return modelAndView;
             }
 
+
             // Kiểm tra năm xuất bản hợp lệ
             if (publishYear <= 1000 || publishYear > currentYear) {
                 modelAndView.addObject("errorMessage", String.format(AdminCodes.getErrorMessage("INVALID_PUBLISH_YEAR"), currentYear));
@@ -101,7 +102,6 @@ public class BookController {
             for (String author : authorNames) {
                 if (!author.matches("^[a-zA-ZÀ-Ỹà-ỹ.,\\s]+$")) {
                     modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("INVALID_AUTHOR_NAME"));
-                    //modelAndView.setViewName("error");
                     return modelAndView;
                 }
                 formattedAuthors.add(capitalizeEachWord(author));
@@ -119,12 +119,10 @@ public class BookController {
             if (!bookImage.isEmpty()) {
                 if (!ALLOWED_IMAGE_TYPES.contains(bookImage.getContentType())) {
                     modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("INVALID_IMAGE_TYPE"));
-                    //modelAndView.setViewName("error");
                     return modelAndView;
                 }
                 if (bookImage.getSize() > MAX_IMAGE_SIZE) {
                     modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("IMAGE_TOO_LARGE"));
-                    //modelAndView.setViewName("error");
                     return modelAndView;
                 }
                 fileName = bookImage.getOriginalFilename();
@@ -148,7 +146,6 @@ public class BookController {
                 book = bookService.getBookById(bookId);
                 if (book == null) {
                     modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("BOOK_NOT_EXIST"));
-                    //modelAndView.setViewName("error");
                     return modelAndView;
                 }
 

@@ -12,8 +12,8 @@ public class UserCodes {
     private static final Map<String, String> SUCCESS_MESSAGES = new HashMap<>();
 
     static {
-        loadMessages("userErrorCode.txt", ERROR_MESSAGES);
-        loadMessages("userSuccessCode.txt", SUCCESS_MESSAGES);
+        loadMessages("error/userErrorCode", ERROR_MESSAGES);
+        loadMessages("error/userSuccessCode", SUCCESS_MESSAGES);
     }
 
     private static void loadMessages(String filePath, Map<String, String> map) {
