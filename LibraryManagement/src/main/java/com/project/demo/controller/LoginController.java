@@ -1,6 +1,8 @@
 package com.project.demo.controller;
 
+import com.project.admin.utils.AdminCodes;
 import com.project.demo.service.UserService;
+import com.project.demo.utils.UserCodes;
 import jakarta.servlet.http.HttpSession;
 import com.project.demo.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +45,7 @@ public class LoginController {
 		} else {
 			System.out.println("Đăng nhập thất bại: " + username);
 			mav.setViewName("login"); // Giữ nguyên trang đăng nhập
-			mav.addObject("error", "Tên đăng nhập hoặc mật khẩu không đúng!");
+			mav.addObject("error", UserCodes.getErrorMessage("INVALID_CREDENTIALS_2"));
 		}
 		return mav;
 	}

@@ -2,6 +2,7 @@ package com.project.admin.controller;
 
 import com.project.admin.service.UserService;
 
+import com.project.admin.utils.AdminCodes;
 import jakarta.servlet.http.HttpSession;
 
 import com.project.admin.entity.User;
@@ -43,7 +44,7 @@ public class LoginController {
 			mav.setViewName("admin");
 		} else {
 			mav.setViewName("adminLogin");
-			mav.addObject("error", "Sai tài khoản hoặc mật khẩu!");
+			mav.addObject("error", AdminCodes.getErrorMessage("INVALID_CREDENTIALS_1"));
 		}
 		return mav;
 	}

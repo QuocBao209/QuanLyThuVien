@@ -2,6 +2,7 @@ package com.project.admin.controller;
 
 import com.project.admin.entity.*;
 import com.project.admin.service.*;
+import com.project.admin.utils.AdminCodes;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -80,14 +81,14 @@ public class BookController {
 
             // Kiểm tra số lượng sách hợp lệ (chỉ nhận số nguyên dương)
             if (amount <= 0) {
-                modelAndView.addObject("message", "Số lượng sách phải là số nguyên dương.");
+                modelAndView.addObject("message", AdminCodes.getErrorMessage("INVALID_BOOK_AMOUNT"));
                 modelAndView.setViewName("error");
                 return modelAndView;
             }
 
             // Kiểm tra năm xuất bản hợp lệ
             if (publishYear <= 1000 || publishYear > currentYear) {
-                modelAndView.addObject("message", "Năm xuất bản phải lớn hơn 1000 và nhỏ hơn hoặc bằng " + currentYear);
+                modelAndView.addObject("message", String.format(AdminCodes.getErrorMessage("INVALID_PUBLISH_YEAR"), currentYear));
                 modelAndView.setViewName("error");
                 return modelAndView;
             }
@@ -96,7 +97,7 @@ public class BookController {
             List<String> formattedAuthors = new ArrayList<>();
             for (String author : authorNames) {
                 if (!author.matches("^[a-zA-ZÀ-Ỹà-ỹ.,\\s]+$")) {
-                    modelAndView.addObject("message", "Tên tác giả chỉ được chứa chữ cái, dấu chấm (.) hoặc dấu phẩy (,).");
+                    modelAndView.addObject("message", AdminCodes.getErrorMessage("INVALID_AUTHOR_NAME"));
                     modelAndView.setViewName("error");
                     return modelAndView;
                 }
@@ -105,7 +106,7 @@ public class BookController {
 
             // Kiểm tra và định dạng thể loại
             if (!categoryName.matches("^[a-zA-ZÀ-Ỹà-ỹ\\s]+$")) {
-                modelAndView.addObject("message", "Thể loại chỉ được chứa chữ cái.");
+                modelAndView.addObject("message", AdminCodes.getErrorMessage("INVALID_CATEGORY_NAME"));
                 modelAndView.setViewName("error");
                 return modelAndView;
             }
@@ -114,12 +115,12 @@ public class BookController {
             String fileName = "";
             if (!bookImage.isEmpty()) {
                 if (!ALLOWED_IMAGE_TYPES.contains(bookImage.getContentType())) {
-                    modelAndView.addObject("message", "Chỉ chấp nhận ảnh JPG, PNG hoặc GIF!");
+                    modelAndView.addObject("message", AdminCodes.getErrorMessage("INVALID_IMAGE_TYPE"));
                     modelAndView.setViewName("error");
                     return modelAndView;
                 }
                 if (bookImage.getSize() > MAX_IMAGE_SIZE) {
-                    modelAndView.addObject("message", "Ảnh quá lớn! Kích thước tối đa là 5MB.");
+                    modelAndView.addObject("message", AdminCodes.getErrorMessage("IMAGE_TOO_LARGE"));
                     modelAndView.setViewName("error");
                     return modelAndView;
                 }
@@ -143,7 +144,7 @@ public class BookController {
             if (bookId != null) { // TRƯỜNG HỢP CHỈNH SỬA SÁCH
                 book = bookService.getBookById(bookId);
                 if (book == null) {
-                    modelAndView.addObject("message", "Sách không tồn tại!");
+                    modelAndView.addObject("message", AdminCodes.getErrorMessage("BOOK_NOT_EXIST"));
                     modelAndView.setViewName("error");
                     return modelAndView;
                 }
@@ -180,10 +181,10 @@ public class BookController {
 
             bookService.saveBook(book);
 
-            modelAndView.addObject("message", "Thao tác thành công!");
+            modelAndView.addObject("message", AdminCodes.getSuccessMessage("OPERATION_SUCCESS"));
             modelAndView.setViewName("forward:/admin/book-list");
         } catch (IOException e) {
-            modelAndView.addObject("message", "Lỗi khi xử lý ảnh!");
+            modelAndView.addObject("message", AdminCodes.getErrorMessage("IMAGE_PROCESS_ERROR"));
             modelAndView.setViewName("error");
         }
 
@@ -217,7 +218,7 @@ public class BookController {
         ModelAndView modelAndView = new ModelAndView("bookEdit");
         Book book = bookService.getBookById(id);
         if (book == null) {
-            modelAndView.addObject("message", "Không tìm thấy sách!");
+            modelAndView.addObject("message", AdminCodes.getErrorMessage("BOOK_NOT_FOUND"));
             modelAndView.setViewName("error");
             return modelAndView;
         }

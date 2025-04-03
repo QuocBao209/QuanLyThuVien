@@ -130,4 +130,8 @@ public class UserService {
     public List<User> searchUsersWithViolations(String keyword) {
         return userRepository.searchUsersWithViolations(keyword);
     }
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
 }

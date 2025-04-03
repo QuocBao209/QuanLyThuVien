@@ -1,8 +1,10 @@
 package com.project.demo.controller;
 
+import com.project.admin.utils.AdminCodes;
 import com.project.demo.entity.Borrow_Return;
 import com.project.demo.repository.Borrow_ReturnRepository;
 
+import com.project.demo.utils.UserCodes;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +33,11 @@ public class BorrowReturnController {
 //    }
 
     @PostMapping("/confirm-borrow")
-    public String confirmBorrow(@RequestParam("borrowId") Long borrowId, RedirectAttributes redirectAttributes, HttpSession session) {
-    	 String username = (String) session.getAttribute("user");
-    	    System.out.println("Session trước khi xác nhận: " + username);
+    public String confirmBorrow(@RequestParam("borrowId") Long borrowId, RedirectAttributes redirectAttributes) {
+
     	    
         if (borrowId == null) {
-            redirectAttributes.addFlashAttribute("error", "Lỗi: ID mượn sách không hợp lệ.");
+            redirectAttributes.addFlashAttribute("error",  AdminCodes.getErrorMessage("INVALID_USER_ID"));
             return "redirect:/home/account";
         }
 
@@ -48,12 +49,11 @@ public class BorrowReturnController {
 
             borrowReturnRepository.save(borrowReturn);
 
-            redirectAttributes.addFlashAttribute("message", "Yêu cầu mượn sách đã được gửi! Vui lòng chờ admin duyệt.");
+            redirectAttributes.addFlashAttribute("message", UserCodes.getSuccessMessage("BORROW_REQUEST_SENT"));
         } else {
-            redirectAttributes.addFlashAttribute("error", "Lỗi: Không tìm thấy thông tin mượn sách.");
+            redirectAttributes.addFlashAttribute("error",  UserCodes.getErrorMessage("BORROW_NOT_FOUND"));
         }
 
-        System.out.println("Session sau khi xác nhận: " + session.getAttribute("user"));
         return "redirect:/home/account";
     }
     
@@ -62,12 +62,12 @@ public class BorrowReturnController {
     	Borrow_Return borrowReturn = borrowReturnRepository.findById(borrowId).orElse(null);
     	
     	if (!"borrowed".equals(borrowReturn.getStatus())) {
-    		redirectAttributes.addFlashAttribute("error", "Lỗi: Chỉ có thể gia hạn khi sách đang được mượn.");
+    		redirectAttributes.addFlashAttribute("error",  UserCodes.getErrorMessage("INVALID_STATUS"));
             return "redirect:/home/account";
     	}
     	
     	if (borrowReturn.getRenewCount() >= 2) {
-    		redirectAttributes.addFlashAttribute("error", "Bạn đã hết lượt gia hạn.");
+    		redirectAttributes.addFlashAttribute("error",  UserCodes.getErrorMessage("RENEW_LIMIT_REACHED"));
             return "redirect:/home/account";
     	}
     	
@@ -77,7 +77,7 @@ public class BorrowReturnController {
     	// Lưu vào DB
         borrowReturnRepository.save(borrowReturn);
 
-        redirectAttributes.addFlashAttribute("message", "Gia hạn thành công! Hạn trả sách mới: ");
+        redirectAttributes.addFlashAttribute("message",  UserCodes.getSuccessMessage("RENEWAL_SUCCESS"));
         return "redirect:/home/account";
     }
 }

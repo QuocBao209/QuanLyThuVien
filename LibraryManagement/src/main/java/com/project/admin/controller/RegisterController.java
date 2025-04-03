@@ -2,6 +2,7 @@ package com.project.admin.controller;
 
 import com.project.admin.entity.User;
 import com.project.admin.service.UserService;
+import com.project.admin.utils.AdminCodes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,19 +35,19 @@ public class RegisterController {
 
         // Kiểm tra tên không chứa số
         if (!name.matches("^[a-zA-ZÀ-Ỹà-ỹ\\s]+$")) {
-            modelAndView.addObject("error", "Tên không được chứa số hoặc ký tự đặc biệt.");
+            modelAndView.addObject("error", AdminCodes.getErrorMessage("INVALID_NAME_FORMAT_1"));
             return modelAndView;
         }
 
         // Kiểm tra định dạng số điện thoại (10 số)
         if (!phone.matches("\\d{10}")) {
-            modelAndView.addObject("error", "Số điện thoại phải có đúng 10 chữ số.");
+            modelAndView.addObject("error", AdminCodes.getErrorMessage("INVALID_PHONE_FORMAT_1"));
             return modelAndView;
         }
 
         // Kiểm tra định dạng CMT (12 số)
         if (!cmt.matches("\\d{12}")) {
-            modelAndView.addObject("error", "CMT phải có đúng 12 chữ số.");
+            modelAndView.addObject("error", AdminCodes.getErrorMessage("INVALID_CMT_FORMAT_1"));
             return modelAndView;
         }
 
@@ -55,7 +56,7 @@ public class RegisterController {
 
         // Kiểm tra username có tồn tại không
         if (userService.existsByUsername(username)) {
-            modelAndView.addObject("error", "Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.");
+            modelAndView.addObject("error", AdminCodes.getErrorMessage("USERNAME_EXISTS_1"));
             return modelAndView;
         }
 
@@ -73,7 +74,7 @@ public class RegisterController {
         userService.registerUser(newUser);
 
         modelAndView.setViewName("adminLogin");
-        modelAndView.addObject("message", "Đăng ký thành công. Vui lòng đăng nhập.");
+        modelAndView.addObject("message", AdminCodes.getSuccessMessage("REGISTER_SUCCESS_1"));
         return modelAndView;
     }
 
