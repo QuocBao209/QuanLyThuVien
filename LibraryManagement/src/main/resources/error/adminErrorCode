@@ -1,0 +1,14 @@
+error_code,message
+NOT_FULL_FIELD,Vui lòng điền đầy đủ thông tin.
+NUMBER_PHONE_ERROR,Số điện thoại không hợp lệ.
+VALIDATION_EMAIL_E001,Email không đúng định dạng.
+BORROW_SUCCESS,Mượn sách thành công.
+BORROW_FAILED,Mượn sách thất bại. Vui lòng thử lại.
+BORROW_LIMIT_EXCEEDED,Bạn đã đạt giới hạn số sách được mượn.
+BORROW_NOT_AVAILABLE,Sách hiện không có sẵn để mượn.
+BORROW_OVERDUE_EXIST,Bạn còn sách quá hạn chưa trả.
+RETURN_SUCCESS,Trả sách thành công.
+RETURN_FAILED,Trả sách thất bại. Vui lòng thử lại.
+RETURN_OVERDUE,Sách đã quá hạn, vui lòng trước trả.
+RETURN_NOT_BORROWED,Bạn chưa mượn sách này nên không thể trả trước khi bị phạt.
+RETURN_DAMAGED,Sách bị hư hỏng, vui lòng bồi thường theo quy định.

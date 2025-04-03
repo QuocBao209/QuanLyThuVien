@@ -104,10 +104,10 @@ public class BorrowReturnController {
 	
 	@PostMapping("/borrow-confirm")
 	public String confirmBorrow(@RequestParam("borrowId") Long borrowId, Model model) {
-	    if (borrowId == null) {
-	        model.addAttribute("error", "Thiếu borrowId!");
-	        return "borrow_return_view";
-	    }
+//	    if (borrowId == null) {
+//	        model.addAttribute("error", "Thiếu borrowId!");
+//	        return "borrow_return_view";
+//	    }
 
 	    Borrow_Return borrowReturn = borrowReturnService.findById(borrowId);
 	    if (borrowReturn != null && "pending".equals(borrowReturn.getStatus())) {
@@ -188,6 +188,7 @@ public class BorrowReturnController {
 		borrowReturnService.save(borrowReturn);
 		bookService.save(book);
 		userService.save(user);
+
 
 		// Tạo thông báo
 		Notification notification = new Notification();
