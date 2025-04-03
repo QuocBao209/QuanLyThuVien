@@ -11,58 +11,66 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-	<!-- Sidebar -->
-	<div th:replace="admin :: sidebar"></div>
-	<!-- Nội dung chính -->
-	<div class="content-container">
-	    <h2>Báo cáo số lượng sách</h2>
-	    <div class="toolbar">
-	        <form id="statsForm" th:action="@{/admin/statistics/book-report}" method="post">
-	            <!-- Chọn tháng -->
-	            <label>Tháng - Năm:</label>
-	            <label for="month"></label><select id="month" name="month" onchange="this.form.submit();">
-	                <option value="">Chọn tháng</option>
-	                <option th:each="month : ${#numbers.sequence(1, 12)}" th:value="${month}" th:text="${month}" th:selected="${param.month == month}"></option>
-	            </select>
-	            <label for="year"></label><select id="year" name="year" onchange="this.form.submit();">
-	                <option value="">Chọn năm</option>
-	                <option th:each="year : ${#numbers.sequence(2020, 2025)}" th:value="${year}" th:text="${year}" th:selected="${param.year == year}"></option>
-	            </select>
-	            <!-- Nút làm mới -->
-	            <button type="button" class="reset-btn" onclick="resetForm()">Làm mới</button>
-	        </form>
-	    </div>
-	    <!-- Tổng quan số liệu -->
-	    <div class="stats-overview">
-	        <div class="stat-box">
-	            <h4>Tổng số sách</h4>
-	            <p th:text="${totalBooks} ?: 'N/A'"></p>
-	        </div>
-	        <div class="stat-box">
-	            <h4>Số sách đang mượn</h4>
-	            <p th:text="${totalBorrowing} ?: 'N/A'"></p>
-	        </div>
-	        <div class="stat-box">
-	            <h4>Số sách sẵn sàng</h4>
-	            <p th:text="${totalAvailable} ?: 'N/A'"></p>
-	        </div>
-	        <div class="stat-box">
-	            <h4>Số sách bị hư hại</h4>
-	            <p th:text="${totalDamaged} ?: 'N/A'"></p>
-	        </div>
-	    </div>
-	
-	
-	    <!-- Biểu đồ -->
-	    <div class="chart-container" th:if="${#lists.isEmpty(labels)} == false">
-	        <canvas id="bookChart"></canvas>
-	    </div>
-	    <div class="no-data" th:if="${#lists.isEmpty(labels)}">
-	        Không có dữ liệu để hiển thị biểu đồ.
-	    </div>
-	</div>
+<!-- Sidebar -->
+<div th:replace="admin :: sidebar"></div>
+
+<!-- Nội dung chính -->
+<div class="content-container">
+    <h2>Báo cáo số lượng sách</h2>
+    <div class="toolbar">
+        <form id="statsForm" th:action="@{/admin/statistics/book-report}" method="post">
+            <!-- Chọn tháng -->
+            <label>Tháng - Năm:</label>
+            <label for="month"></label><select id="month" name="month" onchange="this.form.submit();">
+                <option value="">Chọn tháng</option>
+                <option th:each="month : ${#numbers.sequence(1, 12)}" th:value="${month}" th:text="${month}" th:selected="${param.month == month}"></option>
+            </select>
+            <label for="year"></label><select id="year" name="year" onchange="this.form.submit();">
+                <option value="">Chọn năm</option>
+                <option th:each="year : ${#numbers.sequence(2020, 2025)}" th:value="${year}" th:text="${year}" th:selected="${param.year == year}"></option>
+            </select>
+            <!-- Nút làm mới -->
+            <button type="button" class="reset-btn" onclick="resetForm()">Làm mới</button>
+        </form>
+    </div>
+    <!-- Tổng quan số liệu -->
+    <div class="stats-overview">
+        <div class="stat-box">
+            <h4>Tổng số sách</h4>
+            <p th:text="${totalBooks} ?: 'N/A'"></p>
+        </div>
+        <div class="stat-box">
+            <h4>Số sách đang mượn</h4>
+            <p th:text="${totalBorrowing} ?: 'N/A'"></p>
+        </div>
+        <div class="stat-box">
+            <h4>Số sách sẵn sàng</h4>
+            <p th:text="${totalAvailable} ?: 'N/A'"></p>
+        </div>
+        <div class="stat-box">
+            <h4>Số sách bị hư hại</h4>
+            <p th:text="${totalDamaged} ?: 'N/A'"></p>
+        </div>
+    </div>
+
+
+    <!-- Biểu đồ -->
+    <div class="chart-container" th:if="${#lists.isEmpty(labels)} == false">
+        <canvas id="bookChart"></canvas>
+    </div>
+    <div class="no-data" th:if="${#lists.isEmpty(labels)}">
+        Không có dữ liệu để hiển thị biểu đồ.
+    </div>
+</div>
 
 <script th:inline="javascript">
+    // Làm mới form (xóa bộ lọc)
+    function resetForm() {
+        document.getElementById('month').value = '';
+        document.getElementById('year').value = '';
+        document.getElementById('statsForm').submit();
+    }
+
     // Dữ liệu biểu đồ từ Controller (truyền qua Thymeleaf)
     const labels = /*[[${labels}]]*/ [];
     const borrowingData = /*[[${borrowingData}]]*/ [];
@@ -147,43 +155,6 @@
             }
         });
     }
-    
- 	// Các method xử lý toolbar
-    function validateForm() {
-        const month = document.getElementById('month').value.trim();
-        const year = document.getElementById('year').value.trim();
-        const errorMsg = document.getElementById('errorMsg');
-
-        if (month && !year) {
-            errorMsg.textContent = "Vui lòng nhập năm khi đã nhập tháng!";
-            errorMsg.style.display = "block";
-            return false;
-        }
-        
-        errorMsg.style.display = "none";
-        return true;
-    }
-
-    function resetForm() {
-        const form = document.getElementById('statsForm');
-        form.reset();
-        document.getElementById('searchQuery').value = '';
-        document.getElementById('month').value = '';
-        document.getElementById('year').value = '';
-        form.submit();
-    }
-
-    window.onload = function () {
-        const urlParams = new URLSearchParams(window.location.search);
-        const query = urlParams.get('query');
-        const month = urlParams.get('month');
-        const year = urlParams.get('year');
-
-        if (query) document.getElementById('searchQuery').value = query;
-        if (month) document.getElementById('month').value = month;
-        if (year) document.getElementById('year').value = year;
-    };
-
 </script>
 
 </body>
