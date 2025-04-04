@@ -214,16 +214,104 @@ public class BookController {
 
     // Chỉnh sửa sách theo id
     @PostMapping("/edit-book/{id}")
-    public ModelAndView showBookEditForm(@PathVariable Long id) {
+    public ModelAndView editBook(@PathVariable Long id,
+                                 @RequestParam(value = "authors", required = false) List<String> authorNames,
+                                 @RequestParam(value = "book-title", required = false) String bookName,
+                                 @RequestParam(value = "amount", required = false) Integer amount,
+                                 @RequestParam(value = "category", required = false) String categoryName,
+                                 @RequestParam(value = "publish-year", required = false) Integer publishYear,
+                                 @RequestParam(value = "book-image", required = false) MultipartFile bookImage) {
+
         ModelAndView modelAndView = new ModelAndView("bookEdit");
+        modelAndView.addObject("authors", authorService.getAuthors());
+        modelAndView.addObject("categories", categoryService.getCategories());
+
+        // Lấy thông tin sách
         Book book = bookService.getBookById(id);
         if (book == null) {
             modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("BOOK_NOT_FOUND"));
-            modelAndView.setViewName("bookEdit");
             return modelAndView;
         }
-        modelAndView.addObject("authors", authorService.getAuthors());
-        modelAndView.addObject("book", book);
+
+        // Nếu chỉ vào trang chỉnh sửa mà chưa submit form
+        if (bookName == null) {
+            modelAndView.addObject("book", book);
+            return modelAndView;
+        }
+
+        try {
+            int currentYear = java.time.Year.now().getValue();
+
+            if (amount == null || amount <= 0) {
+                throw new IllegalArgumentException(AdminCodes.getErrorMessage("INVALID_BOOK_AMOUNT"));
+            }
+
+            if (publishYear == null || publishYear <= 1000 || publishYear > currentYear) {
+                throw new IllegalArgumentException(String.format(AdminCodes.getErrorMessage("INVALID_PUBLISH_YEAR"), currentYear));
+            }
+
+            if (authorNames == null || authorNames.isEmpty()) {
+                throw new IllegalArgumentException(AdminCodes.getErrorMessage("INVALID_AUTHOR_NAME"));
+            }
+
+            List<String> formattedAuthors = new ArrayList<>();
+            for (String author : authorNames) {
+                if (!author.matches("^[a-zA-ZÀ-Ỹà-ỹ.,\\s]+$")) {
+                    throw new IllegalArgumentException(AdminCodes.getErrorMessage("INVALID_AUTHOR_NAME"));
+                }
+                formattedAuthors.add(capitalizeEachWord(author));
+            }
+
+            if (categoryName == null || !categoryName.matches("^[a-zA-ZÀ-Ỹà-ỹ\\s]+$")) {
+                throw new IllegalArgumentException(AdminCodes.getErrorMessage("INVALID_CATEGORY_NAME"));
+            }
+            categoryName = capitalizeEachWord(categoryName);
+
+            // Kiểm tra ảnh (nếu có)
+            String fileName = book.getBookImage();
+            if (bookImage != null && !bookImage.isEmpty()) {
+                if (!ALLOWED_IMAGE_TYPES.contains(bookImage.getContentType())) {
+                    throw new IllegalArgumentException(AdminCodes.getErrorMessage("INVALID_IMAGE_TYPE"));
+                }
+                if (bookImage.getSize() > MAX_IMAGE_SIZE) {
+                    throw new IllegalArgumentException(AdminCodes.getErrorMessage("IMAGE_TOO_LARGE"));
+                }
+                fileName = bookImage.getOriginalFilename();
+                saveBookImage(bookImage, fileName);
+            }
+
+            // Cập nhật sách
+            book.setBookName(bookName);
+            book.setAmount(amount);
+            book.setPublishYear(publishYear);
+            book.setBookImage(fileName);
+
+            // Cập nhật tác giả
+            List<Author> authors = formattedAuthors.stream()
+                    .map(name -> authorService.findByName(name)
+                            .orElseGet(() -> authorService.saveAuthor(new Author(name))))
+                    .collect(Collectors.toList());
+            book.setAuthors(authors);
+
+            // Cập nhật thể loại
+            Category category = categoryService.findByName(categoryName);
+            if (category == null) {
+                category = categoryService.saveCategory(new Category(categoryName));
+            }
+            book.setCategory(category);
+
+            bookService.saveBook(book);
+            modelAndView.addObject("successMessage", AdminCodes.getSuccessMessage("BOOK_UPDATED_SUCCESS"));
+
+        } catch (IllegalArgumentException e) {
+            modelAndView.addObject("errorMessage", e.getMessage());
+        } catch (IOException e) {
+            modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("IMAGE_PROCESS_ERROR"));
+        } catch (Exception e) {
+            modelAndView.addObject("errorMessage", "Lỗi không xác định: " + e.getMessage());
+        }
+
+        modelAndView.addObject("book", bookService.getBookById(id));
         return modelAndView;
     }
 
