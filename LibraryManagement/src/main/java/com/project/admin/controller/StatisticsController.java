@@ -1,6 +1,7 @@
 package com.project.admin.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,8 +12,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.project.admin.entity.Book;
+import com.project.admin.entity.Category;
+import com.project.admin.service.BookBorrowStatsService;
 import com.project.admin.service.BookService;
 import com.project.admin.service.UserService;
+import com.project.admin.service.CategoryService;
 
 @Controller
 @RequestMapping("/admin")
@@ -20,11 +24,29 @@ public class StatisticsController {
 
 	@Autowired private BookService bookService;
 	@Autowired private UserService userService;
+	@Autowired private CategoryService categoryService;
+	@Autowired private BookBorrowStatsService bookBorrowStatsService;
 	
 	@PostMapping("/statistics/books-per-month")
-	public String monthlyBorrowForm(Model model) {
-	    List<Book> books = bookService.getBooksByMonthAndYear(null, null, null, null, null); // Lấy toàn bộ danh sách
+	public String monthlyBorrowForm(Model model,
+									@RequestParam(value = "month", required = false) Integer month,
+						            @RequestParam(value = "year", required = false) Integer year) {
+        
+        // Tổng quan số liệu
+        int totalBooks = bookBorrowStatsService.getTotalBooks();
+        int totalBorrowing = bookBorrowStatsService.getTotalBorrowing(month, year);
+        int totalAvailable = bookBorrowStatsService.getTotalAvailable(month, year);
+        int totalDamaged = bookBorrowStatsService.getTotalDamaged();
+        
+		List<Category> categories = categoryService.getAllCategories();
+	    List<Book> books = bookService.getBooksByMonthAndYear(null, null, null, null, null, null); // Lấy toàn bộ danh sách
+	    
 	    model.addAttribute("books", books);
+	    model.addAttribute("categories", categories);
+	    model.addAttribute("totalBooks", totalBooks);
+        model.addAttribute("totalBorrowing", totalBorrowing);
+        model.addAttribute("totalAvailable", totalAvailable);
+        model.addAttribute("totalDamaged", totalDamaged);
 	    return "monthly_borrow";
 	}
 	
@@ -35,10 +57,12 @@ public class StatisticsController {
                                  @RequestParam(required = false) Integer fromYear,
                                  @RequestParam(required = false) Integer toMonth,
                                  @RequestParam(required = false) Integer toYear,
+                                 @RequestParam(required = false) Integer categoryId,
                                  Model model) {
     	
     	// Lọc sách theo khoảng thời gian
-    	 List<Book> books = bookService.getBooksByMonthAndYear(query, fromMonth, fromYear, toMonth, toYear);
+    	List<Book> books = bookService.getBooksByMonthAndYear(query, fromMonth, fromYear, toMonth, toYear, categoryId);
+    	List<Category> categories = categoryService.getAllCategories();
         
         // Lưu dữ liệu vào model để hiển thị lại trên giao diện
         model.addAttribute("books", books);
@@ -47,6 +71,8 @@ public class StatisticsController {
         model.addAttribute("fromYear", fromYear);
         model.addAttribute("toMonth", toMonth);
         model.addAttribute("toYear", toYear);
+        model.addAttribute("categories", categories); // Trả lại danh sách thể loại để render dropdown
+        model.addAttribute("selectedCategory", categoryId); // Giữ lại lựa chọn thể loại khi submit form
         
         return "monthly_borrow";
     }

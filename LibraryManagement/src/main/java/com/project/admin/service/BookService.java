@@ -72,11 +72,31 @@ public class BookService {
         bookRepository.save(book);
     }
     
-    // Thống kê sách theo Tháng
-    public List<Book> getBooksByMonthAndYear(String query, Integer fromMonth, Integer fromYear, Integer toMonth, Integer toYear) {
-        if (fromMonth == null || fromYear == null || toMonth == null || toYear == null) {
-            return bookRepository.findAllBooks(query);
+    // Thống kê sách theo dữ liệu được nhập trên vùng tìm kiếm
+    public List<Book> getBooksByMonthAndYear(String query, Integer fromMonth, Integer fromYear, 
+            Integer toMonth, Integer toYear, Integer categoryId) {
+
+        // Nếu tất cả tháng, năm đều null
+        if (fromMonth == null && fromYear == null && toMonth == null && toYear == null) {
+            if (categoryId == null) {
+                return bookRepository.findAllBooks(query); // Trả về tất cả sách
+            } else {
+                return bookRepository.findBooksByCategory(query, categoryId); // Trả về sách theo category
+            }
         }
-        return bookRepository.findBooksByDateRange(query, fromMonth, fromYear, toMonth, toYear);
+        
+        if (fromMonth != null && fromYear != null && toMonth == null && toYear == null
+        	|| fromMonth == null && fromYear == null && toMonth != null && toYear != null) {
+        	return bookRepository.findBooksByMonthAndYear(query, fromMonth, fromYear, categoryId, categoryId);
+        }
+        	
+
+        // Nếu tháng, năm được cung cấp nhưng không có categoryId
+        if (categoryId == null) {
+            return bookRepository.findBooksByDateRange(query, fromMonth, fromYear, toMonth, toYear);
+        }
+
+        // Nếu tất cả đều được cung cấp (có cả categoryId và khoảng thời gian)
+        return bookRepository.findBooksByDateRangeAndCategory(query, fromMonth, fromYear, toMonth, toYear, categoryId);
     }
 }

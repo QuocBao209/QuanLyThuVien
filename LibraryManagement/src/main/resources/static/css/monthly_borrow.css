@@ -115,6 +115,72 @@ body {
     text-align: center;
 }
 
+/* Thê loại */
+.category-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.category-group label {
+    margin-bottom: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.category-group select {
+    padding: 10px;
+    font-size: 1rem;
+    border: 2px solid #ccc;
+    border-radius: 12px; /* Bo góc mềm mại */
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: white;
+    outline: none;
+}
+
+.category-group select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+}
+
+.category-group select:hover {
+    border-color: #007bff;
+}
+
+.category-group option {
+    padding: 10px;
+    border-radius: 8px; /* Bo góc nhẹ */
+}
+
+/* Stats Overview styles */
+.stats-overview {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.stat-box {
+    background: #34495E;
+    padding: 15px;
+    border-radius: 5px;
+    flex: 1;
+    text-align: center;
+    color: #ECF0F1;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.stat-box h4 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+    color: #1ABC9C;
+}
+
+.stat-box p {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+}
 
 /* Table styles */
 .table {

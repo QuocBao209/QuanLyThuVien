@@ -16,3 +16,4 @@ INVALID_NAME_FORMAT_1, Tên không được chứa số hoặc ký tự đặc b
 INVALID_PHONE_FORMAT_1, Số điện thoại phải có đúng 10 chữ số.
 INVALID_CMT_FORMAT_1, CMT phải có đúng 12 chữ số.
 USERNAME_EXISTS_1, Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.
+INVALID_TIME, Vui lòng nhập đầy đủ Tháng và Năm cho khoảng thời gian!.

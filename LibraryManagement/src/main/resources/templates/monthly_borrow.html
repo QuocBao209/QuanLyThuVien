@@ -44,6 +44,18 @@
 		                <input type="number" id="toYear" name="toYear" placeholder="Nhập năm (VD: 2023)" th:value="${param.toYear}">
 		            </div>
 		        </div>
+		        
+		        <!-- Chọn thể loại sách -->
+		        <div class="category-group">
+		        	<label for="categorySelect">Thể loại:</label>
+		        	<select id="categorySelect" name="categoryId">
+		        		<option value="">-- Chọn thể loại --</option>
+		        		<option th:each="category : ${categories}"
+		        				th:value="${category.categoryId}"
+		        				th:text="${category.categoryName}"
+		        				th:selected="${category.categoryId == selectedCategory}"></option>
+		        	</select>
+		        </div>
 		
 		        <!-- Vùng Button -->
 		        <div class="button-group">
@@ -55,22 +67,44 @@
 		        <span id="errorMsg" class="error-msg"></span>
 		    </form>
 		</div>
-
+		
+		<!-- Tổng quan số liệu -->
+	    <div class="stats-overview">
+	        <div class="stat-box">
+	            <h4>Tổng số sách</h4>
+	            <p th:text="${totalBooks} ?: 'N/A'"></p>
+	        </div>
+	        <div class="stat-box">
+	            <h4>Số sách đang mượn</h4>
+	            <p th:text="${totalBorrowing} ?: 'N/A'"></p>
+	        </div>
+	        <div class="stat-box">
+	            <h4>Số sách sẵn sàng</h4>
+	            <p th:text="${totalAvailable} ?: 'N/A'"></p>
+	        </div>
+	        <div class="stat-box">
+	            <h4>Số sách bị hư hại</h4>
+	            <p th:text="${totalDamaged} ?: 'N/A'"></p>
+	        </div>
+	    </div>
 		
 		<table class="table">
 			<thead>
 				<tr>
+					<th>Thể loại</th>
 					<th>ID</th>
                     <th>Ảnh</th>
                     <th>Tên sách</th>
                     <th>Tác giả</th>
-                    <th>Thể loại</th>
-                    <th>Số lượng</th>
-                    <th>Số lượng mượn</th>
+                    <th>Tổng số sách</th>
+                    <th>Số sách đang mượn</th>
+                    <th>Số sách sẵn sàng</th>
+                    <th>Số sách bị hư hại</th>
 				</tr>
 			</thead>
 			<tbody>
                 <tr th:each="book : ${books}">
+                	<td th:text="${book.category.categoryName}"></td>
                     <td th:text="${book.bookId}"></td>
 					<td>
 						<img th:src="@{/images/book_images/{img}(img=${book.bookImage})}" alt="Ảnh bìa" width="80">
@@ -82,7 +116,6 @@
 			                <span th:if="${!iterStat.last}">, </span>
 			            </span>
 					</td>
-					<td th:text="${book.category.categoryName}"></td>
 					<td th:text="${book.amount}"></td>
 					<td th:text="${book.borrowCount}"></td>
                 </tr>
@@ -104,12 +137,13 @@ function validateForm() {
     const errorMsg = document.getElementById('errorMsg');
 
     if ((fromMonth && !fromYear) || (toMonth && !toYear)) {
-        errorMsg.textContent = "Vui lòng nhập đầy đủ Tháng và Năm cho khoảng thời gian!";
+        errorMsg.textContent = AdminCodes.getErrorMessage("INVALID_TIME");
         errorMsg.style.display = "block";
         return false;
     }
 
-    if (fromYear && toYear && (parseInt(fromYear) > parseInt(toYear) || (parseInt(fromYear) === parseInt(toYear) && parseInt(fromMonth) > parseInt(toMonth)))) {
+    if (fromYear && toYear && (parseInt(fromYear) > parseInt(toYear) || 
+        (parseInt(fromYear) === parseInt(toYear) && parseInt(fromMonth) > parseInt(toMonth)))) {
         errorMsg.textContent = "Khoảng thời gian không hợp lệ! Ngày bắt đầu phải nhỏ hơn hoặc bằng ngày kết thúc.";
         errorMsg.style.display = "block";
         return false;
@@ -127,6 +161,7 @@ function resetForm() {
     document.getElementById('fromYear').value = '';
     document.getElementById('toMonth').value = '';
     document.getElementById('toYear').value = '';
+    document.getElementById('categorySelect').value = ''; // Reset category
     form.submit();
 }
 
@@ -137,13 +172,16 @@ window.onload = function () {
     const fromYear = urlParams.get('fromYear');
     const toMonth = urlParams.get('toMonth');
     const toYear = urlParams.get('toYear');
+    const category = urlParams.get('category'); // Lấy giá trị category từ URL
 
     if (query) document.getElementById('searchQuery').value = query;
     if (fromMonth) document.getElementById('fromMonth').value = fromMonth;
     if (fromYear) document.getElementById('fromYear').value = fromYear;
     if (toMonth) document.getElementById('toMonth').value = toMonth;
     if (toYear) document.getElementById('toYear').value = toYear;
+    if (category) document.getElementById('categorySelect').value = category; // Giữ nguyên category đã chọn
 };
+
 </script>
 
 </html>
