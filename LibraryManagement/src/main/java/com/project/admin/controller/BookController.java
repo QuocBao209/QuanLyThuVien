@@ -84,7 +84,7 @@ public class BookController {
 
             // Kiểm tra số lượng sách hợp lệ (chỉ nhận số nguyên dương)
             if (amount <= 0) {
-                modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("INVALID_BOOK_AMOUNT"));
+                modelAndView.addObject("errorAmount", AdminCodes.getErrorMessage("INVALID_BOOK_AMOUNT"));
                 //modelAndView.setViewName("error");
                 return modelAndView;
             }
@@ -92,7 +92,7 @@ public class BookController {
 
             // Kiểm tra năm xuất bản hợp lệ
             if (publishYear <= 1000 || publishYear > currentYear) {
-                modelAndView.addObject("errorMessage", String.format(AdminCodes.getErrorMessage("INVALID_PUBLISH_YEAR"), currentYear));
+                modelAndView.addObject("errorYear", String.format(AdminCodes.getErrorMessage("INVALID_PUBLISH_YEAR"), currentYear));
                 //modelAndView.setViewName("error");
                 return modelAndView;
             }
@@ -101,7 +101,7 @@ public class BookController {
             List<String> formattedAuthors = new ArrayList<>();
             for (String author : authorNames) {
                 if (!author.matches("^[a-zA-ZÀ-Ỹà-ỹ.,\\s]+$")) {
-                    modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("INVALID_AUTHOR_NAME"));
+                    modelAndView.addObject("errorAuthors", AdminCodes.getErrorMessage("INVALID_AUTHOR_NAME"));
                     return modelAndView;
                 }
                 formattedAuthors.add(capitalizeEachWord(author));
@@ -109,7 +109,7 @@ public class BookController {
 
             // Kiểm tra và định dạng thể loại
             if (!categoryName.matches("^[a-zA-ZÀ-Ỹà-ỹ\\s]+$")) {
-                modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("INVALID_CATEGORY_NAME"));
+                modelAndView.addObject("errorCategory", AdminCodes.getErrorMessage("INVALID_CATEGORY_NAME"));
                 //modelAndView.setViewName("error");
                 return modelAndView;
             }
@@ -118,11 +118,11 @@ public class BookController {
             String fileName = "";
             if (!bookImage.isEmpty()) {
                 if (!ALLOWED_IMAGE_TYPES.contains(bookImage.getContentType())) {
-                    modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("INVALID_IMAGE_TYPE"));
+                    modelAndView.addObject("errorImageType", AdminCodes.getErrorMessage("INVALID_IMAGE_TYPE"));
                     return modelAndView;
                 }
                 if (bookImage.getSize() > MAX_IMAGE_SIZE) {
-                    modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("IMAGE_TOO_LARGE"));
+                    modelAndView.addObject("errorImageSize", AdminCodes.getErrorMessage("IMAGE_TOO_LARGE"));
                     return modelAndView;
                 }
                 fileName = bookImage.getOriginalFilename();
@@ -145,7 +145,7 @@ public class BookController {
             if (bookId != null) { // TRƯỜNG HỢP CHỈNH SỬA SÁCH
                 book = bookService.getBookById(bookId);
                 if (book == null) {
-                    modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("BOOK_NOT_EXIST"));
+                    modelAndView.addObject("notExistedBook", AdminCodes.getErrorMessage("BOOK_NOT_EXIST"));
                     return modelAndView;
                 }
 

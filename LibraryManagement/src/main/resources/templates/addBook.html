@@ -8,68 +8,93 @@
 	<link rel="stylesheet" th:href="@{/css/admin.css}">
 </head>
 <body>
-
-<!-- Sidebar -->
-<div th:replace="admin :: sidebar"></div>
-
-<!-- Form thêm sách -->
-<div id="form-container">
-	<h2>Thêm sách</h2>
-	<!-- Thông báo lỗi -->
-	<div th:if="${errorMessage}" class="error-message">
-	    <p th:text="${errorMessage}"></p>
-	</div>
+	<!-- Sidebar -->
+	<div th:replace="admin :: sidebar"></div>
 	
-	<!-- Thông báo thành công -->
-	<div th:if="${successMessage}" class="success-message">
-	    <p th:text="${successMessage}"></p>
-	</div>
-	
-
-	<form action="/admin/submit-book-info" method="post" enctype="multipart/form-data">
-		<div class="input-group">
-			<label for="book-title">Tên sách:</label>
-			<input type="text" id="book-title" name="book-title" placeholder="Nhập tên sách" required>
+	<!-- Form thêm sách -->
+	<div id="form-container">
+		<h2>Thêm sách</h2>
+		<!-- Thông báo lỗi -->
+		<div th:if="${errorMessage}" class="error-message">
+		    <p th:text="${errorMessage}"></p>
 		</div>
-
-		<div class="input-group">
-			<label>Tác giả:</label>
-			<div id="author-container">
-				<div class="author-field">
-					<input type="text" name="authors" placeholder="Nhập tên tác giả" required>
-					<button type="button" class="remove-author" onclick="removeAuthor(this)">Xóa</button>
+		
+		<!-- Thông báo thành công -->
+		<div th:if="${successMessage}" class="success-message">
+		    <p th:text="${successMessage}"></p>
+		</div>
+		
+	
+		<form action="/admin/submit-book-info" method="post" enctype="multipart/form-data">
+			<div class="input-group">
+				<label for="book-title">Tên sách:</label>
+				<input type="text" id="book-title" name="book-title" placeholder="Nhập tên sách" required>
+			</div>
+	
+			<div class="input-group">
+				<label>Tác giả:</label>
+				<div id="author-container">
+					<div class="author-field">
+						<input type="text" name="authors" placeholder="Nhập tên tác giả" required>
+						<button type="button" class="remove-author" onclick="removeAuthor(this)">Xóa</button>
+					</div>
+				</div>
+				<button type="button" id="add-author">Thêm tác giả</button>
+				<!-- Thông báo lỗi -->
+				<div th:if="${errorAuthors}" class="error-message">
+				    <p th:text="${errorAuthors}"></p>
 				</div>
 			</div>
-			<button type="button" id="add-author">Thêm tác giả</button>
-		</div>
-
-		<div class="input-group">
-			<label for="amount">Số lượng:</label>
-			<input type="number" id="amount" name="amount" placeholder="Nhập số lượng sách" required>
-		</div>
-
-		<div class="input-group">
-			<label for="category">Thể loại:</label>
-			<input type="text" id="category" name="category" placeholder="Nhập tên thể loại" required>
-		</div>
-
-		<div class="input-group">
-			<label for="publish-year">Năm Phát Hành:</label>
-			<input type="number" id="publish-year" name="publish-year" min="1900" max="2025" step="1" placeholder="Nhập năm phát hành" required>
-		</div>
-
-		<!-- Upload ảnh sách -->
-		<div class="input-group">
-			<label for="book-image">Ảnh bìa sách:</label>
-			<input type="file" id="book-image" name="book-image" accept="image/*" required>
-		</div>
-
-		<div class="button-group">
-			<button type="submit">Thêm sách</button>
-		</div>
-	</form>
-
-</div>
+	
+			<div class="input-group">
+				<label for="amount">Số lượng:</label>
+				<input type="number" id="amount" name="amount" placeholder="Nhập số lượng sách" required>
+				<!-- Thông báo lỗi -->
+				<div th:if="${errorAmount}" class="error-message">
+				    <p th:text="${errorAmount}"></p>
+				</div>
+			</div>
+	
+			<div class="input-group">
+				<label for="category">Thể loại:</label>
+				<input type="text" id="category" name="category" placeholder="Nhập tên thể loại" required>
+				<!-- Thông báo lỗi -->
+				<div th:if="${errorCategory}" class="error-message">
+				    <p th:text="${errorCategory}"></p>
+				</div>
+			</div>
+	
+			<div class="input-group">
+				<label for="publish-year">Năm Phát Hành:</label>
+				<input type="number" id="publish-year" name="publish-year" min="1900" max="2025" step="1" placeholder="Nhập năm phát hành" required>
+				<!-- Thông báo lỗi -->
+				<div th:if="${errorYear}" class="error-message">
+				    <p th:text="${errorYear}"></p>
+				</div>
+			</div>
+	
+			<!-- Upload ảnh sách -->
+			<div class="input-group">
+				<label for="book-image">Ảnh bìa sách:</label>
+				<input type="file" id="book-image" name="book-image" accept="image/*" required>
+				<!-- Thông báo lỗi -->
+				<div th:if="${errorImageType}" class="error-message">
+				    <p th:text="${errorImageType}"></p>
+				</div>
+				
+				<!-- Thông báo lỗi -->
+				<div th:if="${errorAuthors}" class="error-message">
+				    <p th:text="${errorImageType}"></p>
+				</div>
+			</div>
+	
+			<div class="button-group">
+				<button type="submit">Thêm sách</button>
+			</div>
+		</form>
+	
+	</div>
+</body>
 
 <script>
 	document.getElementById('add-author').addEventListener('click', function() {
@@ -95,5 +120,4 @@
 	}
 </script>
 
-</body>
 </html>

@@ -35,19 +35,19 @@ public class RegisterController {
 
         // Kiểm tra tên không chứa số
         if (!name.matches("^[a-zA-ZÀ-Ỹà-ỹ\\s]+$")) {
-            modelAndView.addObject("error", AdminCodes.getErrorMessage("INVALID_NAME_FORMAT_1"));
+            modelAndView.addObject("errorName", AdminCodes.getErrorMessage("INVALID_NAME_FORMAT_1"));
             return modelAndView;
         }
 
         // Kiểm tra định dạng số điện thoại (10 số)
         if (!phone.matches("\\d{10}")) {
-            modelAndView.addObject("error", AdminCodes.getErrorMessage("INVALID_PHONE_FORMAT_1"));
+            modelAndView.addObject("errorPhone", AdminCodes.getErrorMessage("INVALID_PHONE_FORMAT_1"));
             return modelAndView;
         }
 
         // Kiểm tra định dạng CMT (12 số)
         if (!cmt.matches("\\d{12}")) {
-            modelAndView.addObject("error", AdminCodes.getErrorMessage("INVALID_CMT_FORMAT_1"));
+            modelAndView.addObject("errorCMT", AdminCodes.getErrorMessage("INVALID_CMT_FORMAT_1"));
             return modelAndView;
         }
 
@@ -56,7 +56,7 @@ public class RegisterController {
 
         // Kiểm tra username có tồn tại không
         if (userService.existsByUsername(username)) {
-            modelAndView.addObject("error", AdminCodes.getErrorMessage("USERNAME_EXISTS_1"));
+            modelAndView.addObject("errorUsername", AdminCodes.getErrorMessage("USERNAME_EXISTS_1"));
             return modelAndView;
         }
 
@@ -74,7 +74,7 @@ public class RegisterController {
         userService.registerUser(newUser);
 
         modelAndView.setViewName("adminLogin");
-        modelAndView.addObject("message", AdminCodes.getSuccessMessage("REGISTER_SUCCESS_1"));
+        //modelAndView.addObject("successMessage", AdminCodes.getSuccessMessage("REGISTER_SUCCESS_1"));
         return modelAndView;
     }
 

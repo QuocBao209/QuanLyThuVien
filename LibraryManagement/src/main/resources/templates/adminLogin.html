@@ -25,21 +25,16 @@
 		<div class="input-group">
 			<button type="submit">Đăng nhập</button>
 		</div>
-	
-		<!-- Bắt lỗi tài khoản -->
-		<div class="error-message" th:if="${error != null}">
-			<p th:text="${error}"></p>
+		
+		<!-- Thông báo lỗi -->
+		<div th:if="${errorMessage}" style="color: red">
+		    <p th:text="${errorMessage}"></p>
 		</div>
 		
 		<!-- Dòng tạo tài khoản -->
 		<div class="account-actions">
 		    <p><a th:href="@{/forget-password(from='admin')}">Quên mật khẩu</a></p>
 		    <p>Chưa có tài khoản? <a href="/admin-register">Tạo tài khoản</a></p>
-		</div>
-		
-		<!-- Thông báo trả thành công -->
-		<div th:if="${errorMessage}" class="error-message">
-		    <p th:text="${errorMessage}"></p>
 		</div>
 	</form>
 </body>

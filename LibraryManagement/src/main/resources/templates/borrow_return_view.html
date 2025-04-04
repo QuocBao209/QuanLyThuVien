@@ -30,7 +30,7 @@
         <h2 th:text="|Người dùng : ${borrowReturns[0].user.name}|"></h2>
         
         <!-- Thông báo trả thành công -->
-		<div th:if="${successMessage}" class="success-message">
+		<div th:if="${successMessage}" style="color: green">
 		    <p th:text="${successMessage}"></p>
 		</div>
 
