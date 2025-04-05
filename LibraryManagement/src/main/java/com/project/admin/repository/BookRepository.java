@@ -66,5 +66,12 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     	       "AND (YEAR(br.startDate) < :toYear OR (YEAR(br.startDate) = :toYear AND MONTH(br.startDate) <= :toMonth))")
     List<Book> findBooksByDateRangeAndCategory(String query, Integer fromMonth, Integer fromYear, Integer toMonth, Integer toYear, 
     											Integer categoryId);
+    
+    // Đếm tổng số sách theo thể loại
+    @Query("SELECT COUNT(b) FROM Book b WHERE b.category.categoryId = :categoryId")
+    int countBooksByCategory(@Param("categoryId") Integer categoryId);
 
+    // Đếm số sách bị hư hỏng theo thể loại
+    @Query("SELECT COUNT(b) FROM Book b WHERE b.category.categoryId = :categoryId AND b.isDamaged > 0")
+    int countDamagedBooksByCategory(@Param("categoryId") Integer categoryId);
 }

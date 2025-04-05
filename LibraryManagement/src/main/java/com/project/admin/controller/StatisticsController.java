@@ -58,11 +58,19 @@ public class StatisticsController {
                                  @RequestParam(required = false) Integer toMonth,
                                  @RequestParam(required = false) Integer toYear,
                                  @RequestParam(required = false) Integer categoryId,
+								 @RequestParam(value = "month", required = false) Integer month,
+						         @RequestParam(value = "year", required = false) Integer year,
                                  Model model) {
     	
     	// Lọc sách theo khoảng thời gian
     	List<Book> books = bookService.getBooksByMonthAndYear(query, fromMonth, fromYear, toMonth, toYear, categoryId);
     	List<Category> categories = categoryService.getAllCategories();
+    	
+    	// Tổng quan số liệu
+    	int totalBooks = bookBorrowStatsService.getTotalBooksByCategory(categoryId); // Thống kê tổng số sách theo thể loại
+        int totalBorrowing = bookBorrowStatsService.getTotalBorrowingByCategory(categoryId, month, year); // Sách đang mượn theo thể loại
+        int totalAvailable = bookBorrowStatsService.getTotalAvailableByCategory(categoryId, month, year); // Sách sẵn sàng theo thể loại
+        int totalDamaged = bookBorrowStatsService.getTotalDamagedByCategory(categoryId); // Sách bị hư hỏng theo thể loại
         
         // Lưu dữ liệu vào model để hiển thị lại trên giao diện
         model.addAttribute("books", books);
@@ -71,8 +79,12 @@ public class StatisticsController {
         model.addAttribute("fromYear", fromYear);
         model.addAttribute("toMonth", toMonth);
         model.addAttribute("toYear", toYear);
-        model.addAttribute("categories", categories); // Trả lại danh sách thể loại để render dropdown
+        model.addAttribute("categories", categories);
         model.addAttribute("selectedCategory", categoryId); // Giữ lại lựa chọn thể loại khi submit form
+        model.addAttribute("totalBooks", totalBooks);
+        model.addAttribute("totalBorrowing", totalBorrowing);
+        model.addAttribute("totalAvailable", totalAvailable);
+        model.addAttribute("totalDamaged", totalDamaged);
         
         return "monthly_borrow";
     }

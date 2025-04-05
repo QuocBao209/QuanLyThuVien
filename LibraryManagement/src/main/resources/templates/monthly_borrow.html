@@ -118,6 +118,8 @@
 					</td>
 					<td th:text="${book.amount}"></td>
 					<td th:text="${book.borrowCount}"></td>
+					<td th:text="${book.amount - book.borrowCount - book.isDamaged}"></td> <!-- Số sách sẵn sàng -->
+					<td th:text="${book.isDamaged}"></td> <!-- Số sách hư hỏng -->
                 </tr>
                 
                 <tr th:if="${#lists.isEmpty(books)}">
@@ -137,7 +139,7 @@ function validateForm() {
     const errorMsg = document.getElementById('errorMsg');
 
     if ((fromMonth && !fromYear) || (toMonth && !toYear)) {
-        errorMsg.textContent = AdminCodes.getErrorMessage("INVALID_TIME");
+        errorMsg.textContent = "Vui lòng nhập đầy đủ Tháng và Năm cho khoảng thời gian!";
         errorMsg.style.display = "block";
         return false;
     }

@@ -113,4 +113,27 @@ public class BookBorrowStatsService {
                         Collectors.summingInt(Book::getIsDamaged)
                 ));
     }
+    
+    // Tổng số sách theo thể loại
+    public int getTotalBooksByCategory(Integer categoryId) {
+        if (categoryId == null) {
+            return (int) bookRepository.count(); // Nếu không chọn thể loại, trả về tổng số sách
+        }
+        return bookRepository.countBooksByCategory(categoryId); // Phương thức đếm sách theo thể loại
+    }
+
+    // Số sách đang mượn theo thể loại và tháng/năm
+    public int getTotalBorrowingByCategory(Integer categoryId, Integer month, Integer year) {
+        return borrowReturnRepository.countBorrowingBooksByCategory(categoryId, month, year); // Phương thức đếm sách đang mượn theo thể loại và thời gian
+    }
+
+    // Số sách sẵn sàng theo thể loại và tháng/năm
+    public int getTotalAvailableByCategory(Integer categoryId, Integer month, Integer year) {
+        return borrowReturnRepository.countAvailableBooksByCategory(categoryId, month, year); // Phương thức đếm sách sẵn sàng
+    }
+
+    // Số sách bị hư hỏng theo thể loại
+    public int getTotalDamagedByCategory(Integer categoryId) {
+        return bookRepository.countDamagedBooksByCategory(categoryId); // Phương thức đếm sách bị hư hỏng
+    }
 }
