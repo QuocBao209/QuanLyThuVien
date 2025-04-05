@@ -290,7 +290,21 @@ table tr:hover {
 .confirm-btn:hover {
     background: #218838;
 }
+/* ----- Nút "Hủy mượn" màu đỏ ----- */
+.delete-btn {
+    display: inline-block;
+    background: #ff0000;
+    color: white;
+    border: none;
+    padding: 7px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+}
 
+.delete-btn:hover {
+    background: #cc0000;
+}
 /* ----- Nút "Gia hạn" màu vàng ----- */
 .renew-btn {
     display: inline-block;
