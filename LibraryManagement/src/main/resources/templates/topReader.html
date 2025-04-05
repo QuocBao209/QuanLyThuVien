@@ -17,14 +17,14 @@
 		<h2>Top độc giả đọc nhiều nhất</h2>
 		<!-- Toolbar -->
 		<div class="toolbar">
-		    <form th:action="@{/admin/statistics/top-readers}" method="post" 
+		    <form th:action="@{/admin/statistics/top-readers/search-reader}" method="post" 
 		            onsubmit="return validateForm()" id="statsForm">
 		        
 		        <!-- Nhóm ô tìm kiếm -->
 		        <div class="input-group">
 		            <label for="searchQuery">Tìm kiếm:</label>
 		            <input type="text" id="searchQuery" name="query" 
-		                placeholder="Nhập thông tin sách..." th:value="${param.query}">
+		                placeholder="Nhập thông tin độc giả..." th:value="${param.query}">
 		        </div>
 		
 		        <!-- Nhóm ô Tháng - Năm (Từ và Đến) -->
@@ -87,7 +87,7 @@
 				<td th:text="${reader.borrowCount}"></td>
 			</tr>
 			 <!-- Thông báo không có dữ liệu -->
-                <tr th:if="${#lists.isEmpty(reader)}">
+                <tr th:if="${#lists.isEmpty(reader) and #lists.isEmpty(topReader)}">
                     <td colspan="9" class="no-data">Không có dữ liệu</td>
                 </tr>
 			</tbody>

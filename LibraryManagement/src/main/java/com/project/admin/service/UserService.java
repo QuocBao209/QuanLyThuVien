@@ -110,17 +110,46 @@ public class UserService {
     }
     
     //top User mượn sách 
+    
+    public List<User> getAllUsersByBorrowCount() {
+        return userRepository.findByRoleOrderByBorrowCountDesc("USER");
+    }
+    
     public List<User> getTop3UsersByBorrowCount() {
-        List<User> users = userRepository.findByRoleOrderByBorrowCountDesc("USER");
+        List<User> users = getAllUsersByBorrowCount();
         return users.stream().limit(3).toList(); // Lấy 3 người đầu tiên
     }
 
     public List<User> getRemainingUsersByBorrowCount() {
-        List<User> users = userRepository.findByRoleOrderByBorrowCountDesc("USER");
+        List<User> users = getAllUsersByBorrowCount();
         return users.stream().skip(3).toList(); // Lấy phần còn lại
     }
 
-   
+ // Thống kê độc giả mượn theo khoảng thời gian từ Tháng/Năm đến Tháng/Năm
+    public List<User> getAllUsersOrderByBorrowCount(String query) {
+        return userRepository.findByRoleAndUserNameContainingOrderByBorrowCountDesc( query);
+    }
+    
+    public List<User> getAllUsersByMonthAndYearOrderByBorrowCount(String query, Integer fromMonth, Integer fromYear, Integer toMonth, Integer toYear) {
+        return userRepository.findUsersByDateRange(query, fromMonth, fromYear, toMonth, toYear);
+    }
+    
+    public List<User> getTop3UsersByMonthAndYear(String query, Integer fromMonth, Integer fromYear, Integer toMonth, Integer toYear) {
+        if (fromMonth == null || fromYear == null || toMonth == null || toYear == null) {
+        	List<User> users = getAllUsersOrderByBorrowCount( query);
+            return users.stream().limit(3).toList();
+        }
+        return getAllUsersByMonthAndYearOrderByBorrowCount(query, fromMonth, fromYear, toMonth, toYear).stream().limit(3).toList();
+    }
+    
+    public List<User> getRemainingUsersByMonthAndYear(String query, Integer fromMonth, Integer fromYear, Integer toMonth, Integer toYear) {
+        if (fromMonth == null || fromYear == null || toMonth == null || toYear == null) {
+        	List<User> users = getAllUsersOrderByBorrowCount( query);
+            return users.stream().skip(3).toList();
+        }
+        return getAllUsersByMonthAndYearOrderByBorrowCount(query, fromMonth, fromYear, toMonth, toYear).stream().skip(3).toList();
+    }
+    
     // Lấy danh sách người dùng có vi phạm
     public List<User> getUsersWithViolations() {
         return userRepository.findUsersWithViolations();

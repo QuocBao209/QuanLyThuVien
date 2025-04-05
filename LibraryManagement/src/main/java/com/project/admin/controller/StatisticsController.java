@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.project.admin.entity.Book;
+import com.project.admin.entity.User;
 import com.project.admin.service.BookService;
 import com.project.admin.service.UserService;
 
@@ -59,5 +60,19 @@ public class StatisticsController {
         modelAndView.addObject("reader", userService.getRemainingUsersByBorrowCount());
         return modelAndView;
     }
-
+ // Thống kê độc giả theo Tháng - Năm
+    @PostMapping("/statistics/top-readers/search-reader")
+    public ModelAndView getSearchBorrowers(@RequestParam(required = false) String query,
+                                 @RequestParam(required = false) Integer fromMonth,
+                                 @RequestParam(required = false) Integer fromYear,
+                                 @RequestParam(required = false) Integer toMonth,
+                                 @RequestParam(required = false) Integer toYear) {
+    	
+    	
+        
+    	ModelAndView modelAndView = new ModelAndView("topReader");
+        modelAndView.addObject("topReader", userService.getTop3UsersByMonthAndYear(query, fromMonth, fromYear, toMonth, toYear));
+        modelAndView.addObject("reader", userService.getRemainingUsersByMonthAndYear(query, fromMonth, fromYear, toMonth, toYear));
+        return modelAndView;
+    }
 }

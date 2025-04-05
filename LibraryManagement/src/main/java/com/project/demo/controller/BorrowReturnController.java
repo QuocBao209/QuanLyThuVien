@@ -57,6 +57,25 @@ public class BorrowReturnController {
         return "redirect:/home/account"; // ⚡ Chuyển hướng về trang danh sách mượn
     }
     
+    @PostMapping("/delete-borrow")
+    public String deleteBorrow(@RequestParam("borrowId") Long borrowId, RedirectAttributes redirectAttributes) {
+        if (borrowId == null) {
+            redirectAttributes.addFlashAttribute("error", "Lỗi: ID mượn sách không hợp lệ.");
+            return "redirect:/home/account";
+        }
+
+        Borrow_Return borrowReturn = borrowReturnRepository.findById(borrowId).orElse(null);
+        if (borrowReturn != null) {
+            borrowReturnRepository.delete(borrowReturn); // Xóa yêu cầu mượn khỏi DB 
+
+            redirectAttributes.addFlashAttribute("message", "Yêu cầu hủy mượn sách đã được gửi!");
+        } else {
+            redirectAttributes.addFlashAttribute("error", "Lỗi: Không tìm thấy thông tin mượn sách.");
+        }
+        return "redirect:/home/account"; // ⚡ Chuyển hướng về trang danh sách mượn
+    }
+    
+    
     @PostMapping("/renew")
     public String renewBook (@RequestParam("borrowId") Long borrowId, RedirectAttributes redirectAttributes) {
     	Borrow_Return borrowReturn = borrowReturnRepository.findById(borrowId).orElse(null);
