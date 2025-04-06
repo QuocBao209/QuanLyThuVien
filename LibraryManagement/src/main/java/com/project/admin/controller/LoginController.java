@@ -58,8 +58,8 @@ public class LoginController {
     }
 
     // Quên mật khẩu
-	@GetMapping("/login/forget-password")
+	@GetMapping("/admin-login/forget-password")
 	public String forgetPasswordForm() {
-		return "forgetPassword";
+		return "adminForgetPassword";
 	}
 }

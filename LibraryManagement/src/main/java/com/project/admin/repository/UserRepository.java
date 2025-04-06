@@ -17,8 +17,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // top user mượn sách nhiều nhất
     List<User> findByRoleOrderByBorrowCountDesc(String role);
-
-    
+   
     // Lấy danh sách người dùng có số lần vi phạm > 0
     @Query("SELECT u FROM User u WHERE u.violationCount > 0")
     List<User> findUsersWithViolations();

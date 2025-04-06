@@ -70,8 +70,12 @@ public class ForgotPasswordController {
     }
     
     @GetMapping("/return")
-    public String returnToLogin(@RequestParam(required = false, defaultValue = "user") String from) {
-        return from.equals("admin") ? "redirect:/admin-login" : "redirect:/login";
+    public String returnToLogin() {
+        return "redirect:/login";
     }
 
+    @GetMapping("/admin-return")
+    public String returnToAdminLogin() {
+        return "redirect:/admin-login";
+    }
 }
