@@ -163,4 +163,12 @@ public class UserService {
         return userRepository.existsByEmail(email);
     }
 
+    public void checkAndLockUser(Long userId) {
+        com.project.admin.entity.User user = userRepository.findById(userId).orElse(null);
+        if (user != null && user.getViolationCount() >= 3) {
+            user.setStatus("Khóa");
+            userRepository.save(user);
+        }
+    }
+
 }

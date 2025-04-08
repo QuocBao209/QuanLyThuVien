@@ -100,26 +100,28 @@
 			</section>
 		
 			<h2>Lịch sử mượn / trả sách</h2>
-			
+
 			<!-- Bộ lọc -->
 			<form action="/home/account" method="get">
 				<div class="searching-group">
 					<label for="status">Trạng thái:</label>
-					<select class="status" id="status">
-						<option value="pending">Đang chờ</option>
-						<option value="borrowed">Đang mượn</option>
-						<option value="returned">Đã trả</option>
-						<option value="outdate">Quá hạn</option>
+					<select class="status" id="status" name="status">
+						<option value="">Tất cả</option>
+						<option value="pending" th:selected="${status == 'pending'}">Đang chờ</option>
+						<option value="borrowed" th:selected="${status == 'borrowed'}">Đang mượn</option>
+						<option value="returned" th:selected="${status == 'returned'}">Đã trả</option>
+						<option value="outdate" th:selected="${status == 'outdate'}">Quá hạn</option>
 					</select>
 				</div>
 
 				<div class="searching-action">
-					<input type="text" name="search" placeholder="Nhập tên sách tại đây ...">
-
+					<input type="text" name="keyword" placeholder="Nhập tên sách hoặc tên tác giả ..."
+						   th:value="${keyword}">
 					<button type="submit" class="search-btn">Tìm kiếm</button>
 				</div>
 			</form>
-			
+
+
 			<!-- Bảng lịch sử -->
 			<table>
 			<thead>

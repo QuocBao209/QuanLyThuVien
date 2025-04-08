@@ -13,3 +13,6 @@ INVALID_NAME_FORMAT_2, Tên không được chứa số hoặc ký tự đặc b
 INVALID_PHONE_FORMAT_2, Số điện thoại phải có đúng 10 chữ số.
 INVALID_CMT_FORMAT_2, CMT phải có đúng 12 chữ số.
 USERNAME_EXISTS_2, Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.
+INVALID_NAME_FORMAT_3,Tên không được chứa số hoặc ký tự đặc biệt
+INVALID_PHONE_FORMAT_3,Số điện thoại phải đúng 10 chữ số
+INVALID_GMAIL_FORMAT_3,Email không đúng định dạng

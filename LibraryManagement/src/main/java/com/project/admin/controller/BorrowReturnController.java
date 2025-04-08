@@ -135,6 +135,7 @@ public class BorrowReturnController {
 			borrowReturn.setStatus("outdate");
 			user.setViolationCount(user.getViolationCount() + 1);
 			statusMessage = "Bạn đã trả sách " + book.getBookName() + " quá hạn (" + daysBorrowed + " ngày).";
+			userService.checkAndLockUser(user.getUserId());
 		} else {
 			borrowReturn.setStatus("returned");
 			statusMessage = "Bạn đã trả sách " + book.getBookName() + " thành công!";
@@ -144,6 +145,7 @@ public class BorrowReturnController {
 			book.setIsDamaged(book.getIsDamaged() + 1);
 			user.setViolationCount(user.getViolationCount() + 1);
 			statusMessage += " Tuy nhiên, sách bị hư hỏng hoặc mất!";
+			userService.checkAndLockUser(user.getUserId());
 		} else {
 			book.setAmount(book.getAmount() + 1);
 		}

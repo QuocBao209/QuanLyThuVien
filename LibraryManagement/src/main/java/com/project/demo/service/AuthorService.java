@@ -38,43 +38,5 @@ public class AuthorService {
         return authorRepository.findById(id);
     }
 
-    // Lưu tác giả mới (dùng khi chắc chắn chưa có)
-    public Author saveAuthor(Author author) {
-        if (author == null || author.getAuthorName() == null || author.getAuthorName().isBlank()) {
-            throw new IllegalArgumentException("Tên tác giả không được để trống!");
-        }
-        return authorRepository.save(author);
-    }
 
-    // Lưu hoặc cập nhật tác giả (tạo mới nếu chưa tồn tại)
-    public Author saveOrUpdateAuthor(Author author) {
-        if (author == null || author.getAuthorName() == null || author.getAuthorName().isBlank()) {
-            throw new IllegalArgumentException("Tên tác giả không được để trống!");
-        }
-
-        return authorRepository.findByAuthorName(author.getAuthorName().trim())
-                .orElseGet(() -> authorRepository.save(author));
-    }
-
-    // Cập nhật thông tin tác giả
-    public Author updateAuthor(Long id, String newAuthorName) {
-        if (newAuthorName == null || newAuthorName.isBlank()) {
-            throw new IllegalArgumentException("Tên tác giả mới không được để trống!");
-        }
-
-        return authorRepository.findById(id)
-                .map(author -> {
-                    author.setAuthorName(newAuthorName.trim());
-                    return authorRepository.save(author);
-                })
-                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tác giả có ID: " + id));
-    }
-
-    // Xóa tác giả theo ID
-    public void deleteAuthor(Long id) {
-        if (!authorRepository.existsById(id)) {
-            throw new IllegalArgumentException("Không tìm thấy tác giả để xóa!");
-        }
-        authorRepository.deleteById(id);
-    }
 }

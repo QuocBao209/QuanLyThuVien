@@ -42,7 +42,12 @@ public class AccountController {
 
     // Xử lý hiện thông tin của User và hiện thông tin sách trên table
     @GetMapping("/account")
-    public ModelAndView accountForm(HttpSession session, HttpServletRequest request) {
+    public ModelAndView accountForm(
+            HttpSession session,
+            HttpServletRequest request,
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(value = "status", required = false) String status) {
+
         ModelAndView mav = new ModelAndView("account");
 
         String username = (String) session.getAttribute("user");
@@ -50,7 +55,7 @@ public class AccountController {
             mav.setViewName("redirect:/login");
             return mav;
         }
-        
+
         Optional<User> userOptional = userService.getUserByUsername(username);
         if (!userOptional.isPresent()) {
             mav.setViewName("redirect:/login");
@@ -58,25 +63,27 @@ public class AccountController {
         }
 
         User user = userOptional.get();
+
+        // Lấy danh sách đã mượn và lọc theo keyword + status nếu có
+        List<Borrow_Return> borrowedBooks = borrowService.findBorrowHistory(user.getUserId(), keyword, status);
+
         List<Notification> notifications = notificationService.getNotificationsByUsername(username);
-        
-        // Sắp xếp danh sách: theo thời gian createdAt từ mới nhất đến cũ nhất
         notifications.sort((n1, n2) -> n2.getCreatedAt().compareTo(n1.getCreatedAt()));
-        
-        mav.addObject("user", user);
-        mav.addObject("borrowedBooks", getSortedBorrowReturns(user));
-        mav.addObject("notifications", notifications);
-        
-        // Thêm unreadCount
+
         long unreadCount = notifications.stream().filter(n -> !n.isRead()).count();
+
+        mav.addObject("user", user);
+        mav.addObject("borrowedBooks", borrowedBooks);
+        mav.addObject("notifications", notifications);
         mav.addObject("unreadCount", unreadCount);
-        
-        // Thêm requestURI vào model
         mav.addObject("currentUrl", request.getRequestURI());
-        
+        mav.addObject("keyword", keyword); // để giữ lại giá trị trong ô tìm kiếm
+        mav.addObject("status", status);   // để giữ lại lựa chọn trạng thái
+
         return mav;
     }
-    
+
+
     // Sắp xếp thứ tự theo trạng thái mượn / trả
     private List<Borrow_Return> getSortedBorrowReturns(User user) {
         return borrowService.getBorrowsByUser(user)
@@ -100,10 +107,36 @@ public class AccountController {
 
     // Chỉnh sửa tài khoản
     @PostMapping("/edit-account")
-    public String editAccount(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
+    public ModelAndView editAccount(@ModelAttribute("user") User user) {
+        ModelAndView modelAndView = new ModelAndView("account");
+
+        boolean hasError = false;
+
         if (user.getUserId() == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", UserCodes.getErrorMessage("INVALID_USER_ID"));
-            return "redirect:/home/account";
+            modelAndView.addObject("errorUserId", UserCodes.getErrorMessage("INVALID_USER_ID"));
+            hasError = true;
+        }
+
+        if (user.getName() == null || !user.getName().matches("^[a-zA-ZÀ-Ỹà-ỹ\\s]+$")) {
+            modelAndView.addObject("errorName", "INVALID_NAME_FORMAT_3");
+            hasError = true;
+        }
+
+
+
+        if (user.getEmail() == null || !user.getEmail().matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+            modelAndView.addObject("errorEmail", "INVALID_GMAIL_FORMAT_3");
+            hasError = true;
+        }
+
+        if (user.getPhone() == null || !user.getPhone().matches("^[0-9]{10}$")) {
+            modelAndView.addObject("errorPhone", "INVALID_PHONE_FORMAT_3");
+            hasError = true;
+        }
+
+        if (hasError) {
+            modelAndView.addObject("user", user);
+            return modelAndView;
         }
 
         Optional<User> userOptional = userService.getUserById(user.getUserId());
@@ -115,11 +148,12 @@ public class AccountController {
             existingUser.setPhone(user.getPhone());
             userService.updateUser(existingUser);
 
-            redirectAttributes.addFlashAttribute("successMessage", UserCodes.getErrorMessage("UPDATE_SUCCESS"));
+            modelAndView.addObject("successMessage", UserCodes.getErrorMessage("UPDATE_SUCCESS"));
         } else {
-            redirectAttributes.addFlashAttribute("errorMessage", UserCodes.getErrorMessage("USER_NOT_FOUND"));
+            modelAndView.addObject("errorUserNotFound", UserCodes.getErrorMessage("USER_NOT_FOUND"));
         }
 
-        return "redirect:/home/account";
+        return modelAndView;
     }
+
 }

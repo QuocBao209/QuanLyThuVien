@@ -106,13 +106,6 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void checkAndLockUser(Long userId) {
-        User user = userRepository.findById(userId).orElse(null);
-        if (user != null && user.getViolationCount() >= 3) {
-            user.setStatus("Khóa");
-            userRepository.save(user);
-        }
-    }
 
     public boolean emailExists(String email) {
         return userRepository.existsByEmail(email);

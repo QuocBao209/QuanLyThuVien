@@ -13,14 +13,17 @@ import org.springframework.data.repository.query.Param;
 @Repository
 public interface Borrow_ReturnRepository extends JpaRepository<Borrow_Return, Long> {
 
-	// Xử lý sự kiện mượn sách ( bookFilter - account )
+	// Lấy danh sách mượn theo đối tượng User
 	List<Borrow_Return> findByUser(User user);
 
-	// Đếm số lần mượn sách đang hoạt động (bao gồm trạng thái "borrowed" và "pending")
+	// Lấy danh sách mượn theo userId
+	List<Borrow_Return> findByUser_UserId(Long userId);
+
+	// Đếm số lần mượn sách đang hoạt động
 	@Query("SELECT COUNT(b.id) FROM Borrow_Return b " +
 			"WHERE b.user.userId= :userId AND b.status IN ('borrowed', 'pending')")
 	int countActiveBorrowSessionsByUser(@Param("userId") Long userId);
-
 }
+
 
 
