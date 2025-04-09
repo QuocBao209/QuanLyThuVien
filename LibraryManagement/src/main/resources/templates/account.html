@@ -44,7 +44,7 @@
 			
 			<!-- Hiển thị thông báo thành công hoặc lỗi -->
             <div th:if="${successMessage}" class="success-message" th:text="${successMessage}"></div>
-            <div th:if="${errorMessage}" class="error-message" th:text="${errorMessage}"></div>
+            <div th:if="${errorUserNotFound}" class="error-message" th:text="${errorUserNotFound}"></div>
 			
 			<!-- Form chỉnh sửa khi bấm "Thay đổi thông tin" -->
 			<div id="editAccountPopup" class="popup-overlay">
@@ -54,6 +54,10 @@
 					<form th:action="@{/home/edit-account}" th:object="${user}" method="post"
 							class="confirm-form">
 						<input type="hidden" th:field="*{userId}">
+						<!-- Thông báo lỗi -->
+						<div th:if="${errorUserId}" id="errorName" style="color: red; font-size: 12px;">
+							<p th:text="${errorUserId}"></p>
+						</div>
 
 						<div class="info-group">
 							<label>Tên tài khoản:</label>
@@ -63,16 +67,28 @@
 						<div class="info-group">
 							<label>Họ và tên:</label>
 							<input type="text" th:field="*{name}" required>
+							<!-- Thông báo lỗi -->
+							<div th:if="${errorName}" id="errorNameMsg" style="color: red; font-size: 12px;">
+								<p th:text="${errorName}"></p>
+							</div>
 						</div>
 
 						<div class="info-group">
 							<label>Email:</label>
 							<input type="email" th:field="*{email}" required>
+							<!-- Thông báo lỗi -->
+							<div th:if="${errorEmail}" id="errorEmailMsg" style="color: red; font-size: 12px;">
+								<p th:text="${errorEmail}"></p>
+							</div>
 						</div>
 
 						<div class="info-group">
 							<label>Số điện thoại:</label>
 							<input type="text" th:field="*{phone}" required>
+							<!-- Thông báo lỗi -->
+							<div th:if="${errorPhone}" id="errorPhoneMsg" style="color: red; font-size: 12px;">
+								<p th:text="${errorPhone}"></p>
+							</div>
 						</div>
 
 						<button type="submit" class="save-btn">Lưu</button>
@@ -120,7 +136,11 @@
 					<button type="submit" class="search-btn">Tìm kiếm</button>
 				</div>
 			</form>
-
+			
+			<!-- Thông báo không tìm thấy sách -->
+			<div th:if="${errorMessage}" style="color: red">
+			    <p th:text="${errorMessage}"></p>
+			</div>
 
 			<!-- Bảng lịch sử -->
 			<table>
@@ -210,30 +230,32 @@
 	function openPopup() {
 	    document.getElementById("editAccountPopup").style.display = "flex";
 	}
-	
+
 	function closePopup() {
 	    document.getElementById("editAccountPopup").style.display = "none";
 	}
-	
+
 	document.addEventListener("DOMContentLoaded", function () {
-	    document.getElementById("editAccountPopup").style.display = "none";
-	    
-	    const successMessage = document.querySelector(".success-message");
-	    if (successMessage) {
-	        closePopup();
-	        setTimeout(function () {
-	            successMessage.style.display = "none";
-	        }, 1500);
-	    }
-	
-	    const errorMessage = document.querySelector(".error-message");
-	    if (errorMessage) {
-	        setTimeout(function () {
-	        	errorMessage.style.display = "none";
-	        }, 1500);
-	    }
-	});
+        const popup = document.getElementById("editAccountPopup");
+        const successMessage = document.querySelector(".success-message");
+        const errorMessage = document.querySelector(".error-message");
+
+        // Lấy giá trị từ controller (openPopup là true nếu cần mở popup)
+        const openPopupFromServer = /*[[${openPopup}]]*/ false;
+
+        // Mặc định ẩn popup
+        popup.style.display = "none";
+
+        // Nếu có lỗi từ form hoặc controller yêu cầu -> mở popup
+        const errorFields = ["errorUserId", "errorNameMsg", "errorEmailMsg", "errorPhoneMsg"];
+        const hasError = errorFields.some(id => document.getElementById(id) !== null);
+
+        if (hasError || openPopupFromServer) {
+            openPopup();
+        }
+    });
 </script>
+
 
 <!-- Script hộp thoại thông báo -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

@@ -36,6 +36,8 @@ public class Borrow_ReturnService {
     public int countActiveBorrowSessionsByUser(Long userId) {
         return borrowReturnRepository.countActiveBorrowSessionsByUser(userId);
     }
+    
+    // Tìm kiếm sách ở account.html
     public List<Borrow_Return> findBorrowHistory(Long userId, String keyword, String status) {
         List<Borrow_Return> allBorrows = borrowReturnRepository.findByUser_UserId(userId);
 
@@ -63,6 +65,5 @@ public class Borrow_ReturnService {
             default: return 5;
         }
     }
-
 }
 

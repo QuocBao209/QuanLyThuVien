@@ -131,53 +131,8 @@ public class Borrow_ReturnService {
                 .mapToInt(Book::getIsDamaged)
                 .sum();
     }
-
-//    public List<Borrow_Return> getStatsByMonthYear(int month, int year) {
-//        // Lấy tất cả Borrow_Return đã xác nhận (userConfirmDate không null)
-//        List<Borrow_Return> borrowReturns = getConfirmedBorrowReturns();
-//
-//        // Lọc theo tháng và năm dựa trên userConfirmDate
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.set(year, month - 1, 1, 0, 0, 0); // Đầu tháng
-//        Calendar endCalendar = Calendar.getInstance();
-//        endCalendar.set(year, month, 1, 0, 0, 0); // Đầu tháng sau
-//
-//        borrowReturns = borrowReturns.stream()
-//                .filter(br -> {
-//                    Calendar confirmCal = Calendar.getInstance();
-//                    confirmCal.setTime(br.getUserConfirmDate());
-//                    return !confirmCal.before(calendar) && confirmCal.before(endCalendar);
-//                })
-//                .collect(Collectors.toList());
-//
-//        // Tạo Map để đếm số lượng mượn theo book
-//        Map<Long, Integer> borrowCountMap = new HashMap<>();
-//        for (Borrow_Return br : borrowReturns) {
-//            Long bookId = br.getBook().getBookId();
-//            borrowCountMap.put(bookId, borrowCountMap.getOrDefault(bookId, 0) + 1);
-//        }
-//
-//        // Lấy tất cả sách chưa bị xóa
-//        List<Book> books = bookRepository.findByIsDeletedFalse();
-//        List<Borrow_Return> stats = new ArrayList<>();
-//
-//        // Chuyển đổi sang BookBorrowStats
-//        for (Book book : books) {
-//            Long bookId = book.getBookId();
-//            int borrowCount = borrowCountMap.getOrDefault(bookId, 0);
-//
-//            Borrow_Return stat = new Borrow_Return();
-//            stat.setId(bookId);
-//            stat.setBook(book.getBookName());
-//            stat.setBook(book.getAuthors().isEmpty() ? "Unknown Author" : book.getAuthors().get(0).getAuthorName());
-//            stat.setBook(book.getCategory().getCategoryName());
-//            stat.setBookCover(book.getBookImage() != null ? book.getBookImage() : "default.jpg");
-//            stat.setBorrowCount(borrowCount);
-//            stat.setBorrowAvailable(book.getAmount() - borrowCount - book.getIsDamaged());
-//
-//            stats.add(stat);
-//        }
-//
-//        return stats;
-//    }
+    
+    public List<Borrow_Return> searchByBookOrAuthor(String keyword) {
+        return borrowReturnRepository.searchByBookOrAuthor(keyword);
+    }
 }

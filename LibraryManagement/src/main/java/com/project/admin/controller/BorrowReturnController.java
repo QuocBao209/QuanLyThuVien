@@ -171,6 +171,4 @@ public class BorrowReturnController {
 
 		return "borrow_return_view";
 	}
-
-
 }

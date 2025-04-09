@@ -29,4 +29,13 @@ public interface Borrow_ReturnRepository extends JpaRepository<Borrow_Return, Lo
             "AND br.status = 'AVAILABLE'")
     int countAvailableBooksByCategory(@Param("categoryId") Integer categoryId,
                                       @Param("month") Integer month, @Param("year") Integer year);
+    
+    // Lọc sách theo tên sách / tên tác giả (dùng trong BookController)
+    @Query("SELECT br FROM Borrow_Return br " +
+    	       "JOIN br.book b " +
+    	       "LEFT JOIN b.authors a " +
+    	       "WHERE LOWER(b.bookName) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+    	       "   OR LOWER(a.authorName) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    	List<Borrow_Return> searchByBookOrAuthor(@Param("keyword") String keyword);
+
 }

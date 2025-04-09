@@ -66,6 +66,10 @@ public class AccountController {
 
         // Lấy danh sách đã mượn và lọc theo keyword + status nếu có
         List<Borrow_Return> borrowedBooks = borrowService.findBorrowHistory(user.getUserId(), keyword, status);
+        
+        if (borrowedBooks.isEmpty()) {
+        	mav.addObject("errorMessage", AdminCodes.getErrorMessage("BOOK_NOT_FOUND")); 
+        }
 
         List<Notification> notifications = notificationService.getNotificationsByUsername(username);
         notifications.sort((n1, n2) -> n2.getCreatedAt().compareTo(n1.getCreatedAt()));
@@ -105,38 +109,35 @@ public class AccountController {
         }
     }
 
-    // Chỉnh sửa tài khoản
     @PostMapping("/edit-account")
-    public ModelAndView editAccount(@ModelAttribute("user") User user) {
-        ModelAndView modelAndView = new ModelAndView("account");
-
+    public String editAccount(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
         boolean hasError = false;
 
         if (user.getUserId() == null) {
-            modelAndView.addObject("errorUserId", UserCodes.getErrorMessage("INVALID_USER_ID"));
+            redirectAttributes.addFlashAttribute("errorUserId", UserCodes.getErrorMessage("INVALID_USER_ID"));
             hasError = true;
         }
 
         if (user.getName() == null || !user.getName().matches("^[a-zA-ZÀ-Ỹà-ỹ\\s]+$")) {
-            modelAndView.addObject("errorName", "INVALID_NAME_FORMAT_3");
+            redirectAttributes.addFlashAttribute("errorName", UserCodes.getErrorMessage("INVALID_NAME_FORMAT_3"));
             hasError = true;
         }
 
-
-
         if (user.getEmail() == null || !user.getEmail().matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
-            modelAndView.addObject("errorEmail", "INVALID_GMAIL_FORMAT_3");
+            redirectAttributes.addFlashAttribute("errorEmail", UserCodes.getErrorMessage("INVALID_GMAIL_FORMAT_3"));
             hasError = true;
         }
 
         if (user.getPhone() == null || !user.getPhone().matches("^[0-9]{10}$")) {
-            modelAndView.addObject("errorPhone", "INVALID_PHONE_FORMAT_3");
+            redirectAttributes.addFlashAttribute("errorPhone", UserCodes.getErrorMessage("INVALID_PHONE_FORMAT_3"));
             hasError = true;
         }
 
         if (hasError) {
-            modelAndView.addObject("user", user);
-            return modelAndView;
+            // Gửi lại dữ liệu nhập và bật popup
+            redirectAttributes.addFlashAttribute("user", user);
+            redirectAttributes.addFlashAttribute("openPopup", true);
+            return "redirect:/home/account";
         }
 
         Optional<User> userOptional = userService.getUserById(user.getUserId());
@@ -148,12 +149,11 @@ public class AccountController {
             existingUser.setPhone(user.getPhone());
             userService.updateUser(existingUser);
 
-            modelAndView.addObject("successMessage", UserCodes.getErrorMessage("UPDATE_SUCCESS"));
+            redirectAttributes.addFlashAttribute("successMessage", UserCodes.getSuccessMessage("UPDATE_SUCCESS"));
         } else {
-            modelAndView.addObject("errorUserNotFound", UserCodes.getErrorMessage("USER_NOT_FOUND"));
+            redirectAttributes.addFlashAttribute("errorUserNotFound", UserCodes.getErrorMessage("USER_NOT_FOUND"));
         }
 
-        return modelAndView;
+        return "redirect:/home/account";
     }
-
 }

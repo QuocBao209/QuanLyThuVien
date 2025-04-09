@@ -29,6 +29,7 @@ public class BookController {
     @Autowired private CategoryService categoryService;
     @Autowired private ExcelBookService excelBookService;
     @Autowired private ImportService importService;
+    @Autowired private Borrow_ReturnService borrowReturnService;
 
     private static final List<String> ALLOWED_IMAGE_TYPES = Arrays.asList("image/jpeg", "image/png", "image/gif");
     private static final long MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -370,9 +371,27 @@ public class BookController {
     
     // Controller xử lý tìm sách
     @PostMapping("/search-book")
-    public ModelAndView searchBook(@RequestParam("keyword") String keyword) {
-        ModelAndView modelAndView = new ModelAndView("bookList");
-        modelAndView.addObject("books", bookService.searchBooks(keyword));
+    public ModelAndView searchBook(@RequestParam("keyword") String keyword,
+    							   @RequestParam("targetView") String targetView) {
+        ModelAndView modelAndView = new ModelAndView(targetView);
+        
+        if ("borrow_return_view".equals(targetView)) {
+            List<Borrow_Return> results = borrowReturnService.searchByBookOrAuthor(keyword);
+            modelAndView.addObject("borrowReturns", results);
+            
+            if (results.isEmpty()) {
+            	modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("BOOK_NOT_FOUND"));
+            }
+            
+        } else {
+            List<Book> books = bookService.searchBooks(keyword);
+            modelAndView.addObject("books", books);
+            
+            if (books.isEmpty()) {
+            	modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("BOOK_NOT_FOUND"));
+            }
+        }
+        
         return modelAndView;
     }
 }

@@ -194,29 +194,46 @@ body {
     align-items: center;
     gap: 10px;
     margin-bottom: 15px;
+    flex-wrap: wrap;
 }
 
 .searching-group label {
     font-weight: bold;
     color: #333;
+    min-width: 80px;
 }
 
 .searching-action {
-	display: flex;
-	flex-direction: row;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.searching-action input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    min-width: 250px;
 }
 
 .search-btn {
-	width: 20%;
-    padding: 10px;
-    margin-right: 500px;
-    margin-left: 20px;
+    padding: 10px 20px;
     background-color: #28a745;
     color: white;
     border: none;
     border-radius: 5px;
     font-size: 14px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-btn:hover {
+    background-color: #218838;
 }
 
 .status {

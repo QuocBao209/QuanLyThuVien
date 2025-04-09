@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Stream;
 
 public class AdminCodes {
     private static final Map<String, String> ERROR_MESSAGES = new HashMap<>();

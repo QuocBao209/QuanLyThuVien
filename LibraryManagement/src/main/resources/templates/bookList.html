@@ -16,9 +16,15 @@
         <h2>Danh sách thư viện</h2>
 
 		<form th:action="@{/admin/search-book}" method="post" class="search-container">
+			<input type="hidden" name="targetView" value="bookList"/>
 			<input type="text" name="keyword" placeholder="Nhập tên sách hoặc tên tác giả ...">
 			<button type="submit" class="search-btn">🔍 Tìm kiếm</button>
 		</form>
+		
+		<!-- Thông báo không tìm thấy sách -->
+		<div th:if="${errorMessage}" style="color: red">
+		    <p th:text="${errorMessage}"></p>
+		</div>
 
 		<table>
 			<thead>

@@ -23,9 +23,15 @@
     <!-- Form danh sách -->
     <div class="container">
         <form th:action="@{/admin/search-book}" method="post" class="search-container">
+        	<input type="hidden" name="targetView" value="borrow_return_view"/>
             <input type="text" name="keyword" placeholder="Nhập tên sách hoặc tên tác giả ...">
             <button type="submit" class="search-btn">🔍 Tìm kiếm</button>
         </form>
+        
+        <!-- Thông báo không tìm thấy sách -->
+		<div th:if="${errorMessage}" style="color: red">
+		    <p th:text="${errorMessage}"></p>
+		</div>
 
         <h2 th:text="|Người dùng : ${borrowReturns[0].user.name}|"></h2>
         
