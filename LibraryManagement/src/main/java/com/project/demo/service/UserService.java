@@ -24,10 +24,6 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public List<User> searchUsers(String keyword) {
-        return userRepository.findByRoleAndNameContainingOrRoleAndEmailContaining("USER", keyword, "USER", keyword);
-    }
-
 
     // Lưu tất cả người dùng vào cơ sở dữ liệu
     public void transferData(List<User> users) {
@@ -80,16 +76,7 @@ public class UserService {
     public Optional<User> getUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
-    
-    // Cập nhật status độc giả
-    public void updateStatus(Long userId, String newStatus) {
-    	Optional<User> userOptional = userRepository.findById(userId);
-    	if (userOptional.isPresent()) {
-    		User user = userOptional.get();
-    		user.setStatus(newStatus);
-    		userRepository.save(user);
-    	}
-    }
+
 
     // Xác định role tài khoản theo email (Bảo)
     public String getUserRole(String email) {

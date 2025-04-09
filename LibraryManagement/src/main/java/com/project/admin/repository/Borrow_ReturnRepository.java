@@ -9,7 +9,6 @@ import java.util.List;
 
 @Repository
 public interface Borrow_ReturnRepository extends JpaRepository<Borrow_Return, Long> {
-    List<Borrow_Return> findByStatus(String status);
     
     List<Borrow_Return> findByUserConfirmDateIsNotNull();
     

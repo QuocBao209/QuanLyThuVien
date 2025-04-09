@@ -87,11 +87,6 @@ public class UserService {
         return false;
     }
 
-    // Tìm người dùng bằng username
-    public Optional<User> getUserByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
-
     // Cập nhật trạng thái của độc giả
     public void updateStatus(Long userId, String newStatus) {
         Optional<User> userOptional = userRepository.findById(userId);
@@ -102,12 +97,6 @@ public class UserService {
         }
     }
 
-    // Xác định vai trò tài khoản dựa trên email
-    public String getUserRole(String email) {
-        return userRepository.findByEmail(email)
-                .map(User::getRole)
-                .orElseThrow(() -> new IllegalArgumentException("Email không tồn tại trong hệ thống!"));
-    }
     
     //top User mượn sách 
     

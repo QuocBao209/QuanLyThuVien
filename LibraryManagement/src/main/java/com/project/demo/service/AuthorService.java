@@ -25,13 +25,6 @@ public class AuthorService {
         }
     }
 
-    // Tìm tác giả theo tên (không phân biệt hoa thường)
-    public Optional<Author> findByName(String authorName) {
-        if (authorName == null || authorName.isBlank()) {
-            return Optional.empty();
-        }
-        return authorRepository.findByAuthorName(authorName.trim());
-    }
 
     // Tìm tác giả theo ID
     public Optional<Author> findById(Long id) {

@@ -19,7 +19,4 @@ public class NotificationService {
         notificationRepository.save(notification);
     }
 
-    public List<Notification> getNotificationsByUser(User user) {
-        return notificationRepository.findByUserOrderByCreatedAtDesc(user);
-    }
 }
