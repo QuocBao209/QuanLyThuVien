@@ -193,7 +193,7 @@
 			                </form>
 			            </td>
 			            <td>
-			                <form th:if="${borrow.status eq 'pending' and borrow.userConfirmDate == null}" 
+			                <form th:if="${borrow.status eq 'pending'}" 
 			                		th:action="@{/home/delete-borrow}" method="post" 
 			                		class="delete-borrow-form">
 			                    <input type="hidden" name="borrowId" th:value="${borrow.id}">
