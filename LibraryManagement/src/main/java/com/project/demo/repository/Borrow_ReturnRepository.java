@@ -23,6 +23,8 @@ public interface Borrow_ReturnRepository extends JpaRepository<Borrow_Return, Lo
 	@Query("SELECT COUNT(b.id) FROM Borrow_Return b " +
 			"WHERE b.user.userId= :userId AND b.status IN ('borrowed', 'pending')")
 	int countActiveBorrowSessionsByUser(@Param("userId") Long userId);
+
+	long countByUserAndStatus(User user, String status);
 }
 
 

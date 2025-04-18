@@ -81,8 +81,8 @@ public class AccountController {
         mav.addObject("notifications", notifications);
         mav.addObject("unreadCount", unreadCount);
         mav.addObject("currentUrl", request.getRequestURI());
-        mav.addObject("keyword", keyword); // để giữ lại giá trị trong ô tìm kiếm
-        mav.addObject("status", status);   // để giữ lại lựa chọn trạng thái
+        mav.addObject("keyword", keyword);
+        mav.addObject("status", status);
 
         return mav;
     }
