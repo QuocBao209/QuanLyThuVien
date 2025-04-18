@@ -56,10 +56,22 @@
     margin-bottom: 10px;
 }
 
-.detail-group p {
+.detail {
     font-size: 20px;
     color: #2C3E50; 
     margin-bottom: 5px;
+}
+
+.error-message {
+    color: #ff0000; /* Màu đỏ đậm để nổi bật */
+    font-size: 14px; /* Tăng kích thước chữ một chút để dễ đọc */
+    font-weight: bold; /* Làm chữ đậm để thu hút sự chú ý */
+    margin-top: 10px; /* Tăng khoảng cách phía trên để tách biệt */
+    padding: 5px; /* Thêm padding để thông báo trông gọn gàng */
+    background-color: #ffe6e6; /* Nền đỏ nhạt để làm nổi bật */
+    border: 1px solid #ff4d4d; /* Viền đỏ để tạo khung */
+    border-radius: 4px; /* Bo góc nhẹ */
+    width: 266px;
 }
 
 .btn {

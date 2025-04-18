@@ -19,23 +19,32 @@
 		
 		<div class="detail-group">
 				<h4 th:text="${book.bookName}"></h4>
-				<p>
+				<p class="detail">
 				    Tác giả: 
 				    <span th:each="author, iterStat : ${book.authors}">
 				        <span th:text="${author.authorName}"></span>
 				        <span th:if="${!iterStat.last}">, </span>
 				    </span>
 				</p>
-				<p th:text="'Thể loại: ' + ${book.category}"></p>
-				<p th:text="'Năm xuất bản: ' + ${book.publishYear}"></p>
-				<p th:text="'Số lượng hiện tại: ' + ${book.amount} + ' quyển'"></p>
+				<p th:text="'Thể loại: ' + ${book.category}" class="detail"></p>
+				<p th:text="'Năm xuất bản: ' + ${book.publishYear}" class="detail"></p>
+				<p th:text="'Số lượng hiện tại: ' + ${book.amount} + ' quyển'" class="detail"></p>
 				
 				<div class="btn">
 					<form th:action="@{/home/submit-borrow/{id}(id=${book.bookId})}" method="post"
 					      class="confirm-form">
 					    <button type="submit" class="borrow-btn">Mượn sách</button>
 					</form>
-					<p th:if="${book.amount == 0}" style="color: red; font-weight: bold;">Sách đã hết hàng</p>
+				</div>
+				
+				<!-- Thông báo lỗi sách hết hàng -->
+				<div th:if="${noBooks}" class="error-message">
+					<p th:text="${noBooks}"></p>
+				</div>
+				
+				<!-- Thông báo lỗi giới hạn mượn sách -->
+				<div th:if="${limitBorrow}" class="error-message">
+				    <p th:text="${limitBorrow}"></p>
 				</div>
 		</div>
 	</div>
@@ -71,8 +80,8 @@
 	</div>
 	
 	<!-- Hiển thị thông báo khi không có sách -->
-	<div class="no-books-message" th:if="${recBooks.totalElements == 0}">
-	    <p>Xin lỗi bạn! Hiện tại chưa có sách hoặc chúng tôi chưa cập nhật. Mong bạn thông cảm!</p>
+	<div class="no-books-message" th:if="${noRecBooks}">
+	    <p th:text="${noRecBooks}"></p>
 	</div>
 	
 	<!-- Footer -->

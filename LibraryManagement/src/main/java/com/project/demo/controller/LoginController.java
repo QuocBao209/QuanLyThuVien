@@ -1,6 +1,5 @@
 package com.project.demo.controller;
 
-import com.project.admin.utils.AdminCodes;
 import com.project.demo.service.UserService;
 import com.project.demo.utils.UserCodes;
 import jakarta.servlet.http.HttpSession;
@@ -29,19 +28,23 @@ public class LoginController {
 	// Xử lý đăng nhập
 	@PostMapping("/login")
 	public ModelAndView login(@RequestParam("username") String username,
-							  @RequestParam("password") String password,
-							  HttpSession session) {
+ 				             @RequestParam("password") String password,
+				             HttpSession session) {
 		ModelAndView mav = new ModelAndView();
 		Optional<User> userOptional = userService.authenticateUser(username, password);
-
+		
 		if (userOptional.isPresent()) {
 			User user = userOptional.get();
-
-			// Lưu username và role vào session
-			session.setAttribute("user", username);
-			session.setAttribute("role", user.getRole());
-
-			mav.setViewName("redirect:/home");
+			
+			// Kiểm tra trạng thái tài khoản
+			if ("Khóa".equals(user.getStatus())) {
+				mav.setViewName("account_locked");
+			} else {
+				// Lưu username và role vào session
+				session.setAttribute("user", username);
+				session.setAttribute("role", user.getRole());
+				mav.setViewName("redirect:/home");
+			}
 		} else {
 			System.out.println("Đăng nhập thất bại: " + username);
 			mav.setViewName("login"); // Giữ nguyên trang đăng nhập

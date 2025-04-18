@@ -24,14 +24,6 @@ public class BorrowReturnController {
     @Autowired
     private Borrow_ReturnRepository borrowReturnRepository;
 
-//    // ⚡ Đổi đường dẫn để tránh trùng với AccountController
-//    @GetMapping("/borrow-list")
-//    public String borrowListPage(Model model) {
-//        List<Borrow_Return> borrowList = borrowReturnRepository.findAll();
-//        model.addAttribute("borrowedBooks", borrowList);
-//        return "borrow-list"; // ⚡ Tên view cũng đổi cho rõ ràng hơn
-//    }
-
     @PostMapping("/confirm-borrow")
     public String confirmBorrow(@RequestParam("borrowId") Long borrowId, RedirectAttributes redirectAttributes) {
 
@@ -68,9 +60,9 @@ public class BorrowReturnController {
         if (borrowReturn != null) {
             borrowReturnRepository.delete(borrowReturn); // Xóa yêu cầu mượn khỏi DB 
 
-            redirectAttributes.addFlashAttribute("message", "Yêu cầu hủy mượn sách đã được gửi!");
+            redirectAttributes.addFlashAttribute("deleteSuccess", UserCodes.getSuccessMessage("SUCCESS_DELETE"));
         } else {
-            redirectAttributes.addFlashAttribute("error", "Lỗi: Không tìm thấy thông tin mượn sách.");
+            redirectAttributes.addFlashAttribute("deleteFailed", UserCodes.getErrorMessage("FAILED_DELETE"));
         }
         return "redirect:/home/account"; // ⚡ Chuyển hướng về trang danh sách mượn
     }

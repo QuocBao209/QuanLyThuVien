@@ -8,6 +8,7 @@ import com.project.demo.service.BookService;
 import com.project.demo.service.CategoryService;
 import com.project.demo.service.NotificationService;
 import com.project.demo.service.UserService;
+import com.project.demo.utils.UserCodes;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -57,6 +59,11 @@ public class BookFilterController {
 
 	    // Lọc sách theo danh mục và thời gian
 	    Page<Book> bookPage = bookService.filterBooks(categoryNames, timeRange, page, size);
+	    
+	    // Kiểm tra nếu không có sách
+        if (bookPage == null || bookPage.getContent().isEmpty()) {
+            mav.addObject("noData", UserCodes.getErrorMessage("BOOK_NOT_FOUND"));
+        }
 
 	    // Kiểm tra session user
 	    String username = (String) session.getAttribute("user");

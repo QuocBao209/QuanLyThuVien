@@ -1,17 +1,81 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" th:href="@{/css/home.css}">
-	<link rel="stylesheet" th:href="@{/css/notifications.css}">
-	<title>Thông báo</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <link rel="stylesheet" th:href="@{/css/notifications.css}">
+    <title>Thông báo</title>
 </head>
 <body>
-	<!-- Header -->
-	<div th:replace="home :: header"></div>
-	
-	<!-- Danh sách thông báo -->
-	<div></div>
+    <!-- Header -->
+    <div th:replace="home :: header"></div>
+    
+    <!-- Notifications Section -->
+    <section class="notifications-container">
+        <h2>Thông báo của bạn</h2>
+        
+        <!-- Flash Messages -->
+        <div th:if="${successMessage}" class="success-message">
+            <p th:text="${successMessage}"></p>
+        </div>
+        <div th:if="${errorMessage}" class="error-message">
+            <p th:text="${errorMessage}"></p>
+        </div>
+        
+        <!-- No Notifications Message -->
+        <div th:if="${noNotifications}" class="no-notifications-message">
+            <p th:text="${noNotifications}"></p>
+        </div>
+        
+        <!-- Notification List -->
+        <ul class="notification-list" th:if="${notifications != null and not #lists.isEmpty(notifications)}">
+            <li th:each="notification : ${notifications}" 
+                th:classappend="${!notification.isRead} ? 'unread'" 
+                th:data-id="${notification.id}"
+                onclick="markAsRead(this)">
+                <div class="notification-box">
+                    <div class="message" th:text="${notification.message}"></div>
+                    <div class="time" th:text="${#temporals.format(notification.createdAt, 'dd/MM/yyyy HH:mm')}"></div>
+                    <div class="notification-actions">
+                        <!-- Form to mark as read and redirect -->
+                        <form th:id="'form-' + ${notification.id}" 
+                              th:action="@{/home/mark-notification-read}" 
+                              method="post" 
+                              th:if="${not notification.isRead}">
+                            <input type="hidden" name="notificationId" th:value="${notification.id}">
+                            <input type="hidden" name="redirectUrl" th:value="'/home/notifications'">
+                        </form>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        br
+    </section>
+    
+    <!-- Footer -->
+    <div th:replace="home :: footer"></div>
+    
+    <script>
+        function markAsRead(element) {
+            if (element.classList.contains('unread')) {
+                element.classList.remove('unread');
+                element.style.opacity = "0.7";
+
+                let form = document.getElementById("form-" + element.dataset.id);
+                form.submit();
+
+                let badge = document.querySelector('.badge');
+                if (badge) {
+                    let count = parseInt(badge.textContent);
+                    if (count > 1) {
+                        badge.textContent = count - 1;
+                    } else {
+                        badge.remove();
+                    }
+                }
+            }
+        }
+    </script>
 </body>
 </html>

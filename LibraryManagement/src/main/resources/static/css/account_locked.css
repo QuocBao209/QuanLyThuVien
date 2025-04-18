@@ -1,0 +1,19 @@
+.account-locked-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #333;
+    font-size: 24px; /* Larger for emphasis */
+    font-weight: 500;
+    padding: 30px;
+    background-color: #fff;
+    width: 100%;
+    text-align: center;
+    animation: fadeIn 1s ease-in; /* Gentle fade-in */
+}
+
+.lock-icon {
+    font-size: 48px; /* Large icon */
+    color: #dc3545; /* Red to match border */
+    margin-bottom: 15px;
+}
