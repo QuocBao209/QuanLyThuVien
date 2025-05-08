@@ -3,6 +3,8 @@ USER_NOT_FOUND, Không tìm thấy tài khoản!
 INVALID_USER_ID, Lỗi: ID không hợp lệ!
 BORROW_NOT_FOUND, Lỗi: Không tìm thấy thông tin mượn sách.
 INVALID_BORROW_ID, Lỗi: ID mượn sách không hợp lệ.
+INVLID_BORROW_ID_1, Lỗi: Bạn đã mượn tối đa số sách cho phép.
+INVLID_BORROW_ID_2, Lỗi: Sách đã hết hàng.
 INVALID_STATUS, Lỗi: Chỉ có thể gia hạn khi sách đang được mượn.
 RENEW_LIMIT_REACHED, Bạn đã hết lượt gia hạn.
 ERROR_CODE_2, Gửi email thất bại.
@@ -16,3 +18,6 @@ USERNAME_EXISTS_2, Tên đăng nhập đã tồn tại. Vui lòng chọn tên kh
 INVALID_NAME_FORMAT_3,Tên không được chứa số hoặc ký tự đặc biệt
 INVALID_PHONE_FORMAT_3,Số điện thoại phải đúng 10 chữ số
 INVALID_GMAIL_FORMAT_3,Email không đúng định dạng
+BOOK_NOT_FOUND, Không có sách nào trong thư viện 
+NO_RECOMMENDED_BOOKS, Xin lỗi bạn! Hiện tại chưa có sách hoặc chúng tôi chưa cập nhật. Mong bạn thông cảm!
+FAILED_DELETE, Lỗi: Không tìm thấy thông tin mượn sách.

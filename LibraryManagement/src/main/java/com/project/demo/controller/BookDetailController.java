@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.project.demo.entity.Book;
 import com.project.demo.entity.Borrow_Return;
@@ -23,6 +24,7 @@ import com.project.demo.service.BookService;
 import com.project.demo.service.Borrow_ReturnService;
 import com.project.demo.service.NotificationService;
 import com.project.demo.service.UserService;
+import com.project.demo.utils.UserCodes;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -60,6 +62,11 @@ public class BookDetailController {
 	    Page<Book> recBooks = bookService.getBooksByAuthors(book.getAuthors(), bookId, page, 4);
 	    mav.addObject("recBooks", recBooks);
 
+	    // Kiểm tra nếu không có sách đề cử
+        if (recBooks == null || recBooks.getTotalElements() == 0) {
+            mav.addObject("noRecBooks", UserCodes.getErrorMessage("NO_RECOMMENDED_BOOKS"));
+        }
+
 	    // Kiểm tra session user
 	    String username = (String) session.getAttribute("user");
 	    if (username != null) {
@@ -89,9 +96,9 @@ public class BookDetailController {
 	    return mav;
 	}
 
-//Giới hạn mượn sách ( it me u dump dump bao)
+	//Giới hạn mượn sách ( it me u dump dump bao)
 	@PostMapping("/submit-borrow/{id}")
-	public String submitBorrow(@PathVariable Long id, HttpSession session) {
+	public String submitBorrow(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttributes) {
 		String username = (String) session.getAttribute("user");
 
 		if (username == null) {
@@ -103,6 +110,19 @@ public class BookDetailController {
 
 		if (userOptional.isPresent() && bookOptional.isPresent()) {
 			User user = userOptional.get();
+			Book book = bookOptional.get();
+
+			if (book.getAmount() == 0) {
+				redirectAttributes.addFlashAttribute("noBooks", UserCodes.getErrorMessage("INVLID_BORROW_ID_2"));
+				return "redirect:/home/book-detail/" + id;
+			}
+
+			// Kiểm tra số lượt mượn đang hoạt động của người dùng
+			int activeBorrowsCount = borrowService.countActiveBorrowSessionsByUser(user.getUserId());
+			if (activeBorrowsCount >= 3) {
+				redirectAttributes.addFlashAttribute("limitBorrow", UserCodes.getErrorMessage("INVLID_BORROW_ID_1"));
+				return "redirect:/home/book-detail/" + id + "?error=max_borrow_sessions_reached"; // Giới hạn số lần mượn
+			}
 
 			// Tạo bản ghi mượn sách mới
 			Borrow_Return borrow = new Borrow_Return();

@@ -91,9 +91,9 @@
 	            </div>
 	        </div>
 	
-	        <div th:if="${bookPage == null or #lists.isEmpty(bookPage.content)}">
-	            <p>Không có sách nào trong thư viện</p>
-	        </div>
+	        <div th:if="${noData}" style="color: red; font-size: 20px;">
+			    <p th:text="${noData}"></p>
+			</div>
 	
 	        <!-- Phân trang -->
 	        <div class="pagination" th:if="${bookPage.totalPages > 1}">

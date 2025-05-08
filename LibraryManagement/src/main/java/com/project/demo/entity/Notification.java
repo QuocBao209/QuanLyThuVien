@@ -16,8 +16,6 @@ public class Notification {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-
-
     @Column(columnDefinition = "NVARCHAR(255)")
     private String message;
 

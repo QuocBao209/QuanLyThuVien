@@ -24,7 +24,6 @@ public class UserService {
         return userRepository.findAll();
     }
 
-
     // Lưu tất cả người dùng vào cơ sở dữ liệu
     public void transferData(List<User> users) {
         users.forEach(user -> {
@@ -76,7 +75,6 @@ public class UserService {
     public Optional<User> getUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
-
 
     // Xác định role tài khoản theo email (Bảo)
     public String getUserRole(String email) {

@@ -2,10 +2,8 @@ package com.project.demo.controller;
 
 import com.project.admin.utils.AdminCodes;
 import com.project.demo.entity.Borrow_Return;
-import com.project.demo.entity.User;
 import com.project.demo.repository.Borrow_ReturnRepository;
 
-import com.project.demo.repository.UserRepository;
 import com.project.demo.utils.UserCodes;
 import jakarta.servlet.http.HttpSession;
 
@@ -18,7 +16,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/home")
@@ -28,7 +25,6 @@ public class BorrowReturnController {
     private Borrow_ReturnRepository borrowReturnRepository;
     @Autowired
     private UserRepository userRepository;
-
 
     @PostMapping("/confirm-borrow")
     public String confirmBorrow(@RequestParam("borrowId") Long borrowId, HttpSession session, RedirectAttributes redirectAttributes) {
@@ -93,9 +89,9 @@ public class BorrowReturnController {
         if (borrowReturn != null) {
             borrowReturnRepository.delete(borrowReturn); // Xóa yêu cầu mượn khỏi DB 
 
-            redirectAttributes.addFlashAttribute("message", "Yêu cầu hủy mượn sách đã được gửi!");
+            redirectAttributes.addFlashAttribute("deleteSuccess", UserCodes.getSuccessMessage("SUCCESS_DELETE"));
         } else {
-            redirectAttributes.addFlashAttribute("error", "Lỗi: Không tìm thấy thông tin mượn sách.");
+            redirectAttributes.addFlashAttribute("deleteFailed", UserCodes.getErrorMessage("FAILED_DELETE"));
         }
         return "redirect:/home/account"; // ⚡ Chuyển hướng về trang danh sách mượn
     }

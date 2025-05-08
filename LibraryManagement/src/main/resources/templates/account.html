@@ -141,6 +141,16 @@
 			<div th:if="${errorMessage}" style="color: red">
 			    <p th:text="${errorMessage}"></p>
 			</div>
+			
+			<!-- Thông báo Hủy sách thành công -->
+			<div th:if="${deleteSuccess}" style="color: green">
+			    <p th:text="${deleteSuccess}"></p>
+			</div>
+			
+			<!-- Thông báo Hủy sách không thành công -->
+			<div th:if="${deleteFailed}" style="color: red">
+			    <p th:text="${deleteFailed}"></p>
+			</div>
 
 			<!-- Bảng lịch sử -->
 			<table>
