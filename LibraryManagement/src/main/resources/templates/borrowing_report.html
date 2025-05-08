@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Thống kê sách đang mượn</title>
+	<title>Thống kê sách</title>
 	<link rel="stylesheet" th:href="@{/css/monthly_borrow.css}">
 	<link rel="stylesheet" th:href="@{/css/admin.css}">
 </head>
@@ -97,10 +97,7 @@
                     <th>Ảnh</th>
                     <th>Tên sách</th>
                     <th>Tác giả</th>
-                    <th>Tổng số sách</th>
                     <th>Số sách đang mượn</th>
-                    <th>Số sách sẵn sàng</th>
-                    <th>Số sách bị hư hại</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -117,10 +114,7 @@
 			                <span th:if="${!iterStat.last}">, </span>
 			            </span>
 					</td>
-					<td th:text="${book.amount}"></td>
 					<td th:text="${book.borrowCount}"></td>
-					<td th:text="${book.amount - book.borrowCount - book.isDamaged}"></td> <!-- Số sách sẵn sàng -->
-					<td th:text="${book.isDamaged}"></td> <!-- Số sách hư hỏng -->
                 </tr>
                 
                 <tr th:if="${#lists.isEmpty(books)}">
@@ -157,14 +151,10 @@ function validateForm() {
 }
 
 function resetForm() {
-    const form = document.getElementById('statsForm');
-    form.reset();
-    document.getElementById('searchQuery').value = '';
-    document.getElementById('fromMonth').value = '';
-    document.getElementById('fromYear').value = '';
-    document.getElementById('toMonth').value = '';
-    document.getElementById('toYear').value = '';
-    document.getElementById('categorySelect').value = ''; // Reset category
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = "/admin/statistics/books-per-month/book-borrow-stats"; // URL của form chính
+    document.body.appendChild(form);
     form.submit();
 }
 

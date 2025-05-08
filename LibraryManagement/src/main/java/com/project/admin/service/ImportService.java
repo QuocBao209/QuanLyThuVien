@@ -55,7 +55,7 @@ public class ImportService {
         for (Map.Entry<Book, Integer> entry : bookAmountMap.entrySet()) {
             Book book = entry.getKey();
             book.setAmount(book.getAmount() + entry.getValue());
-            bookService.saveBook(book);
+            bookService.save(book);
         }
     }
     public List<ImportReceipt> getAllImportReceipts() {

@@ -90,7 +90,6 @@ public class BookService {
         	return bookRepository.findBooksByMonthAndYear(query, fromMonth, fromYear, categoryId, categoryId);
         }
         	
-
         // Nếu tháng, năm được cung cấp nhưng không có categoryId
         if (categoryId == null) {
             return bookRepository.findBooksByDateRange(query, fromMonth, fromYear, toMonth, toYear);

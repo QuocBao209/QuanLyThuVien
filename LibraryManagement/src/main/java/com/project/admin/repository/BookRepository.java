@@ -12,6 +12,11 @@ import java.util.List;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
 
+    List<Book> findByBookNameAndIsDeletedFalse(String bookName);
+
+    List<Book> findByCategoryAndIsDeletedFalse(Category category);
+
+    List<Book> findByPublishYearAndIsDeletedFalse(int publishYear);
 
     List<Book> findByIsDeletedFalse();
 
