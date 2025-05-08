@@ -135,4 +135,55 @@ public class StatisticsController {
 	    
 	    return "borrowing_report";
     }
+
+ // Lọc sách đang sẵn sàng
+    @PostMapping("/statistics/ready")
+    public String getReadyBook(Model model,
+    							   @RequestParam(value = "month", required = false) Integer month,
+    							   @RequestParam(value = "year", required = false) Integer year) {
+    	
+    	// Tổng quan số liệu
+        int totalBooks = bookBorrowStatsService.getTotalBooks();
+        int totalBorrowing = bookBorrowStatsService.getTotalBorrowing(month, year);
+        int totalAvailable = bookBorrowStatsService.getTotalAvailable(month, year);
+        int totalDamaged = bookBorrowStatsService.getTotalDamaged();
+    
+	    List<Category> categories = categoryService.getAllCategories();
+	    List<Book> books = bookService.getReadyBooksByMonthAndYear(null, null); // Lấy toàn bộ danh sách
+	    
+	    model.addAttribute("books", books);
+	    model.addAttribute("categories", categories);
+	    model.addAttribute("totalBooks", totalBooks);
+        model.addAttribute("totalBorrowing", totalBorrowing);
+        model.addAttribute("totalAvailable", totalAvailable);
+        model.addAttribute("totalDamaged", totalDamaged);
+	    
+	    return "readyBook";
+    }
+    
+ // Lọc sách hư hại
+    @PostMapping("/statistics/damaged")
+    public String getDamagedBook(Model model,
+    							   @RequestParam(value = "month", required = false) Integer month,
+    							   @RequestParam(value = "year", required = false) Integer year) {
+    	
+    	// Tổng quan số liệu
+        int totalBooks = bookBorrowStatsService.getTotalBooks();
+        int totalBorrowing = bookBorrowStatsService.getTotalBorrowing(month, year);
+        int totalAvailable = bookBorrowStatsService.getTotalAvailable(month, year);
+        int totalDamaged = bookBorrowStatsService.getTotalDamaged();
+    
+	    List<Category> categories = categoryService.getAllCategories();
+	    List<Book> books = bookService.getDamagedBooksByMonthAndYear(null, null, null, null, null, null); // Lấy toàn bộ danh sách
+	    
+	    model.addAttribute("books", books);
+	    model.addAttribute("categories", categories);
+	    model.addAttribute("totalBooks", totalBooks);
+        model.addAttribute("totalBorrowing", totalBorrowing);
+        model.addAttribute("totalAvailable", totalAvailable);
+        model.addAttribute("totalDamaged", totalDamaged);
+	    
+	    return "damagedBook";
+    }
+    
 }
