@@ -127,7 +127,7 @@ public class BookService {
         // Nếu tất cả đều được cung cấp (có cả categoryId và khoảng thời gian)
         return bookRepository.findBorrowedBooksByDateRangeAndCategory(query, fromMonth, fromYear, toMonth, toYear, categoryId);
     }
-    
+
  // Thống kê sách đang sẵn sàng
     public List<Book> getReadyBooksByMonthAndYear(String query, Integer categoryId) {
 
@@ -137,11 +137,11 @@ public class BookService {
             } else {
                 return bookRepository.findReadyBooksByCategory(query, categoryId); // Trả về sách theo category
             }
-        
+
     }
-    
+
     // Thống kê sách đang được mượn
-    public List<Book> getDamagedBooksByMonthAndYear(String query, Integer fromMonth, Integer fromYear, 
+    public List<Book> getDamagedBooksByMonthAndYear(String query, Integer fromMonth, Integer fromYear,
             Integer toMonth, Integer toYear, Integer categoryId) {
 
         // Nếu tất cả tháng, năm đều null
@@ -152,12 +152,12 @@ public class BookService {
                 return bookRepository.findDamagedBooksByCategory(query, categoryId); // Trả về sách theo category
             }
         }
-        
+
         if (fromMonth != null && fromYear != null && toMonth == null && toYear == null
         	|| fromMonth == null && fromYear == null && toMonth != null && toYear != null) {
         	return bookRepository.findDamagedBooksByMonthAndYear(query, fromMonth, fromYear, categoryId, categoryId);
         }
-        	
+
 
         // Nếu tháng, năm được cung cấp nhưng không có categoryId
         if (categoryId == null) {
@@ -167,5 +167,5 @@ public class BookService {
         // Nếu tất cả đều được cung cấp (có cả categoryId và khoảng thời gian)
         return bookRepository.findDamagedBooksByDateRangeAndCategory(query, fromMonth, fromYear, toMonth, toYear, categoryId);
     }
-    
+
 }

@@ -12,6 +12,11 @@ import java.util.List;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
 
+    List<Book> findByBookNameAndIsDeletedFalse(String bookName);
+
+    List<Book> findByCategoryAndIsDeletedFalse(Category category);
+
+    List<Book> findByPublishYearAndIsDeletedFalse(int publishYear);
 
     List<Book> findByIsDeletedFalse();
 
@@ -126,8 +131,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     	                                                   @Param("toMonth") Integer toMonth,
     	                                                   @Param("toYear") Integer toYear,
     	                                                   @Param("categoryId") Integer categoryId);
-    
-    
+
+
  // Lọc sách đang sẵn sàng (ready)
     // Lọc không cần tháng/năm
     @Query("SELECT DISTINCT b FROM Book b " +
@@ -141,7 +146,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     	       "AND (:categoryId IS NULL OR b.category.categoryId = :categoryId)")
     	List<Book> findReadyBooksByCategory(@Param("query") String query,
     	                                       @Param("categoryId") Integer categoryId);
-    
+
     // Lọc sách hư hại (damaged)
     // Lọc theo tháng/năm
     @Query("SELECT DISTINCT b FROM Book b " +
@@ -157,7 +162,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     	                                           @Param("fromYear") Integer fromYear,
     	                                           @Param("toMonth") Integer toMonth,
     	                                           @Param("toYear") Integer toYear);
-    
+
     // Lọc không cần tháng/năm
     @Query("SELECT DISTINCT b FROM Book b JOIN b.borrowReturns br " +
     	       "WHERE b.isDamaged > 0 AND (:query IS NULL OR b.bookName LIKE %:query%)")
@@ -182,7 +187,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     	       "AND (:categoryId IS NULL OR b.category.categoryId = :categoryId)")
     	List<Book> findDamagedBooksByCategory(@Param("query") String query,
     	                                       @Param("categoryId") Integer categoryId);
-    
+
     // Lọc theo thể loại + khoảng thời gian
     @Query("SELECT DISTINCT b FROM Book b JOIN Borrow_Return br ON b.id = br.book.id " +
     	       "WHERE b.isDamaged > 0 " +
@@ -196,5 +201,5 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     	                                                   @Param("toMonth") Integer toMonth,
     	                                                   @Param("toYear") Integer toYear,
     	                                                   @Param("categoryId") Integer categoryId);
-    
+
 }
