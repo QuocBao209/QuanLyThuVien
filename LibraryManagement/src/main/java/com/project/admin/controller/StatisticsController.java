@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.project.admin.entity.Book;
+import com.project.admin.entity.Borrow_Return;
 import com.project.admin.entity.Category;
+import com.project.admin.repository.Borrow_ReturnRepository;
 import com.project.admin.service.BookBorrowStatsService;
 import com.project.admin.service.BookService;
 import com.project.admin.service.UserService;
@@ -166,22 +168,19 @@ public class StatisticsController {
     public String getDamagedBook(Model model,
     							   @RequestParam(value = "month", required = false) Integer month,
     							   @RequestParam(value = "year", required = false) Integer year) {
-    	
-    	// Tổng quan số liệu
+    
+	    List<Borrow_Return> borrowReturns = bookBorrowStatsService.getDamagedBooks(); // Lấy toàn bộ danh sách
+	 // Tổng quan số liệu
         int totalBooks = bookBorrowStatsService.getTotalBooks();
         int totalBorrowing = bookBorrowStatsService.getTotalBorrowing(month, year);
         int totalAvailable = bookBorrowStatsService.getTotalAvailable(month, year);
         int totalDamaged = bookBorrowStatsService.getTotalDamaged();
-    
-	    List<Category> categories = categoryService.getAllCategories();
-	    List<Book> books = bookService.getDamagedBooksByMonthAndYear(null, null, null, null, null, null); // Lấy toàn bộ danh sách
-	    
-	    model.addAttribute("books", books);
-	    model.addAttribute("categories", categories);
+	    model.addAttribute("borrowReturns", borrowReturns);
 	    model.addAttribute("totalBooks", totalBooks);
         model.addAttribute("totalBorrowing", totalBorrowing);
         model.addAttribute("totalAvailable", totalAvailable);
         model.addAttribute("totalDamaged", totalDamaged);
+
 	    
 	    return "damagedBook";
     }

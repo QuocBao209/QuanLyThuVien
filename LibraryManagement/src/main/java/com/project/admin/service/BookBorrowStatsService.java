@@ -136,4 +136,10 @@ public class BookBorrowStatsService {
     public int getTotalDamagedByCategory(Integer categoryId) {
         return bookRepository.countDamagedBooksByCategory(categoryId); // Phương thức đếm sách bị hư hỏng
     }
+    
+    //Lấy sách bị hư hại
+    public List<Borrow_Return> getDamagedBooks() {
+        return borrowReturnRepository.findDamagedBooks(); // Phương thức đếm sách bị hư hỏng
+    }
+    
 }
