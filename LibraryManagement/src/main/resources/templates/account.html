@@ -137,6 +137,11 @@
 				</div>
 			</form>
 			
+			<!-- Thông báo lỗi giới hạn mượn sách -->
+			<div th:if="${limitBorrow}" class="error-message">
+				<p th:text="${limitBorrow}"></p>
+			</div>
+			
 			<!-- Thông báo không tìm thấy sách -->
 			<div th:if="${errorMessage}" style="color: red">
 			    <p th:text="${errorMessage}"></p>

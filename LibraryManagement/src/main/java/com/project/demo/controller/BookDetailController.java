@@ -117,13 +117,6 @@ public class BookDetailController {
 				return "redirect:/home/book-detail/" + id;
 			}
 
-			// Kiểm tra số lượt mượn đang hoạt động của người dùng
-			int activeBorrowsCount = borrowService.countActiveBorrowSessionsByUser(user.getUserId());
-			if (activeBorrowsCount >= 3) {
-				redirectAttributes.addFlashAttribute("limitBorrow", UserCodes.getErrorMessage("INVLID_BORROW_ID_1"));
-				return "redirect:/home/book-detail/" + id + "?error=max_borrow_sessions_reached"; // Giới hạn số lần mượn
-			}
-
 			// Tạo bản ghi mượn sách mới
 			Borrow_Return borrow = new Borrow_Return();
 			borrow.setUser(user);

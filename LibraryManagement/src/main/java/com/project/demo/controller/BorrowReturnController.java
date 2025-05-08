@@ -43,7 +43,6 @@ public class BorrowReturnController {
             String username = (String) session.getAttribute("user");
 
             if (username == null) {
-                redirectAttributes.addFlashAttribute("error", "Bạn cần đăng nhập để mượn sách.");
                 return "redirect:/home/login";
             }
 
@@ -51,7 +50,6 @@ public class BorrowReturnController {
             Optional<User> optionalUser = userRepository.findByUsername(username);
 
             if (optionalUser.isEmpty()) {
-                redirectAttributes.addFlashAttribute("error", "Không tìm thấy người dùng.");
                 return "redirect:/home/login";
             }
 
@@ -61,7 +59,7 @@ public class BorrowReturnController {
             long borrowedBooksCount = borrowReturnRepository.countByUserAndStatus(user, "borrowed");
 
             if (borrowedBooksCount >= 3) {
-                redirectAttributes.addFlashAttribute("error", "Bạn đã mượn đủ số lượng sách cho phép.");
+            	redirectAttributes.addFlashAttribute("limitBorrow", UserCodes.getErrorMessage("INVLID_BORROW_ID_1"));
                 return "redirect:/home/account";
             }
 

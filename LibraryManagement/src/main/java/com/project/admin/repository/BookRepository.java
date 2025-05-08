@@ -27,7 +27,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query("SELECT b FROM Book b WHERE b.isDeleted = false AND b.isDamaged > 0")
     List<Book> findByIsDeletedFalseAndIsDamagedGreaterThan(@Param("damage") int damage);
-
+    
+    // Lọc tất cả sách (all)
     // Thống kê sách theo Tháng
     @Query("SELECT DISTINCT b FROM Book b " +
     	       "JOIN b.borrowReturns br " +
@@ -74,4 +75,60 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     // Đếm số sách bị hư hỏng theo thể loại
     @Query("SELECT COUNT(b) FROM Book b WHERE b.category.categoryId = :categoryId AND b.isDamaged > 0")
     int countDamagedBooksByCategory(@Param("categoryId") Integer categoryId);
+    
+    
+    // Lọc sách đang mượn (borrowing)
+    // Lọc theo tháng/năm
+    @Query("SELECT DISTINCT b FROM Book b " +
+    	       "JOIN b.borrowReturns br " +
+    	       "WHERE br.status = 'borrowed' " +
+    	       "AND (:query IS NULL OR LOWER(b.bookName) LIKE LOWER(CONCAT('%', :query, '%'))) " +
+    	       "AND (:fromMonth IS NULL OR FUNCTION('MONTH', br.startDate) = :fromMonth) " +
+    	       "AND (:fromYear IS NULL OR FUNCTION('YEAR', br.startDate) = :fromYear) " +
+    	       "AND (:toMonth IS NULL OR FUNCTION('MONTH', br.startDate) = :toMonth) " +
+    	       "AND (:toYear IS NULL OR FUNCTION('YEAR', br.startDate) = :toYear)")
+    	List<Book> findBorrowedBooksByMonthAndYear(@Param("query") String query,
+    	                                           @Param("fromMonth") Integer fromMonth,
+    	                                           @Param("fromYear") Integer fromYear,
+    	                                           @Param("toMonth") Integer toMonth,
+    	                                           @Param("toYear") Integer toYear);
+    
+    // Lọc không cần tháng/năm
+    @Query("SELECT DISTINCT b FROM Book b JOIN b.borrowReturns br " +
+    	       "WHERE br.status = 'borrowed' AND (:query IS NULL OR b.bookName LIKE %:query%)")
+    	List<Book> findAllBorrowedBooks(@Param("query") String query);
+
+    // Lọc theo khoảng thời gian
+    @Query("SELECT DISTINCT b FROM Book b JOIN Borrow_Return br ON b.id = br.book.id " +
+    	       "WHERE br.status = 'borrowed' " +
+    	       "AND (:query IS NULL OR b.bookName LIKE %:query%) " +
+    	       "AND (YEAR(br.startDate) > :fromYear OR (YEAR(br.startDate) = :fromYear AND MONTH(br.startDate) >= :fromMonth)) " +
+    	       "AND (YEAR(br.startDate) < :toYear OR (YEAR(br.startDate) = :toYear AND MONTH(br.startDate) <= :toMonth))")
+    	List<Book> findBorrowedBooksByDateRange(@Param("query") String query,
+    	                                        @Param("fromMonth") Integer fromMonth,
+    	                                        @Param("fromYear") Integer fromYear,
+    	                                        @Param("toMonth") Integer toMonth,
+    	                                        @Param("toYear") Integer toYear);
+
+    // Lọc theo thể loại
+    @Query("SELECT DISTINCT b FROM Book b JOIN b.borrowReturns br " +
+    	       "WHERE br.status = 'borrowed' " +
+    	       "AND (:query IS NULL OR b.bookName LIKE %:query%) " +
+    	       "AND (:categoryId IS NULL OR b.category.categoryId = :categoryId)")
+    	List<Book> findBorrowedBooksByCategory(@Param("query") String query,
+    	                                       @Param("categoryId") Integer categoryId);
+    
+    // Lọc theo thể loại + khoảng thời gian
+    @Query("SELECT DISTINCT b FROM Book b JOIN Borrow_Return br ON b.id = br.book.id " +
+    	       "WHERE br.status = 'borrowed' " +
+    	       "AND (:query IS NULL OR b.bookName LIKE %:query%) " +
+    	       "AND (:categoryId IS NULL OR b.category.categoryId = :categoryId) " +
+    	       "AND (YEAR(br.startDate) > :fromYear OR (YEAR(br.startDate) = :fromYear AND MONTH(br.startDate) >= :fromMonth)) " +
+    	       "AND (YEAR(br.startDate) < :toYear OR (YEAR(br.startDate) = :toYear AND MONTH(br.startDate) <= :toMonth))")
+    	List<Book> findBorrowedBooksByDateRangeAndCategory(@Param("query") String query,
+    	                                                   @Param("fromMonth") Integer fromMonth,
+    	                                                   @Param("fromYear") Integer fromYear,
+    	                                                   @Param("toMonth") Integer toMonth,
+    	                                                   @Param("toYear") Integer toYear,
+    	                                                   @Param("categoryId") Integer categoryId);
 }
