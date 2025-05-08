@@ -49,39 +49,39 @@ public class Borrow_ReturnService {
         return borrowReturnRepository.findByUserConfirmDateIsNotNull();
     }
 
-    // Phương thức từ BookBorrowStatsService
-    public Map<String, Integer> getBorrowStatsByCategory(Integer month, Integer year) {
-        // Lấy tất cả Borrow_Return đã xác nhận (userConfirmDate không null)
-        List<Borrow_Return> borrowReturns = getConfirmedBorrowReturns();
-
-        // Lọc theo thời gian nếu có month và year
-        if (month != null && year != null) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(year, month - 1, 1, 0, 0, 0); // Đầu tháng
-            Calendar endCalendar = Calendar.getInstance();
-            endCalendar.set(year, month, 1, 0, 0, 0); // Đầu tháng sau
-
-            borrowReturns = borrowReturns.stream()
-                    .filter(br -> {
-                        Calendar confirmCal = Calendar.getInstance();
-                        confirmCal.setTime(br.getUserConfirmDate());
-                        return !confirmCal.before(calendar) && confirmCal.before(endCalendar);
-                    })
-                    .collect(Collectors.toList());
-        }
-
-        // Tính số lượng sách mượn theo thể loại
-        Map<String, Integer> statsByCategory = new HashMap<>();
-        for (Borrow_Return br : borrowReturns) {
-            String categoryName = br.getBook().getCategory().getCategoryName();
-            statsByCategory.put(categoryName, statsByCategory.getOrDefault(categoryName, 0) + 1);
-        }
-
-        return statsByCategory;
-    }
+//    // Phương thức từ BookBorrowStatsService
+//    public Map<String, Integer> getBorrowStatsByCategory(Integer month, Integer year) {
+//
+//        List<Borrow_Return> borrowReturns = getConfirmedBorrowReturns();
+//
+//        // Lọc theo thời gian nếu có month và year
+//        if (month != null && year != null) {
+//            Calendar calendar = Calendar.getInstance();
+//            calendar.set(year, month - 1, 1, 0, 0, 0); // Đầu tháng
+//            Calendar endCalendar = Calendar.getInstance();
+//            endCalendar.set(year, month, 1, 0, 0, 0); // Đầu tháng sau
+//
+//            borrowReturns = borrowReturns.stream()
+//                    .filter(br -> {
+//                        Calendar confirmCal = Calendar.getInstance();
+//                        confirmCal.setTime(br.getUserConfirmDate());
+//                        return !confirmCal.before(calendar) && confirmCal.before(endCalendar);
+//                    })
+//                    .collect(Collectors.toList());
+//        }
+//
+//        // Tính số lượng sách mượn theo thể loại
+//        Map<String, Integer> statsByCategory = new HashMap<>();
+//        for (Borrow_Return br : borrowReturns) {
+//            String categoryName = br.getBook().getCategory().getCategoryName();
+//            statsByCategory.put(categoryName, statsByCategory.getOrDefault(categoryName, 0) + 1);
+//        }
+//
+//        return statsByCategory;
+//    }
 
     public int getTotalBooks() {
-        // Tổng số sách (amount) của tất cả sách chưa bị xóa
+
         return bookRepository.findByIsDeletedFalse()
                 .stream()
                 .mapToInt(Book::getAmount)
@@ -120,12 +120,11 @@ public class Borrow_ReturnService {
                     .collect(Collectors.toList());
         }
 
-        // Đếm số lượng sách đang được mượn
         return borrowReturns.size();
     }
 
     public int getTotalDamaged() {
-        // Tổng số sách bị hư/mất (isDamaged) của tất cả sách chưa bị xóa
+
         return bookRepository.findByIsDeletedFalse()
                 .stream()
                 .mapToInt(Book::getIsDamaged)

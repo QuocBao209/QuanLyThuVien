@@ -66,6 +66,10 @@ public class ImportService {
         return importDetailRepository.findAll();
     }
 
+    public List<ImportDetail> getImportDetailsByInvoiceId(String invoiceId) {
+        return importDetailRepository.getImportDetailsByInvoiceId(invoiceId);
+    }
+
     @Transactional
     public void transferImportReceipts(List<ImportReceipt> importReceipts) {
         if (importReceipts != null && !importReceipts.isEmpty()) {

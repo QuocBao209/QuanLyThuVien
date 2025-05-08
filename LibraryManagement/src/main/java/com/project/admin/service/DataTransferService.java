@@ -34,7 +34,6 @@ public class DataTransferService {
         importService.transferImportReceipts(importReceipts);
         importService.transferImportDetails(importDetails);
 
-        System.out.println("Dữ liệu đã được lấy và lưu lại thành công!");
     }
 
 }

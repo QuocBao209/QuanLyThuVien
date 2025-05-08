@@ -1,9 +1,10 @@
 package com.project.demo.controller;
 
-import com.project.admin.utils.AdminCodes;
 import com.project.demo.entity.Borrow_Return;
+import com.project.demo.entity.User;
 import com.project.demo.repository.Borrow_ReturnRepository;
 
+import com.project.demo.repository.UserRepository;
 import com.project.demo.utils.UserCodes;
 import jakarta.servlet.http.HttpSession;
 
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/home")
@@ -29,7 +31,6 @@ public class BorrowReturnController {
     @PostMapping("/confirm-borrow")
     public String confirmBorrow(@RequestParam("borrowId") Long borrowId, HttpSession session, RedirectAttributes redirectAttributes) {
         if (borrowId == null) {
-            redirectAttributes.addFlashAttribute("error", AdminCodes.getErrorMessage("INVALID_USER_ID"));
             return "redirect:/home/account";
         }
 
@@ -40,7 +41,6 @@ public class BorrowReturnController {
             String username = (String) session.getAttribute("user");
 
             if (username == null) {
-                redirectAttributes.addFlashAttribute("error", "Bạn cần đăng nhập để mượn sách.");
                 return "redirect:/home/login";
             }
 
@@ -52,7 +52,7 @@ public class BorrowReturnController {
                 return "redirect:/home/login";
             }
 
-            User user = optionalUser.get(); // Lấy đối tượng User nếu có
+            User user = optionalUser.get();
 
             // Kiểm tra số lượng sách đã mượn của người dùng
             long borrowedBooksCount = borrowReturnRepository.countByUserAndStatus(user, "borrowed");

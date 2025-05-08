@@ -65,9 +65,9 @@ public class UserService {
     public Optional<User> authenticateUser(String username, String password) {
         Optional<User> userOptional = userRepository.findByUsername(username);
         if (userOptional.isPresent() && BCryptUtil.checkPassword(password, userOptional.get().getPassword())) {
-            return userOptional; // Xác thực thành công
+            return userOptional;
         }
-        return Optional.empty(); // Sai tài khoản hoặc mật khẩu
+        return Optional.empty();
     }
 
     // Kiểm tra xem username đã tồn tại chưa
@@ -97,8 +97,7 @@ public class UserService {
         }
     }
 
-    
-    //top User mượn sách 
+
     
     public List<User> getAllUsersByBorrowCount() {
         return userRepository.findByRoleOrderByBorrowCountDesc("USER");
@@ -106,12 +105,12 @@ public class UserService {
     
     public List<User> getTop3UsersByBorrowCount() {
         List<User> users = getAllUsersByBorrowCount();
-        return users.stream().limit(3).toList(); // Lấy 3 người đầu tiên
+        return users.stream().limit(3).toList();
     }
 
     public List<User> getRemainingUsersByBorrowCount() {
         List<User> users = getAllUsersByBorrowCount();
-        return users.stream().skip(3).toList(); // Lấy phần còn lại
+        return users.stream().skip(3).toList();
     }
 
  // Thống kê độc giả mượn theo khoảng thời gian từ Tháng/Năm đến Tháng/Năm
