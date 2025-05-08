@@ -37,11 +37,14 @@
 			<td th:text="${#temporals.format(importReceipt.importDate, 'dd/MM/yyyy')}"></td>
 			<td th:text="${importReceipt.user.name}"></td>
 			<td>
-		        <form th:action="@{/admin/import-receipt-detail}" method="post">
-		           <input type="hidden" name="invoiceId" th:value="${importReceipt.invoiceId}">
-		           <button type="submit" class="history-btn">Xem lịch sử</button>
-		       	</form>
-		    </td>
+				<form th:action="@{/admin/import-receipt-detail}" method="post">
+					<input type="hidden" name="invoiceId" th:value="${importReceipt.invoiceId}">
+					<input type="hidden" name="importDate" th:value="${#temporals.format(importReceipt.importDate, 'dd/MM/yyyy')}">
+					<input type="hidden" name="userName" th:value="${importReceipt.user.name}">
+					<button type="submit" class="history-btn">Xem lịch sử</button>
+				</form>
+
+			</td>
 		</tr>
 		</tbody>
 	</table>

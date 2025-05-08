@@ -61,7 +61,7 @@ public class BookDetailController {
 	    // Lấy danh sách đề cử theo tác giả (mỗi trang 4 sách)
 	    Page<Book> recBooks = bookService.getBooksByAuthors(book.getAuthors(), bookId, page, 4);
 	    mav.addObject("recBooks", recBooks);
-	    
+
 	    // Kiểm tra nếu không có sách đề cử
         if (recBooks == null || recBooks.getTotalElements() == 0) {
             mav.addObject("noRecBooks", UserCodes.getErrorMessage("NO_RECOMMENDED_BOOKS"));
@@ -111,10 +111,17 @@ public class BookDetailController {
 		if (userOptional.isPresent() && bookOptional.isPresent()) {
 			User user = userOptional.get();
 			Book book = bookOptional.get();
-			
+
 			if (book.getAmount() == 0) {
 				redirectAttributes.addFlashAttribute("noBooks", UserCodes.getErrorMessage("INVLID_BORROW_ID_2"));
 				return "redirect:/home/book-detail/" + id;
+			}
+
+			// Kiểm tra số lượt mượn đang hoạt động của người dùng
+			int activeBorrowsCount = borrowService.countActiveBorrowSessionsByUser(user.getUserId());
+			if (activeBorrowsCount >= 3) {
+				redirectAttributes.addFlashAttribute("limitBorrow", UserCodes.getErrorMessage("INVLID_BORROW_ID_1"));
+				return "redirect:/home/book-detail/" + id + "?error=max_borrow_sessions_reached"; // Giới hạn số lần mượn
 			}
 
 			// Tạo bản ghi mượn sách mới

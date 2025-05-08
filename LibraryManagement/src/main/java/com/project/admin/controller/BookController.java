@@ -43,14 +43,24 @@ public class BookController {
         model.addAttribute("importReceipts", importReceipts);
         return "import";
     }
-    
+
     @PostMapping("/import-receipt-detail")
-    public String showImportDetailList(Model model) {
-        List<ImportDetail> importDetails = importService.getAllImportDetails();
+    public String showImportDetailList(@RequestParam String invoiceId,
+                                       @RequestParam String importDate,
+                                       @RequestParam String userName,
+                                       Model model) {
+        // Lấy danh sách chi tiết nhập hàng theo invoiceId
+        List<ImportDetail> importDetails = importService.getImportDetailsByInvoiceId(invoiceId);
+
+        // Gán thông tin để hiển thị trong view
+        model.addAttribute("invoiceId", invoiceId);
+        model.addAttribute("importDate", importDate);
+        model.addAttribute("userName", userName);
         model.addAttribute("importDetails", importDetails);
+
         return "importDetails";
     }
-    
+
     // Hiển thị lựa chọn thêm sách
     @PostMapping("/add-book-option")
     public String addBookOption() {
@@ -86,7 +96,6 @@ public class BookController {
             // Kiểm tra số lượng sách hợp lệ (chỉ nhận số nguyên dương)
             if (amount <= 0) {
                 modelAndView.addObject("errorAmount", AdminCodes.getErrorMessage("INVALID_BOOK_AMOUNT"));
-                //modelAndView.setViewName("error");
                 return modelAndView;
             }
 
@@ -94,7 +103,6 @@ public class BookController {
             // Kiểm tra năm xuất bản hợp lệ
             if (publishYear <= 1000 || publishYear > currentYear) {
                 modelAndView.addObject("errorYear", String.format(AdminCodes.getErrorMessage("INVALID_PUBLISH_YEAR"), currentYear));
-                //modelAndView.setViewName("error");
                 return modelAndView;
             }
 
@@ -111,7 +119,6 @@ public class BookController {
             // Kiểm tra và định dạng thể loại
             if (!categoryName.matches("^[a-zA-ZÀ-Ỹà-ỹ\\s]+$")) {
                 modelAndView.addObject("errorCategory", AdminCodes.getErrorMessage("INVALID_CATEGORY_NAME"));
-                //modelAndView.setViewName("error");
                 return modelAndView;
             }
             categoryName = capitalizeEachWord(categoryName);
@@ -143,7 +150,7 @@ public class BookController {
 
             Book book;
 
-            if (bookId != null) { // TRƯỜNG HỢP CHỈNH SỬA SÁCH
+            if (bookId != null) {
                 book = bookService.getBookById(bookId);
                 if (book == null) {
                     modelAndView.addObject("notExistedBook", AdminCodes.getErrorMessage("BOOK_NOT_EXIST"));
@@ -160,7 +167,7 @@ public class BookController {
                     saveBookImage(bookImage, fileName);
                     book.setBookImage(fileName);
                 }
-            } else { // TRƯỜNG HỢP THÊM MỚI SÁCH
+            } else {
                 Optional<Book> existingBook = bookService.findExactMatch(bookName, authors, category, publishYear);
                 if (existingBook.isPresent()) {
                     book = existingBook.get();
@@ -186,7 +193,6 @@ public class BookController {
             modelAndView.setViewName("forward:/admin/add-book");
         } catch (IOException e) {
             modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("IMAGE_PROCESS_ERROR"));
-            //modelAndView.setViewName("error");
         }
 
         return modelAndView;

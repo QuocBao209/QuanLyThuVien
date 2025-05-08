@@ -1,6 +1,5 @@
 package com.project.demo.controller;
 
-import com.project.admin.utils.AdminCodes;
 import com.project.demo.entity.Borrow_Return;
 import com.project.demo.entity.User;
 import com.project.demo.repository.Borrow_ReturnRepository;
@@ -32,7 +31,6 @@ public class BorrowReturnController {
     @PostMapping("/confirm-borrow")
     public String confirmBorrow(@RequestParam("borrowId") Long borrowId, HttpSession session, RedirectAttributes redirectAttributes) {
         if (borrowId == null) {
-            redirectAttributes.addFlashAttribute("error", AdminCodes.getErrorMessage("INVALID_USER_ID"));
             return "redirect:/home/account";
         }
 
@@ -53,7 +51,7 @@ public class BorrowReturnController {
                 return "redirect:/home/login";
             }
 
-            User user = optionalUser.get(); // Lấy đối tượng User nếu có
+            User user = optionalUser.get();
 
             // Kiểm tra số lượng sách đã mượn của người dùng
             long borrowedBooksCount = borrowReturnRepository.countByUserAndStatus(user, "borrowed");

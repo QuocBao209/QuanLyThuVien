@@ -37,7 +37,7 @@ public class ExcelBookService {
 
             Sheet sheet = workbook.getSheetAt(0);
             Iterator<Row> rowIterator = sheet.iterator();
-            rowIterator.next(); // Bỏ qua dòng tiêu đề
+            rowIterator.next();
 
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
