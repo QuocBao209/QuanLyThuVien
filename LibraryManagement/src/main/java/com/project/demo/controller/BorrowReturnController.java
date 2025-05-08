@@ -48,7 +48,6 @@ public class BorrowReturnController {
             Optional<User> optionalUser = userRepository.findByUsername(username);
 
             if (optionalUser.isEmpty()) {
-                redirectAttributes.addFlashAttribute("error", "Không tìm thấy người dùng.");
                 return "redirect:/home/login";
             }
 
@@ -58,7 +57,7 @@ public class BorrowReturnController {
             long borrowedBooksCount = borrowReturnRepository.countByUserAndStatus(user, "borrowed");
 
             if (borrowedBooksCount >= 3) {
-                redirectAttributes.addFlashAttribute("error", "Bạn đã mượn đủ số lượng sách cho phép.");
+            	redirectAttributes.addFlashAttribute("limitBorrow", UserCodes.getErrorMessage("INVLID_BORROW_ID_1"));
                 return "redirect:/home/account";
             }
 
@@ -75,8 +74,6 @@ public class BorrowReturnController {
 
         return "redirect:/home/account";
     }
-
-
 
     @PostMapping("/delete-borrow")
     public String deleteBorrow(@RequestParam("borrowId") Long borrowId, RedirectAttributes redirectAttributes) {

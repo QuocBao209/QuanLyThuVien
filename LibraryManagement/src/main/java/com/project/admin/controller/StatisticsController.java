@@ -27,7 +27,7 @@ public class StatisticsController {
 	@Autowired private CategoryService categoryService;
 	@Autowired private BookBorrowStatsService bookBorrowStatsService;
 	
-	@PostMapping("/statistics/books-per-month")
+	@PostMapping("/statistics/all")
 	public String monthlyBorrowForm(Model model,
 									@RequestParam(value = "month", required = false) Integer month,
 						            @RequestParam(value = "year", required = false) Integer year) {
@@ -105,11 +105,34 @@ public class StatisticsController {
                                  @RequestParam(required = false) Integer toMonth,
                                  @RequestParam(required = false) Integer toYear) {
     	
-    	
-        
     	ModelAndView modelAndView = new ModelAndView("topReader");
         modelAndView.addObject("topReader", userService.getTop3UsersByMonthAndYear(query, fromMonth, fromYear, toMonth, toYear));
         modelAndView.addObject("reader", userService.getRemainingUsersByMonthAndYear(query, fromMonth, fromYear, toMonth, toYear));
         return modelAndView;
+    }
+    
+    // Lọc sách đang mượn
+    @PostMapping("/statistics/borrowing")
+    public String getBorrowingBook(Model model,
+    							   @RequestParam(value = "month", required = false) Integer month,
+    							   @RequestParam(value = "year", required = false) Integer year) {
+    	
+    	// Tổng quan số liệu
+        int totalBooks = bookBorrowStatsService.getTotalBooks();
+        int totalBorrowing = bookBorrowStatsService.getTotalBorrowing(month, year);
+        int totalAvailable = bookBorrowStatsService.getTotalAvailable(month, year);
+        int totalDamaged = bookBorrowStatsService.getTotalDamaged();
+    
+	    List<Category> categories = categoryService.getAllCategories();
+	    List<Book> books = bookService.getBorrowingBooksByMonthAndYear(null, null, null, null, null, null); // Lấy toàn bộ danh sách
+	    
+	    model.addAttribute("books", books);
+	    model.addAttribute("categories", categories);
+	    model.addAttribute("totalBooks", totalBooks);
+        model.addAttribute("totalBorrowing", totalBorrowing);
+        model.addAttribute("totalAvailable", totalAvailable);
+        model.addAttribute("totalDamaged", totalDamaged);
+	    
+	    return "borrowing_report";
     }
 }
