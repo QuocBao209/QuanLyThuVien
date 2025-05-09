@@ -23,10 +23,9 @@ public class BookService {
                 .filter(book -> book.getBookName().equalsIgnoreCase(bookName) &&
                         book.getPublishYear() == publishYear &&
                         Objects.equals(book.getCategory(), category) &&
-                        new HashSet<>(book.getAuthors()).equals(new HashSet<>(authors))) // So sánh danh sách tác giả
+                        new HashSet<>(book.getAuthors()).equals(new HashSet<>(authors)))
                 .findFirst();
     }
-
 
     public Optional<Book> findExactMatch(String bookName, List<Author> authors, Category category, int publishYear) {
         return bookRepository.findByIsDeletedFalse().stream()
@@ -63,7 +62,6 @@ public class BookService {
         return bookRepository.findByIsDeletedFalse();
     }
 
-
     public void transferData(List<Book> books) {
         bookRepository.saveAll(books);
     }
@@ -71,59 +69,120 @@ public class BookService {
     public void save(Book book) {
         bookRepository.save(book);
     }
-    
+
     // Thống kê sách theo dữ liệu được nhập trên vùng tìm kiếm
     public List<Book> getBooksByMonthAndYear(String query, Integer fromMonth, Integer fromYear, 
             Integer toMonth, Integer toYear, Integer categoryId) {
 
-        // Nếu tất cả tháng, năm đều null
-        if (fromMonth == null && fromYear == null && toMonth == null && toYear == null) {
-            if (categoryId == null) {
-                return bookRepository.findAllBooks(query); // Trả về tất cả sách
-            } else {
-                return bookRepository.findBooksByCategory(query, categoryId); // Trả về sách theo category
-            }
+        // Trường hợp 1: Chỉ nhập tên sách
+        if (fromMonth == null && fromYear == null && toMonth == null && toYear == null && categoryId == null) {
+            return bookRepository.findAllBooks(query);
         }
-        
-        if (fromMonth != null && fromYear != null && toMonth == null && toYear == null
-        	|| fromMonth == null && fromYear == null && toMonth != null && toYear != null) {
-        	return bookRepository.findBooksByMonthAndYear(query, fromMonth, fromYear, categoryId, categoryId);
+
+        // Trường hợp 11: Chỉ chọn thể loại
+        if (fromMonth == null && fromYear == null && toMonth == null && toYear == null && categoryId != null) {
+            return bookRepository.findBooksByCategory(query, categoryId);
         }
-        	
-        // Nếu tháng, năm được cung cấp nhưng không có categoryId
-        if (categoryId == null) {
+
+        // Trường hợp 7: Chỉ nhập fromYear
+        if (fromMonth == null && fromYear != null && toMonth == null && toYear == null && categoryId == null) {
+            return bookRepository.findBooksByYear(query, fromYear);
+        }
+
+        // Trường hợp 8: Nhập fromYear và chọn thể loại
+        if (fromMonth == null && fromYear != null && toMonth == null && toYear == null && categoryId != null) {
+            return bookRepository.findBooksByYearAndCategory(query, fromYear, categoryId);
+        }
+
+        // Trường hợp 5: Chỉ nhập fromMonth - fromYear
+        if (fromMonth != null && fromYear != null && toMonth == null && toYear == null && categoryId == null) {
+            return bookRepository.findBooksByMonthAndYear(query, fromMonth, fromYear);
+        }
+
+        // Trường hợp 6: Nhập fromMonth - fromYear và chọn thể loại
+        if (fromMonth != null && fromYear != null && toMonth == null && toYear == null && categoryId != null) {
+            return bookRepository.findBooksByMonthAndYearAndCategory(query, fromMonth, fromYear, categoryId);
+        }
+
+        // Trường hợp 9: Chỉ nhập khoảng thời gian
+        if (fromMonth != null && fromYear != null && toMonth != null && toYear != null && categoryId == null) {
             return bookRepository.findBooksByDateRange(query, fromMonth, fromYear, toMonth, toYear);
         }
 
-        // Nếu tất cả đều được cung cấp (có cả categoryId và khoảng thời gian)
-        return bookRepository.findBooksByDateRangeAndCategory(query, fromMonth, fromYear, toMonth, toYear, categoryId);
+        // Trường hợp 10: Nhập khoảng thời gian và thể loại
+        if (fromMonth != null && fromYear != null && toMonth != null && toYear != null && categoryId != null) {
+            return bookRepository.findBooksByDateRangeAndCategory(query, fromMonth, fromYear, toMonth, toYear, categoryId);
+        }
+
+        // Trường hợp 2: Nhập tên sách và fromYear
+        if (fromMonth == null && fromYear != null && toMonth == null && toYear == null) {
+            return bookRepository.findBooksByYearAndCategory(query, fromYear, categoryId);
+        }
+
+        // Trường hợp 3: Nhập tên sách và fromMonth - fromYear
+        if (fromMonth != null && fromYear != null && toMonth == null && toYear == null) {
+            return bookRepository.findBooksByMonthAndYearAndCategory(query, fromMonth, fromYear, categoryId);
+        }
+
+        // Mặc định: Trả về tất cả sách nếu không khớp
+        return bookRepository.findAllBooks(query);
     }
-    
+
     // Thống kê sách đang được mượn
     public List<Book> getBorrowingBooksByMonthAndYear(String query, Integer fromMonth, Integer fromYear, 
             Integer toMonth, Integer toYear, Integer categoryId) {
 
-        // Nếu tất cả tháng, năm đều null
-        if (fromMonth == null && fromYear == null && toMonth == null && toYear == null) {
-            if (categoryId == null) {
-                return bookRepository.findAllBorrowedBooks(query); // Trả về tất cả sách
-            } else {
-                return bookRepository.findBorrowedBooksByCategory(query, categoryId); // Trả về sách theo category
-            }
+        // Trường hợp 1: Chỉ nhập tên sách
+        if (fromMonth == null && fromYear == null && toMonth == null && toYear == null && categoryId == null) {
+            return bookRepository.findAllBorrowedBooks(query);
         }
-        
-        if (fromMonth != null && fromYear != null && toMonth == null && toYear == null
-        	|| fromMonth == null && fromYear == null && toMonth != null && toYear != null) {
-        	return bookRepository.findBorrowedBooksByMonthAndYear(query, fromMonth, fromYear, categoryId, categoryId);
-        }
-        	
 
-        // Nếu tháng, năm được cung cấp nhưng không có categoryId
-        if (categoryId == null) {
+        // Trường hợp 11: Chỉ chọn thể loại
+        if (fromMonth == null && fromYear == null && toMonth == null && toYear == null && categoryId != null) {
+            return bookRepository.findBorrowedBooksByCategory(query, categoryId);
+        }
+
+        // Trường hợp 7: Chỉ nhập fromYear
+        if (fromMonth == null && fromYear != null && toMonth == null && toYear == null && categoryId == null) {
+            return bookRepository.findBorrowedBooksByYear(query, fromYear);
+        }
+
+        // Trường hợp 8: Nhập fromYear và chọn thể loại
+        if (fromMonth == null && fromYear != null && toMonth == null && toYear == null && categoryId != null) {
+            return bookRepository.findBorrowedBooksByYearAndCategory(query, fromYear, categoryId);
+        }
+
+        // Trường hợp 5: Chỉ nhập fromMonth - fromYear
+        if (fromMonth != null && fromYear != null && toMonth == null && toYear == null && categoryId == null) {
+            return bookRepository.findBorrowedBooksByMonthAndYear(query, fromMonth, fromYear);
+        }
+
+        // Trường hợp 6: Nhập fromMonth - fromYear và chọn thể loại
+        if (fromMonth != null && fromYear != null && toMonth == null && toYear == null && categoryId != null) {
+            return bookRepository.findBorrowedBooksByMonthAndYearAndCategory(query, fromMonth, fromYear, categoryId);
+        }
+
+        // Trường hợp 9: Chỉ nhập khoảng thời gian
+        if (fromMonth != null && fromYear != null && toMonth != null && toYear != null && categoryId == null) {
             return bookRepository.findBorrowedBooksByDateRange(query, fromMonth, fromYear, toMonth, toYear);
         }
 
-        // Nếu tất cả đều được cung cấp (có cả categoryId và khoảng thời gian)
-        return bookRepository.findBorrowedBooksByDateRangeAndCategory(query, fromMonth, fromYear, toMonth, toYear, categoryId);
+        // Trường hợp 10: Nhập khoảng thời gian và thể loại
+        if (fromMonth != null && fromYear != null && toMonth != null && toYear != null && categoryId != null) {
+            return bookRepository.findBorrowedBooksByDateRangeAndCategory(query, fromMonth, fromYear, toMonth, toYear, categoryId);
+        }
+
+        // Trường hợp 2: Nhập tên sách và fromYear
+        if (fromMonth == null && fromYear != null && toMonth == null && toYear == null) {
+            return bookRepository.findBorrowedBooksByYearAndCategory(query, fromYear, categoryId);
+        }
+
+        // Trường hợp 3: Nhập tên sách và fromMonth - fromYear
+        if (fromMonth != null && fromYear != null && toMonth == null && toYear == null) {
+            return bookRepository.findBorrowedBooksByMonthAndYearAndCategory(query, fromMonth, fromYear, categoryId);
+        }
+
+        // Mặc định: Trả về tất cả sách đang mượn
+        return bookRepository.findAllBorrowedBooks(query);
     }
 }

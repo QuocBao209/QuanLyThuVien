@@ -16,19 +16,6 @@ public interface Borrow_ReturnRepository extends JpaRepository<Borrow_Return, Lo
 
     List<Borrow_Return> findByStatusIn(List<String> statuses);
     
-    // Đếm số sách đang mượn theo thể loại và tháng/năm
-    @Query("SELECT COUNT(br) FROM Borrow_Return br JOIN br.book b WHERE b.category.categoryId = :categoryId " +
-            "AND FUNCTION('MONTH', br.startDate) = :month AND FUNCTION('YEAR', br.startDate) = :year")
-    int countBorrowingBooksByCategory(@Param("categoryId") Integer categoryId,
-                                       @Param("month") Integer month, @Param("year") Integer year);
-
-    // Đếm số sách sẵn sàng theo thể loại và tháng/năm
-    @Query("SELECT COUNT(br) FROM Borrow_Return br JOIN br.book b WHERE b.category.categoryId = :categoryId " +
-            "AND FUNCTION('MONTH', br.startDate) = :month AND FUNCTION('YEAR', br.startDate) = :year " +
-            "AND br.status = 'AVAILABLE'")
-    int countAvailableBooksByCategory(@Param("categoryId") Integer categoryId,
-                                      @Param("month") Integer month, @Param("year") Integer year);
-    
     // Lọc sách theo tên sách / tên tác giả (dùng trong BookController)
     @Query("SELECT br FROM Borrow_Return br " +
     	       "JOIN br.book b " +

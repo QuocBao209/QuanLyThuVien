@@ -96,14 +96,3 @@
     padding: 20px;
     flex-grow: 1;
 }
-
-@media (max-width: 768px) {
-    .sidebar {
-        width: 200px;
-    }
-    
-    .menu-item {
-        font-size: 14px;
-        padding: 10px;
-    }
-}
