@@ -97,35 +97,27 @@
                     <th>Ảnh</th>
                     <th>Tên sách</th>
                     <th>Tác giả</th>
-                    <th>Tổng số sách</th>
-                    <th>Số sách đang mượn</th>
-                    <th>Số sách sẵn sàng</th>
-                    <th>Số sách bị hư hại</th>
                     <th>Ngày trả</th>
 				</tr>
 			</thead>
 			<tbody>
-                <tr th:each="book : ${books}">
-                	<td th:text="${book.category.categoryName}"></td>
-                    <td th:text="${book.bookId}"></td>
+                <tr th:each="borrowReturns : ${borrowReturns}">
+                	<td th:text="${borrowReturns.book.category.categoryName}"></td>
+                    <td th:text="${borrowReturns.book.bookId}"></td>
 					<td>
-						<img th:src="@{/images/book_images/{img}(img=${book.bookImage})}" alt="Ảnh bìa" width="80">
+						<img th:src="@{/images/book_images/{img}(img=${borrowReturns.book.bookImage})}" alt="Ảnh bìa" width="80">
 					</td>
-					<td th:text="${book.bookName}"></td>
+					<td th:text="${borrowReturns.book.bookName}"></td>
 					<td>
-			            <span th:each="author, iterStat : ${book.authors}">
+			            <span th:each="author, iterStat : ${borrowReturns.book.authors}">
 			                <span th:text="${author.authorName}"></span>
 			                <span th:if="${!iterStat.last}">, </span>
 			            </span>
 					</td>
-					<td th:text="${book.amount}"></td>
-					<td th:text="${book.borrowCount}"></td>
-					<td th:text="${book.amount - book.borrowCount - book.isDamaged}"></td> <!-- Số sách sẵn sàng -->
-					<td th:text="${book.isDamaged}"></td> <!-- Số sách hư hỏng -->
-					<td></td> <!-- Ngày trả -->
+					<td th:text="${borrowReturns.endDate}"></td> <!-- Ngày trả -->
                 </tr>
                 
-                <tr th:if="${#lists.isEmpty(books)}">
+                <tr th:if="${#lists.isEmpty(borrowReturns)}">
 				    <td colspan="9" class="no-data">Không có dữ liệu</td>
 				</tr>
             </tbody>
