@@ -60,12 +60,28 @@
 		        <div class="button-group">
 		            <button type="submit">Tìm kiếm</button>
 		            <button type="button" class="reset-btn" onclick="resetForm()">Làm mới</button>
-		            <button type="submit">Xuất file excel</button>
 		        </div>
 		
 		        <!-- Thông báo lỗi -->
 		        <span id="errorMsg" class="error-msg" th:text="${errorMsg}"></span>
 		    </form>
+		    
+		    <!-- Form xuất Excel -->
+			<form th:action="@{/admin/statistics/export-excel}" method="get" id="exportForm">
+				<!-- Sao chép các input từ searchForm để đảm bảo dữ liệu nhất quán -->
+				<input type="hidden" id="exportQuery" name="query" th:value="${param.query}">
+				<input type="hidden" id="exportFromMonth" name="fromMonth" th:value="${param.fromMonth}">
+				<input type="hidden" id="exportFromYear" name="fromYear" th:value="${param.fromYear}">
+				<input type="hidden" id="exportToMonth" name="toMonth" th:value="${param.toMonth}">
+				<input type="hidden" id="exportToYear" name="toYear" th:value="${param.toYear}">
+				<input type="hidden" id="exportCategoryId" name="categoryId" th:value="${param.categoryId}">
+				<input type="hidden" name="statisticType" value="book-borrow-stats">
+
+				<!-- Nút xuất Excel -->
+				<div class="button-group">
+					<button type="button" onclick="exportExcel()">Xuất Excel</button>
+				</div>
+			</form>
 		</div>
 		
 		<!-- Tổng quan số liệu -->
