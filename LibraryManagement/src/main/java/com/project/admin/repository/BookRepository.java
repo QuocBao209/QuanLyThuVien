@@ -28,7 +28,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("SELECT b FROM Book b WHERE b.isDeleted = false AND b.isDamaged > 0")
     List<Book> findByIsDeletedFalseAndIsDamagedGreaterThan(@Param("damage") int damage);
 
-
+    
 // Tổng số sách
     // Lấy tất cả sách (không cần tháng/năm)
     @Query("SELECT b FROM Book b WHERE (:query IS NULL OR LOWER(b.bookName) LIKE LOWER(CONCAT('%', :query, '%'))) AND b.isDeleted = false")
@@ -67,7 +67,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
            "AND (:fromMonth IS NULL OR FUNCTION('MONTH', br.startDate) = :fromMonth) " +
            "AND (:fromYear IS NULL OR FUNCTION('YEAR', br.startDate) = :fromYear) " +
            "AND (:categoryId IS NULL OR b.category.categoryId = :categoryId) AND b.isDeleted = false")
-    List<Book> findBooksByMonthAndYearAndCategory(@Param("query") String query, @Param("—fromMonth") Integer fromMonth, 
+    List<Book> findBooksByMonthAndYearAndCategory(@Param("query") String query, @Param("fromMonth") Integer fromMonth, 
                                                   @Param("fromYear") Integer fromYear, @Param("categoryId") Integer categoryId);
 
     // Lấy sách theo khoảng thời gian
@@ -161,14 +161,78 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 // Lọc sách đang sẵn sàng (ready)
     // Lọc không cần tháng/năm
     @Query("SELECT DISTINCT b FROM Book b " +
-    	       "WHERE (b.amount - b.borrowCount - b.isDamaged) > 0  AND (:query IS NULL OR b.bookName LIKE %:query%)")
-    	List<Book> findAllReadyBooks(@Param("query") String query);
+           "WHERE (b.amount - b.borrowCount - b.isDamaged) > 0 " +
+           "AND (:query IS NULL OR LOWER(b.bookName) LIKE LOWER(CONCAT('%', :query, '%'))) " +
+           "AND b.isDeleted = false")
+    List<Book> findAllReadyBooks(@Param("query") String query);
 
     // Lọc theo thể loại
     @Query("SELECT DISTINCT b FROM Book b " +
-    	       "WHERE (b.amount - b.borrowCount - b.isDamaged) > 0  " +
-    	       "AND (:query IS NULL OR b.bookName LIKE %:query%) " +
-    	       "AND (:categoryId IS NULL OR b.category.categoryId = :categoryId)")
-    	List<Book> findReadyBooksByCategory(@Param("query") String query,
-    	                                       @Param("categoryId") Integer categoryId);
+           "WHERE (b.amount - b.borrowCount - b.isDamaged) > 0 " +
+           "AND (:query IS NULL OR LOWER(b.bookName) LIKE LOWER(CONCAT('%', :query, '%'))) " +
+           "AND (:categoryId IS NULL OR b.category.categoryId = :categoryId) " +
+           "AND b.isDeleted = false")
+    List<Book> findReadyBooksByCategory(@Param("query") String query, @Param("categoryId") Integer categoryId);
+
+    // Lọc theo năm
+    @Query("SELECT DISTINCT b FROM Book b JOIN b.borrowReturns br " +
+           "WHERE (b.amount - b.borrowCount - b.isDamaged) > 0 " +
+           "AND (:query IS NULL OR LOWER(b.bookName) LIKE LOWER(CONCAT('%', :query, '%'))) " +
+           "AND (:fromYear IS NULL OR FUNCTION('YEAR', br.startDate) = :fromYear) " +
+           "AND b.isDeleted = false")
+    List<Book> findReadyBooksByYear(@Param("query") String query, @Param("fromYear") Integer fromYear);
+
+    // Lọc theo năm và thể loại
+    @Query("SELECT DISTINCT b FROM Book b JOIN b.borrowReturns br " +
+           "WHERE (b.amount - b.borrowCount - b.isDamaged) > 0 " +
+           "AND (:query IS NULL OR LOWER(b.bookName) LIKE LOWER(CONCAT('%', :query, '%'))) " +
+           "AND (:fromYear IS NULL OR FUNCTION('YEAR', br.startDate) = :fromYear) " +
+           "AND (:categoryId IS NULL OR b.category.categoryId = :categoryId) " +
+           "AND b.isDeleted = false")
+    List<Book> findReadyBooksByYearAndCategory(@Param("query") String query, @Param("fromYear") Integer fromYear, 
+                                               @Param("categoryId") Integer categoryId);
+
+    // Lọc theo tháng và năm
+    @Query("SELECT DISTINCT b FROM Book b JOIN b.borrowReturns br " +
+           "WHERE (b.amount - b.borrowCount - b.isDamaged) > 0 " +
+           "AND (:query IS NULL OR LOWER(b.bookName) LIKE LOWER(CONCAT('%', :query, '%'))) " +
+           "AND (:fromMonth IS NULL OR FUNCTION('MONTH', br.startDate) = :fromMonth) " +
+           "AND (:fromYear IS NULL OR FUNCTION('YEAR', br.startDate) = :fromYear) " +
+           "AND b.isDeleted = false")
+    List<Book> findReadyBooksByMonthAndYear(@Param("query") String query, @Param("fromMonth") Integer fromMonth, 
+                                            @Param("fromYear") Integer fromYear);
+
+    // Lọc theo tháng, năm và thể loại
+    @Query("SELECT DISTINCT b FROM Book b JOIN b.borrowReturns br " +
+           "WHERE (b.amount - b.borrowCount - b.isDamaged) > 0 " +
+           "AND (:query IS NULL OR LOWER(b.bookName) LIKE LOWER(CONCAT('%', :query, '%'))) " +
+           "AND (:fromMonth IS NULL OR FUNCTION('MONTH', br.startDate) = :fromMonth) " +
+           "AND (:fromYear IS NULL OR FUNCTION('YEAR', br.startDate) = :fromYear) " +
+           "AND (:categoryId IS NULL OR b.category.categoryId = :categoryId) " +
+           "AND b.isDeleted = false")
+    List<Book> findReadyBooksByMonthAndYearAndCategory(@Param("query") String query, @Param("fromMonth") Integer fromMonth, 
+                                                       @Param("fromYear") Integer fromYear, @Param("categoryId") Integer categoryId);
+
+    // Lọc theo khoảng thời gian
+    @Query("SELECT DISTINCT b FROM Book b JOIN b.borrowReturns br " +
+           "WHERE (b.amount - b.borrowCount - b.isDamaged) > 0 " +
+           "AND (:query IS NULL OR LOWER(b.bookName) LIKE LOWER(CONCAT('%', :query, '%'))) " +
+           "AND (YEAR(br.startDate) > :fromYear OR (YEAR(br.startDate) = :fromYear AND MONTH(br.startDate) >= :fromMonth)) " +
+           "AND (YEAR(br.startDate) < :toYear OR (YEAR(br.startDate) = :toYear AND MONTH(br.startDate) <= :toMonth)) " +
+           "AND b.isDeleted = false")
+    List<Book> findReadyBooksByDateRange(@Param("query") String query, @Param("fromMonth") Integer fromMonth, 
+                                         @Param("fromYear") Integer fromYear, @Param("toMonth") Integer toMonth, 
+                                         @Param("toYear") Integer toYear);
+
+    // Lọc theo khoảng thời gian và thể loại
+    @Query("SELECT DISTINCT b FROM Book b JOIN b.borrowReturns br " +
+           "WHERE (b.amount - b.borrowCount - b.isDamaged) > 0 " +
+           "AND (:query IS NULL OR LOWER(b.bookName) LIKE LOWER(CONCAT('%', :query, '%'))) " +
+           "AND (:categoryId IS NULL OR b.category.categoryId = :categoryId) " +
+           "AND (YEAR(br.startDate) > :fromYear OR (YEAR(br.startDate) = :fromYear AND MONTH(br.startDate) >= :fromMonth)) " +
+           "AND (YEAR(br.startDate) < :toYear OR (YEAR(br.startDate) = :toYear AND MONTH(br.startDate) <= :toMonth)) " +
+           "AND b.isDeleted = false")
+    List<Book> findReadyBooksByDateRangeAndCategory(@Param("query") String query, @Param("fromMonth") Integer fromMonth, 
+                                                    @Param("fromYear") Integer fromYear, @Param("toMonth") Integer toMonth, 
+                                                    @Param("toYear") Integer toYear, @Param("categoryId") Integer categoryId);
 }

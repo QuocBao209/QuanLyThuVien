@@ -15,7 +15,7 @@
 		<h2>Sách mượn theo tháng</h2>
 		<!-- Toolbar -->
 		<div class="toolbar">
-		    <form th:action="@{/admin/statistics/all/book-borrow-stats}" method="post" id="statsForm">
+		    <form th:action="@{/admin/statistics/borrowing/book-borrow-stats}" method="post" id="statsForm">
 		        
 		        <!-- Nhóm ô tìm kiếm -->
 		        <div class="input-group">
@@ -97,9 +97,9 @@
                     <th>Tên sách</th>
                     <th>Tác giả</th>
                     <th>Tổng số sách</th>
-                    <th>Số sách đang mượn</th>
-                    <th>Số sách sẵn sàng</th>
-                    <th>Số sách bị hư hại</th>
+                    <th>Tổng số sách đang mượn</th>
+                    <th>Tổng số sách sẵn sàng</th>
+                    <th>Tổng số sách bị hư hại</th>
 				</tr>
 			</thead>
 			<tbody>
