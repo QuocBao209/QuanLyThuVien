@@ -62,7 +62,6 @@ public class BookService {
         return bookRepository.findByIsDeletedFalse();
     }
 
-
     public void transferData(List<Book> books) {
         bookRepository.saveAll(books);
     }
@@ -71,10 +70,10 @@ public class BookService {
         bookRepository.save(book);
     }
 
-// All
+    // All
     // Thống kê sách theo dữ liệu được nhập trên vùng tìm kiếm
-    public List<Book> getBooksByMonthAndYear(String query, Integer fromMonth, Integer fromYear, 
-            Integer toMonth, Integer toYear, Integer categoryId) {
+    public List<Book> getBooksByMonthAndYear(String query, Integer fromMonth, Integer fromYear,
+                                             Integer toMonth, Integer toYear, Integer categoryId) {
 
         // Chỉ nhập tên sách
         if (fromMonth == null && fromYear == null && toMonth == null && toYear == null && categoryId == null) {
@@ -129,11 +128,11 @@ public class BookService {
         // Trả về tất cả sách nếu không khớp
         return bookRepository.findAllBooks(query);
     }
-    
-// Borrowing
+
+    // Borrowing
     // Thống kê sách đang được mượn
-    public List<Book> getBorrowingBooksByMonthAndYear(String query, Integer fromMonth, Integer fromYear, 
-            Integer toMonth, Integer toYear, Integer categoryId) {
+    public List<Book> getBorrowingBooksByMonthAndYear(String query, Integer fromMonth, Integer fromYear,
+                                                      Integer toMonth, Integer toYear, Integer categoryId) {
 
         // Chỉ nhập tên sách
         if (fromMonth == null && fromYear == null && toMonth == null && toYear == null && categoryId == null) {
@@ -189,11 +188,11 @@ public class BookService {
         return bookRepository.findAllBorrowedBooks(query);
     }
 
-// Ready
-	// Thống kê sách đang sẵn sàng
+    // Ready
+    // Thống kê sách đang sẵn sàng
     public List<Book> getReadyBooksByMonthAndYear(String query, Integer fromMonth, Integer fromYear,
-            Integer toMonth, Integer toYear, Integer categoryId) {
-    	// Chỉ nhập tên sách
+                                                  Integer toMonth, Integer toYear, Integer categoryId) {
+        // Chỉ nhập tên sách
         if (fromMonth == null && fromYear == null && toMonth == null && toYear == null && categoryId == null) {
             return bookRepository.findAllReadyBooks(query);
         }

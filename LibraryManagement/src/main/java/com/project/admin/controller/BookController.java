@@ -3,19 +3,35 @@ package com.project.admin.controller;
 import com.project.admin.entity.*;
 import com.project.admin.service.*;
 import com.project.admin.utils.AdminCodes;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.tomcat.util.http.parser.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -34,7 +50,8 @@ public class BookController {
     private static final long MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
     private static final String IMAGE_UPLOAD_DIR = "uploads/book_images/";
 
-    
+    @Value("${file.export.directory:/tmp/exports}")
+    private String exportDirectory;
     // Danh sách nhập hàng
     @PostMapping("/import")
     public String showImportList(Model model) {
@@ -42,14 +59,24 @@ public class BookController {
         model.addAttribute("importReceipts", importReceipts);
         return "import";
     }
-    
+
     @PostMapping("/import-receipt-detail")
-    public String showImportDetailList(Model model) {
-        List<ImportDetail> importDetails = importService.getAllImportDetails();
+    public String showImportDetailList(@RequestParam String invoiceId,
+                                       @RequestParam String importDate,
+                                       @RequestParam String userName,
+                                       Model model) {
+        // Lấy danh sách chi tiết nhập hàng theo invoiceId
+        List<ImportDetail> importDetails = importService.getImportDetailsByInvoiceId(invoiceId);
+
+        // Gán thông tin để hiển thị trong view
+        model.addAttribute("invoiceId", invoiceId);
+        model.addAttribute("importDate", importDate);
+        model.addAttribute("userName", userName);
         model.addAttribute("importDetails", importDetails);
+
         return "importDetails";
     }
-    
+
     // Hiển thị lựa chọn thêm sách
     @PostMapping("/add-book-option")
     public String addBookOption() {
@@ -85,7 +112,6 @@ public class BookController {
             // Kiểm tra số lượng sách hợp lệ (chỉ nhận số nguyên dương)
             if (amount <= 0) {
                 modelAndView.addObject("errorAmount", AdminCodes.getErrorMessage("INVALID_BOOK_AMOUNT"));
-                //modelAndView.setViewName("error");
                 return modelAndView;
             }
 
@@ -93,7 +119,6 @@ public class BookController {
             // Kiểm tra năm xuất bản hợp lệ
             if (publishYear <= 1000 || publishYear > currentYear) {
                 modelAndView.addObject("errorYear", String.format(AdminCodes.getErrorMessage("INVALID_PUBLISH_YEAR"), currentYear));
-                //modelAndView.setViewName("error");
                 return modelAndView;
             }
 
@@ -110,7 +135,6 @@ public class BookController {
             // Kiểm tra và định dạng thể loại
             if (!categoryName.matches("^[a-zA-ZÀ-Ỹà-ỹ\\s]+$")) {
                 modelAndView.addObject("errorCategory", AdminCodes.getErrorMessage("INVALID_CATEGORY_NAME"));
-                //modelAndView.setViewName("error");
                 return modelAndView;
             }
             categoryName = capitalizeEachWord(categoryName);
@@ -142,7 +166,7 @@ public class BookController {
 
             Book book;
 
-            if (bookId != null) { // TRƯỜNG HỢP CHỈNH SỬA SÁCH
+            if (bookId != null) {
                 book = bookService.getBookById(bookId);
                 if (book == null) {
                     modelAndView.addObject("notExistedBook", AdminCodes.getErrorMessage("BOOK_NOT_EXIST"));
@@ -159,7 +183,7 @@ public class BookController {
                     saveBookImage(bookImage, fileName);
                     book.setBookImage(fileName);
                 }
-            } else { // TRƯỜNG HỢP THÊM MỚI SÁCH
+            } else {
                 Optional<Book> existingBook = bookService.findExactMatch(bookName, authors, category, publishYear);
                 if (existingBook.isPresent()) {
                     book = existingBook.get();
@@ -185,7 +209,6 @@ public class BookController {
             modelAndView.setViewName("forward:/admin/add-book");
         } catch (IOException e) {
             modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("IMAGE_PROCESS_ERROR"));
-            //modelAndView.setViewName("error");
         }
 
         return modelAndView;
@@ -393,4 +416,147 @@ public class BookController {
         
         return modelAndView;
     }
+
+    @GetMapping("/statistics/export-excel")
+    public String exportBooksToExcel(
+            @RequestParam(required = false) String query,
+            @RequestParam(required = false) Integer fromMonth,
+            @RequestParam(required = false) Integer toMonth,
+            @RequestParam(required = false) Integer fromYear,
+            @RequestParam(required = false) Integer toYear,
+            @RequestParam(required = false) String categoryId,
+            @RequestParam(required = false, defaultValue = "book-borrow-stats") String statisticType,
+            @RequestParam List<String> columns,
+            Model model) throws IOException {
+        // Set default values for null parameters
+        query = query != null ? query : "";
+        fromMonth = fromMonth != null ? fromMonth : 1;
+        toMonth = toMonth != null ? toMonth : 12;
+        int currentYear = LocalDate.now().getYear();
+        fromYear = fromYear != null ? fromYear : 1900;
+        toYear = toYear != null ? toYear : currentYear;
+        categoryId = categoryId != null ? categoryId : "";
+
+        // Validate input parameters
+        if (fromMonth < 1 || fromMonth > 12 || toMonth < 1 || toMonth > 12) {
+            model.addAttribute("errorMessage", "Tháng không hợp lệ (phải từ 1 đến 12)");
+            return "export-error";
+        }
+        if (fromYear < 1900 || fromYear > currentYear || toYear < 1900 || toYear > currentYear) {
+            model.addAttribute("errorMessage", "Năm không hợp lệ (phải từ 1900 đến " + currentYear + ")");
+            return "export-error";
+        }
+        if (fromYear > toYear || (fromYear == toYear && fromMonth > toMonth)) {
+            model.addAttribute("errorMessage", "Khoảng thời gian không hợp lệ: Ngày bắt đầu phải trước ngày kết thúc");
+            return "export-error";
+        }
+        if (columns == null || columns.isEmpty()) {
+            model.addAttribute("errorMessage", "Danh sách cột không được để trống");
+            return "export-error";
+        }
+
+        // Fetch data
+        List<Book> books = bookService.getBooksForStatistics(query, fromMonth, fromYear, toMonth, toYear, categoryId, statisticType);
+
+        // Create unique filename
+        String filename = "thong_ke_sach_" + System.currentTimeMillis() + ".xlsx";
+        String filePath = Paths.get(exportDirectory, filename).toString();
+
+        // Ensure directory exists
+        File directory = new File(exportDirectory);
+        if (!directory.exists() && !directory.mkdirs()) {
+            model.addAttribute("errorMessage", "Không thể tạo thư mục lưu file: " + exportDirectory);
+            return "export-error";
+        }
+
+        // Create workbook
+        try (SXSSFWorkbook workbook = new SXSSFWorkbook(100)) {
+            SXSSFSheet sheet = (SXSSFSheet) workbook.createSheet("Books Statistics");
+            // Enable column tracking for auto-sizing
+            sheet.trackAllColumnsForAutoSizing();
+
+            // Create header row
+            Row headerRow = sheet.createRow(0);
+            int colIndex = 0;
+            for (String column : columns) {
+                switch (column) {
+                    case "Thể loại" -> headerRow.createCell(colIndex++).setCellValue("Thể loại");
+                    case "ID" -> headerRow.createCell(colIndex++).setCellValue("ID");
+                    case "Ảnh" -> headerRow.createCell(colIndex++).setCellValue("Ảnh");
+                    case "Tên sách" -> headerRow.createCell(colIndex++).setCellValue("Tên sách");
+                    case "Tác giả" -> headerRow.createCell(colIndex++).setCellValue("Tác giả");
+                    case "Tổng số sách" -> headerRow.createCell(colIndex++).setCellValue("Tổng số sách");
+                    case "Số sách đang mượn" -> headerRow.createCell(colIndex++).setCellValue("Số sách đang mượn");
+                    case "Số sách sẵn sàng" -> headerRow.createCell(colIndex++).setCellValue("Số sách sẵn sàng");
+                    case "Số sách bị hư hại" -> headerRow.createCell(colIndex++).setCellValue("Số sách bị hư hại");
+                    default -> {
+                        model.addAttribute("errorMessage", "Cột không hợp lệ: " + column);
+                        return "export-error";
+                    }
+                }
+            }
+
+            // Write data rows
+            int rowNum = 1;
+            for (Book book : books) {
+                Row row = sheet.createRow(rowNum++);
+                colIndex = 0;
+
+                if (columns.contains("Thể loại")) row.createCell(colIndex++).setCellValue(book.getCategory().getCategoryName());
+                if (columns.contains("ID")) row.createCell(colIndex++).setCellValue(book.getBookId());
+                if (columns.contains("Ảnh")) row.createCell(colIndex++).setCellValue(book.getBookImage());
+                if (columns.contains("Tên sách")) row.createCell(colIndex++).setCellValue(book.getBookName());
+                if (columns.contains("Tác giả")) {
+                    String authors = String.join(", ", book.getAuthors().stream().map(Author::getAuthorName).toList());
+                    row.createCell(colIndex++).setCellValue(authors);
+                }
+                if (columns.contains("Tổng số sách")) row.createCell(colIndex++).setCellValue((double) book.getAmount());
+                if (columns.contains("Số sách đang mượn")) row.createCell(colIndex++).setCellValue((double) book.getBorrowCount());
+                if (columns.contains("Số sách sẵn sàng")) {
+                    int available = book.getAmount() - book.getBorrowCount() - book.getIsDamaged();
+                    row.createCell(colIndex++).setCellValue((double) available);
+                }
+                if (columns.contains("Số sách bị hư hại")) row.createCell(colIndex++).setCellValue((double) book.getIsDamaged());
+            }
+
+            // Auto-size columns before writing to file
+            for (int i = 0; i < columns.size(); i++) {
+                try {
+                    sheet.autoSizeColumn(i);
+                } catch (IllegalStateException e) {
+                    // Log the error and continue
+                    System.err.println("Failed to auto-size column " + i + ": " + e.getMessage());
+                }
+            }
+
+            // Save file
+            try (FileOutputStream fileOut = new FileOutputStream(filePath)) {
+                workbook.write(fileOut);
+                fileOut.flush();
+            }
+        }
+
+        // Pass data to view
+        model.addAttribute("message", "Export thành công!");
+        model.addAttribute("downloadUrl", "/admin/statistics/downloads/" + filename);
+        return "export-success";
+    }
+    @GetMapping("/statistics/downloads/{filename}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable String filename) throws IOException {
+        if (!filename.matches("[a-zA-Z0-9_\\-\\.]+")) {
+            throw new IllegalArgumentException("Tên file không hợp lệ");
+        }
+        String filePath = Paths.get(exportDirectory, filename).toString();
+        File file = new File(filePath);
+        if (!file.exists()) {
+            throw new FileNotFoundException("File không tồn tại");
+        }
+        Resource resource = new FileSystemResource(file);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+                .header(HttpHeaders.CONTENT_TYPE, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                .contentLength(resource.contentLength())
+                .body(resource);
+    }
+
 }
