@@ -12,7 +12,7 @@
 	<div th:replace="admin :: sidebar"></div>
 	
 	<div class="main-container">
-		<h2>Sách mượn theo tháng</h2>
+		<h2>Tổng số lượng sách</h2>
 		<!-- Toolbar -->
 		<div class="toolbar">
 		    <form th:action="@{/admin/statistics/all/book-borrow-stats}" method="post" id="statsForm">
@@ -75,15 +75,15 @@
 	            <p th:text="${totalBooks} ?: 'N/A'"></p>
 	        </div>
 	        <div class="stat-box" th:classappend="${selectedBox == '/admin/statistics/borrowing'} ? 'selected'" data-url="/admin/statistics/borrowing">
-	            <h4>Số sách đang mượn</h4>
+	            <h4>Tổng số sách đang mượn</h4>
 	            <p th:text="${totalBorrowing} ?: 'N/A'"></p>
 	        </div>
 	        <div class="stat-box" th:classappend="${selectedBox == '/admin/statistics/ready'} ? 'selected'" data-url="/admin/statistics/ready">
-	            <h4>Số sách sẵn sàng</h4>
-	            <p th:text="${totalAvailable} ?: 'N/A'"></p>
+	            <h4>Tổng số sách sẵn sàng</h4>
+	            <p th:text="${totalAvailable < 0 ? '0' : totalAvailable} ?: 'N/A'"></p>
 	        </div>
 	        <div class="stat-box" th:classappend="${selectedBox == '/admin/statistics/damaged'} ? 'selected'" data-url="/admin/statistics/damaged">
-	            <h4>Số sách bị hư hại</h4>
+	            <h4>Tổng số sách bị hư hại</h4>
 	            <p th:text="${totalDamaged} ?: 'N/A'"></p>
 	        </div>
 	    </div>
@@ -97,9 +97,9 @@
                     <th>Tên sách</th>
                     <th>Tác giả</th>
                     <th>Tổng số sách</th>
-                    <th>Tổng số sách mượn/trả</th>
-                    <th>Tổng số sách sẵn sàng</th>
-                    <th>Tổng số sách bị hư hại</th>
+                    <th>Số sách đang mượn</th>
+                    <th>Số sách sẵn sàng</th>
+                    <th>Số sách bị hư hại</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -117,8 +117,8 @@
 			            </span>
 					</td>
 					<td th:text="${book.amount}"></td>
-					<td th:text="${book.borrowCount}"></td>
-					<td th:text="${book.amount - book.borrowCount - book.isDamaged}"></td>
+					<td th:text="${book.borrowedRecordsCount}"></td>
+					<td th:text="${(book.amount - book.borrowedRecordsCount - book.isDamaged) < 0 ? '0' : (book.amount - book.borrowedRecordsCount - book.isDamaged)}"></td>
 					<td th:text="${book.isDamaged}"></td>
                 </tr>
                 

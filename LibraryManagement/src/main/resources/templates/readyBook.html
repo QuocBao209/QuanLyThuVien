@@ -80,7 +80,7 @@
 	        </div>
 	        <div class="stat-box" th:classappend="${selectedBox == '/admin/statistics/ready'} ? 'selected'" data-url="/admin/statistics/ready">
 	            <h4>Số sách sẵn sàng</h4>
-	            <p th:text="${totalAvailable} ?: 'N/A'"></p>
+	            <p th:text="${totalAvailable < 0 ? '0' : totalAvailable} ?: 'N/A'"></p>
 	        </div>
 	        <div class="stat-box" th:classappend="${selectedBox == '/admin/statistics/damaged'} ? 'selected'" data-url="/admin/statistics/damaged">
 	            <h4>Số sách bị hư hại</h4>
@@ -117,8 +117,8 @@
 			            </span>
 					</td>
 					<td th:text="${book.amount}"></td>
-					<td th:text="${book.borrowCount}"></td>
-					<td th:text="${book.amount - book.borrowCount - book.isDamaged}"></td>
+					<td th:text="${book.borrowedRecordsCount}"></td>
+					<td th:text="${(book.amount - book.borrowedRecordsCount - book.isDamaged) < 0 ? '0' : (book.amount - book.borrowedRecordsCount - book.isDamaged)}"></td>
 					<td th:text="${book.isDamaged}"></td>
                 </tr>
                 

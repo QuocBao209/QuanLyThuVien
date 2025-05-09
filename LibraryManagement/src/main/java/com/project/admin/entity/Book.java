@@ -48,6 +48,13 @@ public class Book {
 
     @Column(nullable = false, columnDefinition = "INT DEFAULT 0")
     private int isDamaged;
+    
+    public long getBorrowedRecordsCount() {
+        return borrowReturns != null ? 
+            borrowReturns.stream()
+                .filter(br -> "borrowed".equals(br.getStatus()))
+                .count() : 0;
+    }
 
     @Override
     public String toString() {

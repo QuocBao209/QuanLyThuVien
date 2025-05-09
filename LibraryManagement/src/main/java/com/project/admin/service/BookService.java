@@ -70,179 +70,168 @@ public class BookService {
         bookRepository.save(book);
     }
 
-// All
-    // Thống kê sách theo dữ liệu được nhập trên vùng tìm kiếm
+    // All
     public List<Book> getBooksByMonthAndYear(String query, Integer fromMonth, Integer fromYear, 
             Integer toMonth, Integer toYear, Integer categoryId) {
-
-        // Chỉ nhập tên sách
         if (fromMonth == null && fromYear == null && toMonth == null && toYear == null && categoryId == null) {
             return bookRepository.findAllBooks(query);
         }
-
-        // Chỉ chọn thể loại
         if (fromMonth == null && fromYear == null && toMonth == null && toYear == null && categoryId != null) {
             return bookRepository.findBooksByCategory(query, categoryId);
         }
-
-        // Chỉ nhập fromYear
         if (fromMonth == null && fromYear != null && toMonth == null && toYear == null && categoryId == null) {
             return bookRepository.findBooksByYear(query, fromYear);
         }
-
-        // Nhập fromYear và chọn thể loại
         if (fromMonth == null && fromYear != null && toMonth == null && toYear == null && categoryId != null) {
             return bookRepository.findBooksByYearAndCategory(query, fromYear, categoryId);
         }
-
-        // Chỉ nhập fromMonth - fromYear
         if (fromMonth != null && fromYear != null && toMonth == null && toYear == null && categoryId == null) {
             return bookRepository.findBooksByMonthAndYear(query, fromMonth, fromYear);
         }
-
-        // Nhập fromMonth - fromYear và chọn thể loại
         if (fromMonth != null && fromYear != null && toMonth == null && toYear == null && categoryId != null) {
             return bookRepository.findBooksByMonthAndYearAndCategory(query, fromMonth, fromYear, categoryId);
         }
-
-        // Chỉ nhập khoảng thời gian
         if (fromMonth != null && fromYear != null && toMonth != null && toYear != null && categoryId == null) {
             return bookRepository.findBooksByDateRange(query, fromMonth, fromYear, toMonth, toYear);
         }
-
-        // Nhập khoảng thời gian và thể loại
         if (fromMonth != null && fromYear != null && toMonth != null && toYear != null && categoryId != null) {
             return bookRepository.findBooksByDateRangeAndCategory(query, fromMonth, fromYear, toMonth, toYear, categoryId);
         }
-
-        // Nhập tên sách và fromYear
         if (fromMonth == null && fromYear != null && toMonth == null && toYear == null) {
             return bookRepository.findBooksByYearAndCategory(query, fromYear, categoryId);
         }
-
-        // Nhập tên sách và fromMonth - fromYear
         if (fromMonth != null && fromYear != null && toMonth == null && toYear == null) {
             return bookRepository.findBooksByMonthAndYearAndCategory(query, fromMonth, fromYear, categoryId);
         }
-
-        // Trả về tất cả sách nếu không khớp
         return bookRepository.findAllBooks(query);
     }
-    
-// Borrowing
-    // Thống kê sách đang được mượn
+
+    // Borrowing
     public List<Book> getBorrowingBooksByMonthAndYear(String query, Integer fromMonth, Integer fromYear, 
             Integer toMonth, Integer toYear, Integer categoryId) {
-
-        // Chỉ nhập tên sách
         if (fromMonth == null && fromYear == null && toMonth == null && toYear == null && categoryId == null) {
             return bookRepository.findAllBorrowedBooks(query);
         }
-
-        // Chỉ chọn thể loại
         if (fromMonth == null && fromYear == null && toMonth == null && toYear == null && categoryId != null) {
             return bookRepository.findBorrowedBooksByCategory(query, categoryId);
         }
-
-        // Chỉ nhập fromYear
         if (fromMonth == null && fromYear != null && toMonth == null && toYear == null && categoryId == null) {
             return bookRepository.findBorrowedBooksByYear(query, fromYear);
         }
-
-        // Nhập fromYear và chọn thể loại
         if (fromMonth == null && fromYear != null && toMonth == null && toYear == null && categoryId != null) {
             return bookRepository.findBorrowedBooksByYearAndCategory(query, fromYear, categoryId);
         }
-
-        // Chỉ nhập fromMonth - fromYear
         if (fromMonth != null && fromYear != null && toMonth == null && toYear == null && categoryId == null) {
             return bookRepository.findBorrowedBooksByMonthAndYear(query, fromMonth, fromYear);
         }
-
-        // Nhập fromMonth - fromYear và chọn thể loại
         if (fromMonth != null && fromYear != null && toMonth == null && toYear == null && categoryId != null) {
             return bookRepository.findBorrowedBooksByMonthAndYearAndCategory(query, fromMonth, fromYear, categoryId);
         }
-
-        // Chỉ nhập khoảng thời gian
         if (fromMonth != null && fromYear != null && toMonth != null && toYear != null && categoryId == null) {
             return bookRepository.findBorrowedBooksByDateRange(query, fromMonth, fromYear, toMonth, toYear);
         }
-
-        // Nhập khoảng thời gian và thể loại
         if (fromMonth != null && fromYear != null && toMonth != null && toYear != null && categoryId != null) {
             return bookRepository.findBorrowedBooksByDateRangeAndCategory(query, fromMonth, fromYear, toMonth, toYear, categoryId);
         }
-
-        // Nhập tên sách và fromYear
         if (fromMonth == null && fromYear != null && toMonth == null && toYear == null) {
             return bookRepository.findBorrowedBooksByYearAndCategory(query, fromYear, categoryId);
         }
-
-        // Nhập tên sách và fromMonth - fromYear
         if (fromMonth != null && fromYear != null && toMonth == null && toYear == null) {
             return bookRepository.findBorrowedBooksByMonthAndYearAndCategory(query, fromMonth, fromYear, categoryId);
         }
-
-        // Trả về tất cả sách đang mượn
         return bookRepository.findAllBorrowedBooks(query);
     }
 
-// Ready    
-	// Thống kê sách đang sẵn sàng
+    // Ready
     public List<Book> getReadyBooksByMonthAndYear(String query, Integer fromMonth, Integer fromYear, 
             Integer toMonth, Integer toYear, Integer categoryId) {
-    	// Chỉ nhập tên sách
         if (fromMonth == null && fromYear == null && toMonth == null && toYear == null && categoryId == null) {
             return bookRepository.findAllReadyBooks(query);
         }
-
-        // Chỉ chọn thể loại
         if (fromMonth == null && fromYear == null && toMonth == null && toYear == null && categoryId != null) {
             return bookRepository.findReadyBooksByCategory(query, categoryId);
         }
-
-        // Chỉ nhập fromYear
         if (fromMonth == null && fromYear != null && toMonth == null && toYear == null && categoryId == null) {
             return bookRepository.findReadyBooksByYear(query, fromYear);
         }
-
-        // Nhập fromYear và chọn thể loại
         if (fromMonth == null && fromYear != null && toMonth == null && toYear == null && categoryId != null) {
             return bookRepository.findReadyBooksByYearAndCategory(query, fromYear, categoryId);
         }
-
-        // Chỉ nhập fromMonth - fromYear
         if (fromMonth != null && fromYear != null && toMonth == null && toYear == null && categoryId == null) {
             return bookRepository.findReadyBooksByMonthAndYear(query, fromMonth, fromYear);
         }
-
-        // Nhập fromMonth - fromYear và chọn thể loại
         if (fromMonth != null && fromYear != null && toMonth == null && toYear == null && categoryId != null) {
             return bookRepository.findReadyBooksByMonthAndYearAndCategory(query, fromMonth, fromYear, categoryId);
         }
-
-        // Chỉ nhập khoảng thời gian
         if (fromMonth != null && fromYear != null && toMonth != null && toYear != null && categoryId == null) {
             return bookRepository.findReadyBooksByDateRange(query, fromMonth, fromYear, toMonth, toYear);
         }
-
-        // Nhập khoảng thời gian và thể loại
         if (fromMonth != null && fromYear != null && toMonth != null && toYear != null && categoryId != null) {
             return bookRepository.findReadyBooksByDateRangeAndCategory(query, fromMonth, fromYear, toMonth, toYear, categoryId);
         }
-
-        // Nhập tên sách và fromYear
         if (fromMonth == null && fromYear != null && toMonth == null && toYear == null) {
             return bookRepository.findReadyBooksByYearAndCategory(query, fromYear, categoryId);
         }
-
-        // Nhập tên sách và fromMonth - fromYear
         if (fromMonth != null && fromYear != null && toMonth == null && toYear == null) {
             return bookRepository.findReadyBooksByMonthAndYearAndCategory(query, fromMonth, fromYear, categoryId);
         }
-
-        // Trả về tất cả sách đang mượn
         return bookRepository.findAllReadyBooks(query);
+    }
+
+    // Damaged
+    public List<Book> getDamagedBooksByMonthAndYear(String query, Integer fromMonth, Integer fromYear, 
+            Integer toMonth, Integer toYear, Integer categoryId) {
+        if (fromMonth == null && fromYear == null && toMonth == null && toYear == null && categoryId == null) {
+            return bookRepository.findAllDamagedBooks(query);
+        }
+        if (fromMonth == null && fromYear == null && toMonth == null && toYear == null && categoryId != null) {
+            return bookRepository.findDamagedBooksByCategory(query, categoryId);
+        }
+        if (fromMonth == null && fromYear != null && toMonth == null && toYear == null && categoryId == null) {
+            return bookRepository.findDamagedBooksByYear(query, fromYear);
+        }
+        if (fromMonth == null && fromYear != null && toMonth == null && toYear == null && categoryId != null) {
+            return bookRepository.findDamagedBooksByYearAndCategory(query, fromYear, categoryId);
+        }
+        if (fromMonth != null && fromYear != null && toMonth == null && toYear == null && categoryId == null) {
+            return bookRepository.findDamagedBooksByMonthAndYear(query, fromMonth, fromYear);
+        }
+        if (fromMonth != null && fromYear != null && toMonth == null && toYear == null && categoryId != null) {
+            return bookRepository.findDamagedBooksByMonthAndYearAndCategory(query, fromMonth, fromYear, categoryId);
+        }
+        if (fromMonth != null && fromYear != null && toMonth != null && toYear != null && categoryId == null) {
+            return bookRepository.findDamagedBooksByDateRange(query, fromMonth, fromYear, toMonth, toYear);
+        }
+        if (fromMonth != null && fromYear != null && toMonth != null && toYear != null && categoryId != null) {
+            return bookRepository.findDamagedBooksByDateRangeAndCategory(query, fromMonth, fromYear, toMonth, toYear, categoryId);
+        }
+        if (fromMonth == null && fromYear != null && toMonth == null && toYear == null) {
+            return bookRepository.findDamagedBooksByYearAndCategory(query, fromYear, categoryId);
+        }
+        if (fromMonth != null && fromYear != null && toMonth == null && toYear == null) {
+            return bookRepository.findDamagedBooksByMonthAndYearAndCategory(query, fromMonth, fromYear, categoryId);
+        }
+        return bookRepository.findAllDamagedBooks(query);
+    }
+
+    public long getTotalBooks() {
+        return bookRepository.findByIsDeletedFalse().stream().mapToLong(Book::getAmount).sum();
+    }
+
+    public long getTotalBorrowing(Integer month, Integer year) {
+        List<Book> books = (month != null && year != null) 
+            ? bookRepository.findBooksByMonthAndYear(null, month, year)
+            : bookRepository.findByIsDeletedFalse();
+        return books.stream().mapToLong(Book::getBorrowedRecordsCount).sum();
+    }
+
+    public long getTotalAvailable(Integer month, Integer year) {
+        List<Book> books = (month != null && year != null) 
+            ? bookRepository.findBooksByMonthAndYear(null, month, year)
+            : bookRepository.findByIsDeletedFalse();
+        long totalAvailable = books.stream()
+            .mapToLong(book -> book.getAmount() - book.getBorrowedRecordsCount() - book.getIsDamaged())
+            .sum();
+        return totalAvailable < 0 ? 0 : totalAvailable;
     }
 }
