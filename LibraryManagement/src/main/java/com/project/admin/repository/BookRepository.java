@@ -28,6 +28,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("SELECT b FROM Book b WHERE b.isDeleted = false AND b.isDamaged > 0")
     List<Book> findByIsDeletedFalseAndIsDamagedGreaterThan(@Param("damage") int damage);
 
+
+// Tổng số sách
     // Lấy tất cả sách (không cần tháng/năm)
     @Query("SELECT b FROM Book b WHERE (:query IS NULL OR LOWER(b.bookName) LIKE LOWER(CONCAT('%', :query, '%'))) AND b.isDeleted = false")
     List<Book> findAllBooks(@Param("query") String query);
@@ -89,6 +91,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
                                                @Param("fromYear") Integer fromYear, @Param("toMonth") Integer toMonth, 
                                                @Param("toYear") Integer toYear, @Param("categoryId") Integer categoryId);
 
+    
+// Lọc sách đang mượn
     // Lấy tất cả sách đang mượn
     @Query("SELECT DISTINCT b FROM Book b JOIN b.borrowReturns br " +
            "WHERE br.status = 'borrowed' AND (:query IS NULL OR LOWER(b.bookName) LIKE LOWER(CONCAT('%', :query, '%'))) " +
@@ -152,4 +156,19 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findBorrowedBooksByDateRangeAndCategory(@Param("query") String query, @Param("fromMonth") Integer fromMonth, 
                                                        @Param("fromYear") Integer fromYear, @Param("toMonth") Integer toMonth, 
                                                        @Param("toYear") Integer toYear, @Param("categoryId") Integer categoryId);
+    
+    
+// Lọc sách đang sẵn sàng (ready)
+    // Lọc không cần tháng/năm
+    @Query("SELECT DISTINCT b FROM Book b " +
+    	       "WHERE (b.amount - b.borrowCount - b.isDamaged) > 0  AND (:query IS NULL OR b.bookName LIKE %:query%)")
+    	List<Book> findAllReadyBooks(@Param("query") String query);
+
+    // Lọc theo thể loại
+    @Query("SELECT DISTINCT b FROM Book b " +
+    	       "WHERE (b.amount - b.borrowCount - b.isDamaged) > 0  " +
+    	       "AND (:query IS NULL OR b.bookName LIKE %:query%) " +
+    	       "AND (:categoryId IS NULL OR b.category.categoryId = :categoryId)")
+    	List<Book> findReadyBooksByCategory(@Param("query") String query,
+    	                                       @Param("categoryId") Integer categoryId);
 }

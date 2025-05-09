@@ -64,5 +64,11 @@ public class BookBorrowStatsService {
                 .mapToInt(Book::getIsDamaged)
                 .sum();
     }
+       
+    //Lấy sách bị hư hại
+    public List<Borrow_Return> getDamagedBooks() {
+        return borrowReturnRepository.findDamagedBooks(); // Phương thức đếm sách bị hư hỏng
+    }
     
 }
+

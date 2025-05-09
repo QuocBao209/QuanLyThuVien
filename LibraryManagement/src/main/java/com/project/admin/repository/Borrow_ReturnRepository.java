@@ -24,4 +24,9 @@ public interface Borrow_ReturnRepository extends JpaRepository<Borrow_Return, Lo
     	       "   OR LOWER(a.authorName) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     	List<Borrow_Return> searchByBookOrAuthor(@Param("keyword") String keyword);
 
+    	
+    //Lọc sách hư hại
+    @Query("SELECT br FROM Borrow_Return br WHERE br.status = 'damaged_book' ")
+    List<Borrow_Return> findDamagedBooks();
+    
 }

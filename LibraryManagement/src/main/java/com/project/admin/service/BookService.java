@@ -127,6 +127,7 @@ public class BookService {
         // Mặc định: Trả về tất cả sách nếu không khớp
         return bookRepository.findAllBooks(query);
     }
+    
 
     // Thống kê sách đang được mượn
     public List<Book> getBorrowingBooksByMonthAndYear(String query, Integer fromMonth, Integer fromYear, 
@@ -184,5 +185,15 @@ public class BookService {
 
         // Mặc định: Trả về tất cả sách đang mượn
         return bookRepository.findAllBorrowedBooks(query);
+    }
+
+    
+	// Thống kê sách đang sẵn sàng
+    public List<Book> getReadyBooksByMonthAndYear(String query, Integer categoryId) {
+            if (categoryId == null) {
+                return bookRepository.findAllReadyBooks(query); // Trả về tất cả sách
+            } else {
+                return bookRepository.findReadyBooksByCategory(query, categoryId); // Trả về sách theo category
+            }   
     }
 }

@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.project.admin.entity.Book;
+import com.project.admin.entity.Borrow_Return;
 import com.project.admin.entity.Category;
+import com.project.admin.repository.Borrow_ReturnRepository;
 import com.project.admin.service.BookBorrowStatsService;
 import com.project.admin.service.BookService;
 import com.project.admin.service.UserService;
@@ -28,6 +30,7 @@ public class StatisticsController {
     @Autowired private CategoryService categoryService;
     @Autowired private BookBorrowStatsService bookBorrowStatsService;
 
+    // Hiện danh sách tổng
     @PostMapping("/statistics/all")
     public String monthlyBorrowForm(Model model,
                                     @RequestParam(value = "month", required = false) Integer month,
@@ -54,6 +57,7 @@ public class StatisticsController {
         return "monthly_borrow";
     }
 
+    // Xử lý toolbar ở danh sách tổng
     @PostMapping("/statistics/all/book-borrow-stats")
     public String getBorrowStats(@RequestParam(required = false) String query,
                                  @RequestParam(required = false) Integer fromMonth,
@@ -105,6 +109,7 @@ public class StatisticsController {
         return "monthly_borrow";
     }
 
+    // Hiện danh sách đang mượn
     @PostMapping("/statistics/borrowing")
     public String getBorrowingBook(Model model,
                                    @RequestParam(value = "month", required = false) Integer month,
@@ -134,6 +139,7 @@ public class StatisticsController {
         return "borrowing_report";
     }
 
+    // Xử lý toolbar cho danh sách đang mượn
     @PostMapping("/statistics/borrowing/book-borrow-stats")
     public String getBorrowingStats(@RequestParam(required = false) String query,
                                     @RequestParam(required = false) Integer fromMonth,
@@ -210,7 +216,7 @@ public class StatisticsController {
         return modelAndView;
     }
 
-    // Phương thức hỗ trợ để chuẩn bị model cho monthly_borrow khi có lỗi
+    // Phương thức hỗ trợ để chuẩn bị model cho monthly_borrow khi có lỗi nhập input
     private String prepareModelForMonthlyBorrow(Model model, String query, Integer fromMonth, Integer fromYear, 
                                                Integer toMonth, Integer toYear, Integer categoryId, String selectedBox) {
         List<Book> books = bookService.getBooksByMonthAndYear(query, fromMonth, fromYear, toMonth, toYear, categoryId);
@@ -238,7 +244,7 @@ public class StatisticsController {
         return "monthly_borrow";
     }
 
-    // Phương thức hỗ trợ để chuẩn bị model cho borrowing_report khi có lỗi
+    // Phương thức hỗ trợ để chuẩn bị model cho borrowing_report khi có lỗi nhập input
     private String prepareModelForBorrowingReport(Model model, String query, Integer fromMonth, Integer fromYear, 
                                                  Integer toMonth, Integer toYear, Integer categoryId, String selectedBox) {
         List<Book> books = bookService.getBorrowingBooksByMonthAndYear(query, fromMonth, fromYear, toMonth, toYear, categoryId)
@@ -268,4 +274,52 @@ public class StatisticsController {
         
         return "borrowing_report";
     }
+
+    // Lọc sách đang sẵn sàng
+    @PostMapping("/statistics/ready")
+    public String getReadyBook(Model model,
+    							   @RequestParam(value = "month", required = false) Integer month,
+    							   @RequestParam(value = "year", required = false) Integer year) {
+    	
+    	// Tổng quan số liệu
+        int totalBooks = bookBorrowStatsService.getTotalBooks();
+        int totalBorrowing = bookBorrowStatsService.getTotalBorrowing(month, year);
+        int totalAvailable = bookBorrowStatsService.getTotalAvailable(month, year);
+        int totalDamaged = bookBorrowStatsService.getTotalDamaged();
+    
+	    List<Category> categories = categoryService.getAllCategories();
+	    List<Book> books = bookService.getReadyBooksByMonthAndYear(null, null); // Lấy toàn bộ danh sách
+	    
+	    model.addAttribute("books", books);
+	    model.addAttribute("categories", categories);
+	    model.addAttribute("totalBooks", totalBooks);
+        model.addAttribute("totalBorrowing", totalBorrowing);
+        model.addAttribute("totalAvailable", totalAvailable);
+        model.addAttribute("totalDamaged", totalDamaged);
+	    
+	    return "readyBook";
+    }
+    
+    // Lọc sách hư hại
+    @PostMapping("/statistics/damaged")
+    public String getDamagedBook(Model model,
+    							   @RequestParam(value = "month", required = false) Integer month,
+    							   @RequestParam(value = "year", required = false) Integer year) {
+    
+	    List<Borrow_Return> borrowReturns = bookBorrowStatsService.getDamagedBooks(); // Lấy toàn bộ danh sách
+	    // Tổng quan số liệu
+        int totalBooks = bookBorrowStatsService.getTotalBooks();
+        int totalBorrowing = bookBorrowStatsService.getTotalBorrowing(month, year);
+        int totalAvailable = bookBorrowStatsService.getTotalAvailable(month, year);
+        int totalDamaged = bookBorrowStatsService.getTotalDamaged();
+	    model.addAttribute("borrowReturns", borrowReturns);
+	    model.addAttribute("totalBooks", totalBooks);
+        model.addAttribute("totalBorrowing", totalBorrowing);
+        model.addAttribute("totalAvailable", totalAvailable);
+        model.addAttribute("totalDamaged", totalDamaged);
+
+	    
+	    return "damagedBook";
+    }
 }
+

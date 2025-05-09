@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Thống kê sách đang mượn</title>
+	<link rel="stylesheet" th:href="@{/css/monthly_borrow.css}">
+	<link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+	<!-- Sidebar -->
+	<div th:replace="admin :: sidebar"></div>
+	
+	<div class="main-container">
+		<h2>Sách mượn theo tháng</h2>
+		<!-- Toolbar -->
+		<div class="toolbar">
+		    <form th:action="@{/admin/statistics/books-per-month/book-borrow-stats}" method="post" 
+		            onsubmit="return validateForm()" id="statsForm">
+		        
+		        <!-- Nhóm ô tìm kiếm -->
+		        <div class="input-group">
+		            <label for="searchQuery">Tìm kiếm:</label>
+		            <input type="text" id="searchQuery" name="query" 
+		                placeholder="Nhập thông tin sách..." th:value="${param.query}">
+		        </div>
+		
+		        <!-- Nhóm ô Tháng - Năm (Từ và Đến) -->
+		        <div class="month-year-group">
+		            <div class="month-year">
+		                <label for="fromMonth">Từ Tháng:</label>
+		                <input type="number" id="fromMonth" name="fromMonth" placeholder="Nhập tháng (1-12)" th:value="${param.fromMonth}">
+		            </div>
+		            <div class="month-year">
+		                <label for="fromYear">Từ Năm:</label>
+		                <input type="number" id="fromYear" name="fromYear" placeholder="Nhập năm (VD: 2023)" th:value="${param.fromYear}">
+		            </div>
+		            <div class="month-year">
+		                <label for="toMonth">Đến Tháng:</label>
+		                <input type="number" id="toMonth" name="toMonth" placeholder="Nhập tháng (1-12)" th:value="${param.toMonth}">
+		            </div>
+		            <div class="month-year">
+		                <label for="toYear">Đến Năm:</label>
+		                <input type="number" id="toYear" name="toYear" placeholder="Nhập năm (VD: 2023)" th:value="${param.toYear}">
+		            </div>
+		        </div>
+		        
+		        <!-- Chọn thể loại sách -->
+		        <div class="category-group">
+		        	<label for="categorySelect">Thể loại:</label>
+		        	<select id="categorySelect" name="categoryId">
+		        		<option value="">-- Chọn thể loại --</option>
+		        		<option th:each="category : ${categories}"
+		        				th:value="${category.categoryId}"
+		        				th:text="${category.categoryName}"
+		        				th:selected="${category.categoryId == selectedCategory}"></option>
+		        	</select>
+		        </div>
+		
+		        <!-- Vùng Button -->
+		        <div class="button-group">
+		            <button type="submit">Tìm kiếm</button>
+		            <button type="button" class="reset-btn" onclick="resetForm()">Làm mới</button>
+		            <button type="submit">Xuất file excel</button>
+		        </div>
+		
+		        <!-- Thông báo lỗi -->
+		        <span id="errorMsg" class="error-msg"></span>
+		    </form>
+		</div>
+		
+		<!-- Tổng quan số liệu -->
+	    <div class="stats-overview">
+	        <div class="stat-box" data-url="/admin/statistics/all">
+	            <h4>Tổng số sách</h4>
+	            <p th:text="${totalBooks} ?: 'N/A'"></p>
+	        </div>
+	        <div class="stat-box" data-url="/admin/statistics/borrowing">
+	            <h4>Số sách đang mượn</h4>
+	            <p th:text="${totalBorrowing} ?: 'N/A'"></p>
+	        </div>
+	        <div class="stat-box" data-url="/admin/statistics/ready">
+	            <h4>Số sách sẵn sàng</h4>
+	            <p th:text="${totalAvailable} ?: 'N/A'"></p>
+	        </div>
+	        <div class="stat-box" data-url="/admin/statistics/damaged">
+	            <h4>Số sách bị hư hại</h4>
+	            <p th:text="${totalDamaged} ?: 'N/A'"></p>
+	        </div>
+	    </div>
+		
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Thể loại</th>
+					<th>ID</th>
+                    <th>Ảnh</th>
+                    <th>Tên sách</th>
+                    <th>Tác giả</th>
+                    <th>Ngày trả</th>
+				</tr>
+			</thead>
+			<tbody>
+                <tr th:each="borrowReturns : ${borrowReturns}">
+                	<td th:text="${borrowReturns.book.category.categoryName}"></td>
+                    <td th:text="${borrowReturns.book.bookId}"></td>
+					<td>
+						<img th:src="@{/images/book_images/{img}(img=${borrowReturns.book.bookImage})}" alt="Ảnh bìa" width="80">
+					</td>
+					<td th:text="${borrowReturns.book.bookName}"></td>
+					<td>
+			            <span th:each="author, iterStat : ${borrowReturns.book.authors}">
+			                <span th:text="${author.authorName}"></span>
+			                <span th:if="${!iterStat.last}">, </span>
+			            </span>
+					</td>
+					<td th:text="${borrowReturns.endDate}"></td> <!-- Ngày trả -->
+                </tr>
+                
+                <tr th:if="${#lists.isEmpty(borrowReturns)}">
+				    <td colspan="9" class="no-data">Không có dữ liệu</td>
+				</tr>
+            </tbody>
+		</table>
+	</div>
+</body>
+
+<script>
+function validateForm() {
+    const fromMonth = document.getElementById('fromMonth').value.trim();
+    const fromYear = document.getElementById('fromYear').value.trim();
+    const toMonth = document.getElementById('toMonth').value.trim();
+    const toYear = document.getElementById('toYear').value.trim();
+    const errorMsg = document.getElementById('errorMsg');
+
+    if ((fromMonth && !fromYear) || (toMonth && !toYear)) {
+        errorMsg.textContent = "Vui lòng nhập đầy đủ Tháng và Năm cho khoảng thời gian!";
+        errorMsg.style.display = "block";
+        return false;
+    }
+
+    if (fromYear && toYear && (parseInt(fromYear) > parseInt(toYear) || 
+        (parseInt(fromYear) === parseInt(toYear) && parseInt(fromMonth) > parseInt(toMonth)))) {
+        errorMsg.textContent = "Khoảng thời gian không hợp lệ! Ngày bắt đầu phải nhỏ hơn hoặc bằng ngày kết thúc.";
+        errorMsg.style.display = "block";
+        return false;
+    }
+
+    errorMsg.style.display = "none";
+    return true;
+}
+
+function resetForm() {
+    const form = document.getElementById('statsForm');
+    form.reset();
+    document.getElementById('searchQuery').value = '';
+    document.getElementById('fromMonth').value = '';
+    document.getElementById('fromYear').value = '';
+    document.getElementById('toMonth').value = '';
+    document.getElementById('toYear').value = '';
+    document.getElementById('categorySelect').value = ''; // Reset category
+    form.submit();
+}
+
+window.onload = function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = urlParams.get('query');
+    const fromMonth = urlParams.get('fromMonth');
+    const fromYear = urlParams.get('fromYear');
+    const toMonth = urlParams.get('toMonth');
+    const toYear = urlParams.get('toYear');
+    const category = urlParams.get('category'); // Lấy giá trị category từ URL
+
+    if (query) document.getElementById('searchQuery').value = query;
+    if (fromMonth) document.getElementById('fromMonth').value = fromMonth;
+    if (fromYear) document.getElementById('fromYear').value = fromYear;
+    if (toMonth) document.getElementById('toMonth').value = toMonth;
+    if (toYear) document.getElementById('toYear').value = toYear;
+    if (category) document.getElementById('categorySelect').value = category; // Giữ nguyên category đã chọn
+};
+
+document.addEventListener("DOMContentLoaded", function() {
+    const statBoxes = document.querySelectorAll(".stat-box");
+
+    statBoxes.forEach(function(box) {
+        box.addEventListener("click", function() {
+            const url = this.getAttribute("data-url");
+            if (url) {
+                const form = document.createElement("form");
+                form.method = "POST";
+                form.action = url;
+
+                document.body.appendChild(form);
+                form.submit();
+            }
+        });
+    });
+});
+
+</script>
+
+</html>
