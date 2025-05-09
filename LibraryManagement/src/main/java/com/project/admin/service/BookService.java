@@ -73,6 +73,7 @@ public class BookService {
     // All
     public List<Book> getBooksByMonthAndYear(String query, Integer fromMonth, Integer fromYear, 
             Integer toMonth, Integer toYear, Integer categoryId) {
+
         if (fromMonth == null && fromYear == null && toMonth == null && toYear == null && categoryId == null) {
             return bookRepository.findAllBooks(query);
         }
@@ -109,6 +110,7 @@ public class BookService {
     // Borrowing
     public List<Book> getBorrowingBooksByMonthAndYear(String query, Integer fromMonth, Integer fromYear, 
             Integer toMonth, Integer toYear, Integer categoryId) {
+
         if (fromMonth == null && fromYear == null && toMonth == null && toYear == null && categoryId == null) {
             return bookRepository.findAllBorrowedBooks(query);
         }
@@ -145,6 +147,7 @@ public class BookService {
     // Ready
     public List<Book> getReadyBooksByMonthAndYear(String query, Integer fromMonth, Integer fromYear, 
             Integer toMonth, Integer toYear, Integer categoryId) {
+
         if (fromMonth == null && fromYear == null && toMonth == null && toYear == null && categoryId == null) {
             return bookRepository.findAllReadyBooks(query);
         }
@@ -234,4 +237,5 @@ public class BookService {
             .sum();
         return totalAvailable < 0 ? 0 : totalAvailable;
     }
+
 }

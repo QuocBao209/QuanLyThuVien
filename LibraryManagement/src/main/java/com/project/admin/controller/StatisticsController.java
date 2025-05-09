@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.project.admin.entity.Book;
 import com.project.admin.entity.Category;
+import com.project.admin.service.BookBorrowStatsService;
 import com.project.admin.service.BookService;
 import com.project.admin.service.UserService;
 import com.project.admin.utils.AdminCodes;
@@ -25,7 +26,7 @@ public class StatisticsController {
     @Autowired private BookService bookService;
     @Autowired private UserService userService;
     @Autowired private CategoryService categoryService;
-    
+
     // Top user mượn nhiều
     @PostMapping("/statistics/top-readers")
     public ModelAndView getTopBorrowers() {
@@ -38,10 +39,10 @@ public class StatisticsController {
     // Thống kê độc giả theo Tháng - Năm
     @PostMapping("/statistics/top-readers/search-reader")
     public ModelAndView getSearchBorrowers(@RequestParam(required = false) String query,
-                                          @RequestParam(required = false) Integer fromMonth,
-                                          @RequestParam(required = false) Integer fromYear,
-                                          @RequestParam(required = false) Integer toMonth,
-                                          @RequestParam(required = false) Integer toYear) {
+                                           @RequestParam(required = false) Integer fromMonth,
+                                           @RequestParam(required = false) Integer fromYear,
+                                           @RequestParam(required = false) Integer toMonth,
+                                           @RequestParam(required = false) Integer toYear) {
         ModelAndView modelAndView = new ModelAndView("topReader");
         modelAndView.addObject("topReader", userService.getTop3UsersByMonthAndYear(query, fromMonth, fromYear, toMonth, toYear));
         modelAndView.addObject("reader", userService.getRemainingUsersByMonthAndYear(query, fromMonth, fromYear, toMonth, toYear));
@@ -68,7 +69,7 @@ public class StatisticsController {
             .sum();
         totalAvailable = totalAvailable < 0 ? 0 : totalAvailable;
         long totalDamaged = books.stream().mapToLong(Book::getIsDamaged).sum();
-        
+
         model.addAttribute("books", books);
         model.addAttribute("categories", categories);
         model.addAttribute("totalBooks", totalBooks);
@@ -77,7 +78,7 @@ public class StatisticsController {
         model.addAttribute("totalDamaged", totalDamaged);
         model.addAttribute("selectedBox", selectedBox);
         model.addAttribute("selected", selected);
-        
+      
         return "monthly_borrow";
     }
 
@@ -92,7 +93,9 @@ public class StatisticsController {
                                  @RequestParam(required = false) String selectedBox,
                                  @RequestParam(required = false) String selected,
                                  Model model) {
-        
+
+
+        // Kiểm tra tính đầy đủ của Tháng và Năm
         if ((fromMonth != null && fromYear == null) || (toMonth != null && toYear == null)) {
             model.addAttribute("errorMsg", AdminCodes.getErrorMessage("INVALID_DATE_COMPLETENESS"));
             return prepareModelForMonthlyBorrow(model, query, fromMonth, fromYear, toMonth, toYear, categoryId, selectedBox, selected);
@@ -137,9 +140,10 @@ public class StatisticsController {
     
     private String prepareModelForMonthlyBorrow(Model model, String query, Integer fromMonth, Integer fromYear, 
                                                Integer toMonth, Integer toYear, Integer categoryId, String selectedBox, String selected) {
+
         List<Book> books = bookService.getBooksByMonthAndYear(query, fromMonth, fromYear, toMonth, toYear, categoryId);
         List<Category> categories = categoryService.getAllCategories();
-        
+
         long totalBooks = books.stream().mapToLong(Book::getAmount).sum();
         long totalBorrowing = books.stream()
             .mapToLong(Book::getBorrowedRecordsCount)
@@ -188,7 +192,7 @@ public class StatisticsController {
             .sum();
         totalAvailable = totalAvailable < 0 ? 0 : totalAvailable;
         long totalDamaged = books.stream().mapToLong(Book::getIsDamaged).sum();
-        
+
         model.addAttribute("books", books);
         model.addAttribute("categories", categories);
         model.addAttribute("totalBooks", totalBooks);
@@ -212,7 +216,9 @@ public class StatisticsController {
                                     @RequestParam(required = false) String selectedBox,
                                     @RequestParam(required = false) String selected,
                                     Model model) {
-        
+
+
+        // Kiểm tra tính đầy đủ của Tháng và Năm
         if ((fromMonth != null && fromYear == null) || (toMonth != null && toYear == null)) {
             model.addAttribute("errorMsg", AdminCodes.getErrorMessage("INVALID_DATE_COMPLETENESS"));
             return prepareModelForBorrowingReport(model, query, fromMonth, fromYear, toMonth, toYear, categoryId, selectedBox, selected);
@@ -220,6 +226,7 @@ public class StatisticsController {
 
         if (fromYear != null && toYear != null && 
             (fromYear > toYear || (fromYear.equals(toYear) && fromMonth != null && toMonth != null && fromMonth > toMonth))) {
+
             model.addAttribute("errorMsg", AdminCodes.getErrorMessage("INVALID_DATE_RANGE"));
             return prepareModelForBorrowingReport(model, query, fromMonth, fromYear, toMonth, toYear, categoryId, selectedBox, selected);
         }
@@ -260,7 +267,7 @@ public class StatisticsController {
         
         List<Book> books = bookService.getBorrowingBooksByMonthAndYear(query, fromMonth, fromYear, toMonth, toYear, categoryId);
         List<Category> categories = categoryService.getAllCategories();
-        
+
         long totalBooks = books.stream().mapToLong(Book::getAmount).sum();
         long totalBorrowing = books.stream()
             .mapToLong(Book::getBorrowedRecordsCount)
@@ -309,7 +316,7 @@ public class StatisticsController {
             .sum();
         totalAvailable = totalAvailable < 0 ? 0 : totalAvailable;
         long totalDamaged = books.stream().mapToLong(Book::getIsDamaged).sum();
-        
+
         model.addAttribute("books", books);
         model.addAttribute("categories", categories);
         model.addAttribute("totalBooks", totalBooks);
@@ -333,7 +340,7 @@ public class StatisticsController {
                                 @RequestParam(required = false) String selectedBox,
                                 @RequestParam(required = false) String selected,
                                 Model model) {
-        
+
         if ((fromMonth != null && fromYear == null) || (toMonth != null && toYear == null)) {
             model.addAttribute("errorMsg", AdminCodes.getErrorMessage("INVALID_DATE_COMPLETENESS"));
             return prepareModelForReadyReport(model, query, fromMonth, fromYear, toMonth, toYear, categoryId, selectedBox, selected);
@@ -381,7 +388,7 @@ public class StatisticsController {
         
         List<Book> books = bookService.getReadyBooksByMonthAndYear(query, fromMonth, fromYear, toMonth, toYear, categoryId);
         List<Category> categories = categoryService.getAllCategories();
-        
+
         long totalBooks = books.stream().mapToLong(Book::getAmount).sum();
         long totalBorrowing = books.stream()
             .mapToLong(Book::getBorrowedRecordsCount)
@@ -520,3 +527,4 @@ public class StatisticsController {
         return "damagedBook";
     }
 }
+
