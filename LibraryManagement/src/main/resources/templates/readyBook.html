@@ -91,15 +91,15 @@
 	            <p th:text="${totalBooks} ?: 'N/A'"></p>
 	        </div>
 	        <div class="stat-box" th:classappend="${selectedBox == '/admin/statistics/borrowing'} ? 'selected'" data-url="/admin/statistics/borrowing">
-	            <h4>Số sách đang mượn</h4>
+	            <h4>Tổng số sách đang mượn</h4>
 	            <p th:text="${totalBorrowing} ?: 'N/A'"></p>
 	        </div>
 	        <div class="stat-box" th:classappend="${selectedBox == '/admin/statistics/ready'} ? 'selected'" data-url="/admin/statistics/ready">
-	            <h4>Số sách sẵn sàng</h4>
+	            <h4>Tổng số sách sẵn sàng</h4>
 	            <p th:text="${totalAvailable < 0 ? '0' : totalAvailable} ?: 'N/A'"></p>
 	        </div>
 	        <div class="stat-box" th:classappend="${selectedBox == '/admin/statistics/damaged'} ? 'selected'" data-url="/admin/statistics/damaged">
-	            <h4>Số sách bị hư hại</h4>
+	            <h4>Tổng số sách bị hư hại</h4>
 	            <p th:text="${totalDamaged} ?: 'N/A'"></p>
 	        </div>
 	    </div>

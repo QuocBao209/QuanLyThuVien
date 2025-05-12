@@ -183,15 +183,17 @@ public class StatisticsController {
         List<Category> categories = categoryService.getAllCategories();
         List<Book> books = bookService.getBorrowingBooksByMonthAndYear(null, month, year, month, year, null);
         
-        long totalBooks = books.stream().mapToLong(Book::getAmount).sum();
-        long totalBorrowing = books.stream()
+        List<Book> allBooks = bookService.getBooksByMonthAndYear(null, month, year, month, year, null);
+        
+        long totalBooks = allBooks.stream().mapToLong(Book::getAmount).sum();
+        long totalBorrowing = allBooks.stream()
             .mapToLong(Book::getBorrowedRecordsCount)
             .sum();
-        long totalAvailable = books.stream()
-            .mapToLong(book -> book.getAmount() - book.getBorrowedRecordsCount() - book.getIsDamaged())
+        long totalAvailable = allBooks.stream()
+            .mapToLong(allBook -> allBook.getAmount() - allBook.getBorrowedRecordsCount() - allBook.getIsDamaged())
             .sum();
         totalAvailable = totalAvailable < 0 ? 0 : totalAvailable;
-        long totalDamaged = books.stream().mapToLong(Book::getIsDamaged).sum();
+        long totalDamaged = allBooks.stream().mapToLong(Book::getIsDamaged).sum();
 
         model.addAttribute("books", books);
         model.addAttribute("categories", categories);
@@ -307,15 +309,17 @@ public class StatisticsController {
         List<Category> categories = categoryService.getAllCategories();
         List<Book> books = bookService.getReadyBooksByMonthAndYear(null, month, year, month, year, null);
         
-        long totalBooks = books.stream().mapToLong(Book::getAmount).sum();
-        long totalBorrowing = books.stream()
+        List<Book> allBooks = bookService.getBooksByMonthAndYear(null, month, year, month, year, null);
+        
+        long totalBooks = allBooks.stream().mapToLong(Book::getAmount).sum();
+        long totalBorrowing = allBooks.stream()
             .mapToLong(Book::getBorrowedRecordsCount)
             .sum();
-        long totalAvailable = books.stream()
-            .mapToLong(book -> book.getAmount() - book.getBorrowedRecordsCount() - book.getIsDamaged())
+        long totalAvailable = allBooks.stream()
+            .mapToLong(allBook -> allBook.getAmount() - allBook.getBorrowedRecordsCount() - allBook.getIsDamaged())
             .sum();
         totalAvailable = totalAvailable < 0 ? 0 : totalAvailable;
-        long totalDamaged = books.stream().mapToLong(Book::getIsDamaged).sum();
+        long totalDamaged = allBooks.stream().mapToLong(Book::getIsDamaged).sum();
 
         model.addAttribute("books", books);
         model.addAttribute("categories", categories);

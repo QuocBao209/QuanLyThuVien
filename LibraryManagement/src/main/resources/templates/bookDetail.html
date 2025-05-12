@@ -40,7 +40,12 @@
 				<!-- Thông báo lỗi sách hết hàng -->
 				<div th:if="${noBooks}" class="error-message">
 					<p th:text="${noBooks}"></p>
-				</div>				
+				</div>		
+				
+				<!-- Thông báo lỗi giới hạn mượn sách -->
+				<div th:if="${limitBorrow}" class="error-message">
+					<p th:text="${limitBorrow}"></p>
+				</div>		
 		</div>
 	</div>
 	

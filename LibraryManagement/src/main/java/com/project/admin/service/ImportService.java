@@ -83,4 +83,31 @@ public class ImportService {
             importDetailRepository.saveAll(importDetails);
         }
     }
+    
+    public List<ImportDetail> searchByBookOrAuthor(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return importDetailRepository.findAll();
+        }
+        return importDetailRepository.findByBookNameOrAuthorContainingIgnoreCase(keyword);
+    }
+    
+    public List<ImportDetail> searchByBookOrAuthorAndDate(String keyword, LocalDate importDate) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return importDetailRepository.findByImportDate(importDate);
+        }
+        return importDetailRepository.findByBookNameOrAuthorContainingIgnoreCaseAndImportDate(keyword, importDate);
+    }
+
+    public List<ImportReceipt> searchImportReceipts(String keyword, LocalDate importDate) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            if (importDate == null) {
+                return importReceiptRepository.findAll();
+            }
+            return importReceiptRepository.searchingByImportDate(importDate);
+        }
+        if (importDate == null) {
+            return importReceiptRepository.findByInvoiceIdContainingOrUserNameContaining(keyword);
+        }
+        return importReceiptRepository.findByInvoiceIdContainingOrUserNameContainingAndImportDate(keyword, importDate);
+    }
 }

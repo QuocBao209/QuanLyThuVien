@@ -32,6 +32,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -52,6 +54,7 @@ public class BookController {
 
     @Value("${file.export.directory:/tmp/exports}")
     private String exportDirectory;
+    
     // Danh sách nhập hàng
     @PostMapping("/import")
     public String showImportList(Model model) {
@@ -394,7 +397,8 @@ public class BookController {
     // Controller xử lý tìm sách
     @PostMapping("/search-book")
     public ModelAndView searchBook(@RequestParam("keyword") String keyword,
-    							   @RequestParam("targetView") String targetView) {
+                                   @RequestParam("targetView") String targetView,
+                                   @RequestParam(value = "importDate", required = false) String importDate) {
         ModelAndView modelAndView = new ModelAndView(targetView);
         
         if ("borrow_return_view".equals(targetView)) {
@@ -402,7 +406,68 @@ public class BookController {
             modelAndView.addObject("borrowReturns", results);
             
             if (results.isEmpty()) {
-            	modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("BOOK_NOT_FOUND"));
+                modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("BOOK_NOT_FOUND"));
+            }
+            
+        } else if ("importDetails".equals(targetView)) {
+            try {
+                List<ImportDetail> importDetails;
+                if (importDate != null && !importDate.trim().isEmpty()) {
+                    // Chuyển đổi importDate từ String (dd/MM/yyyy) sang LocalDate
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    LocalDate parsedDate = LocalDate.parse(importDate, formatter);
+                    // Tìm kiếm ImportDetail theo keyword và importDate
+                    importDetails = importService.searchByBookOrAuthorAndDate(keyword, parsedDate);
+                } else {
+                    // Nếu không có importDate, trả về danh sách rỗng và thông báo lỗi
+                    importDetails = Collections.emptyList();
+                    modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("MISSING_IMPORT_DATE"));
+                }
+                
+                modelAndView.addObject("importDetails", importDetails);
+                modelAndView.addObject("importDate", importDate);
+                
+                if (importDetails.isEmpty() && (keyword != null && !keyword.trim().isEmpty())) {
+                    modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("BOOK_NOT_FOUND"));
+                }
+                
+            } catch (DateTimeParseException e) {
+                modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("INVALID_DATE_FORMAT"));
+                modelAndView.addObject("importDetails", Collections.emptyList());
+                modelAndView.addObject("importDate", importDate);
+            }
+            
+        } else if ("import".equals(targetView)) {
+            try {
+                List<ImportReceipt> importReceipts;
+                
+                if ((keyword == null || keyword.trim().isEmpty()) && (importDate == null || importDate.trim().isEmpty())) {
+                    // Nếu không có keyword và importDate, trả về toàn bộ danh sách
+                    importReceipts = importService.getAllImportReceipts();
+                } else if (importDate != null && !importDate.trim().isEmpty()) {
+                    // Chuyển đổi importDate từ String (yyyy-MM-dd) sang LocalDate
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    LocalDate parsedDate = LocalDate.parse(importDate, formatter);
+                    // Tìm kiếm theo keyword (nếu có) và importDate
+                    importReceipts = importService.searchImportReceipts(keyword, parsedDate);
+                } else {
+                    // Chỉ tìm kiếm theo keyword
+                    importReceipts = importService.searchImportReceipts(keyword, null);
+                }
+                
+                modelAndView.addObject("importReceipts", importReceipts);
+                modelAndView.addObject("keyword", keyword);
+                modelAndView.addObject("importDate", importDate);
+                
+                if (importReceipts.isEmpty()) {
+                    modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("IMPORT_RECEIPT_NOT_FOUND"));
+                }
+                
+            } catch (DateTimeParseException e) {
+                modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("INVALID_DATE_FORMAT"));
+                modelAndView.addObject("importReceipts", Collections.emptyList());
+                modelAndView.addObject("keyword", keyword);
+                modelAndView.addObject("importDate", importDate);
             }
             
         } else {
@@ -410,7 +475,7 @@ public class BookController {
             modelAndView.addObject("books", books);
             
             if (books.isEmpty()) {
-            	modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("BOOK_NOT_FOUND"));
+                modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("BOOK_NOT_FOUND"));
             }
         }
         

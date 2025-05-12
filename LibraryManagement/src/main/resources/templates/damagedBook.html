@@ -12,7 +12,7 @@
 	<div th:replace="admin :: sidebar"></div>
 	
 	<div class="main-container">
-		<h2>Sách bị hư hỏng</h2>
+		<h2>Sách bị hư hại</h2>
 		<!-- Toolbar -->
 		<div class="toolbar">
 		    <form th:action="@{/admin/statistics/damaged/book-borrow-stats}" method="post" 
@@ -92,11 +92,11 @@
 	            <p th:text="${totalBooks} ?: 'N/A'"></p>
 	        </div>
 	        <div class="stat-box" th:classappend="${selectedBox == '/admin/statistics/borrowing'} ? 'selected'" data-url="/admin/statistics/borrowing">
-	            <h4>Số sách đang mượn</h4>
+	            <h4>Tổng số sách đang mượn</h4>
 	            <p th:text="${totalBorrowing} ?: 'N/A'"></p>
 	        </div>
 	        <div class="stat-box" th:classappend="${selectedBox == '/admin/statistics/ready'} ? 'selected'" data-url="/admin/statistics/ready">
-	            <h4>Số sách sẵn sàng</h4>
+	            <h4>Tổng số sách sẵn sàng</h4>
 	            <p th:text="${totalAvailable < 0 ? '0' : totalAvailable} ?: 'N/A'"></p>
 	        </div>
 	        <div class="stat-box" th:classappend="${selectedBox == '/admin/statistics/damaged'} ? 'selected'" data-url="/admin/statistics/damaged">

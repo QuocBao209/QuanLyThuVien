@@ -17,10 +17,16 @@
 
 	<!-- Form tìm kiếm -->
 	<form th:action="@{/admin/search-book}" method="post" class="search-container">
+		<input type="hidden" name="targetView" value="importDetails"/>
+		<input type="hidden" name="importDate" th:value="${importDate}"/>
 		<input type="text" name="keyword" placeholder="Nhập tên sách hoặc tác giả ...">
 		<button type="submit" class="search-btn">🔍 Tìm kiếm</button>
 	</form>
-
+	
+	<!-- Thông báo lỗi -->
+    <div th:if="${errorMessage}" style="color: red;">
+        <p th:text="${errorMessage}"></p>
+    </div>
 
 	<table class="book-table">
 		<thead>
