@@ -547,13 +547,14 @@ public class BookController {
 
         ByteArrayResource resource = new ByteArrayResource(outputStream.toByteArray());
 
-        String normalizedTitle = java.text.Normalizer.normalize(pageTitle, java.text.Normalizer.Form.NFD)
+        String processedTitle = pageTitle.replace("đ", "d").replace("Đ", "D");
+
+        String normalizedTitle = java.text.Normalizer.normalize(processedTitle, java.text.Normalizer.Form.NFD)
                 .replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
                 .replaceAll("[^a-zA-Z0-9\\s]", "")
                 .toLowerCase()
                 .trim()
                 .replaceAll("\\s+", "-");
-
 
         String currentDate = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
