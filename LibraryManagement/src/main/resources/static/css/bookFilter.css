@@ -58,6 +58,10 @@
     border-bottom: 1px solid #ccc; /* Add light border between filters */
     padding-bottom: 20px; /* Add padding below the category filter */
     text-align: left;
+    max-height: 322px; /* Adjust the height as needed */
+    overflow-y: auto; /* Enables vertical scrollbar */
+    padding: 10px; /* Optional: for better spacing */
+    border: 1px solid #ccc; /* Optional: for visual clarity */
 }
 
 .time-filter {

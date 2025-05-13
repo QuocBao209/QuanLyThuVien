@@ -75,7 +75,7 @@
 	        
 	        <!-- Tìm kiếm sách -->
 	        <form action="" method="get" class="searching">
-	        	<input type="text" placeholder="Tìm kiếm sách ..." class="search-bar">
+	        	<input type="text" name="keyword" th:value="${keyword}" placeholder="Tìm kiếm sách ..." class="search-bar">
 	        </form>
 	        
 	        <div class="book-list" th:if="${bookPage != null and not #lists.isEmpty(bookPage.content)}">
