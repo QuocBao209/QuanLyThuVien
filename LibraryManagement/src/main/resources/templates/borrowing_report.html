@@ -65,17 +65,8 @@
 		        <!-- Thông báo lỗi -->
 		        <span id="errorMsg" class="error-msg" th:text="${errorMsg}"></span>
 		    </form>
-		    
-		    <!-- Form xuất Excel -->
+
 			<form th:action="@{/admin/statistics/export-excel}" method="get" id="exportForm">
-				<!-- Sao chép các input từ searchForm để đảm bảo dữ liệu nhất quán -->
-				<input type="hidden" id="exportQuery" name="query" th:value="${param.query}">
-				<input type="hidden" id="exportFromMonth" name="fromMonth" th:value="${param.fromMonth}">
-				<input type="hidden" id="exportFromYear" name="fromYear" th:value="${param.fromYear}">
-				<input type="hidden" id="exportToMonth" name="toMonth" th:value="${param.toMonth}">
-				<input type="hidden" id="exportToYear" name="toYear" th:value="${param.toYear}">
-				<input type="hidden" id="exportCategoryId" name="categoryId" th:value="${param.categoryId}">
-				<input type="hidden" name="statisticType" value="book-borrow-stats">
 
 				<!-- Nút xuất Excel -->
 				<div class="button-group">
@@ -198,6 +189,73 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 });
+
+function exportExcel() {
+	var form = document.getElementById('exportForm');
+
+	const oldInputs = form.querySelectorAll('input[name="columns"], input[name="rows"]');
+	oldInputs.forEach(input => input.remove());
+
+	const pageTitle = document.title;
+
+
+	const titleInput = document.createElement('input');
+	titleInput.type = 'hidden';
+	titleInput.name = 'pageTitle';
+	titleInput.value = pageTitle;
+	form.appendChild(titleInput);
+
+	var columns = [];
+	var headers = document.querySelectorAll('.table thead th');
+	headers.forEach(header => {
+		columns.push(header.innerText.trim());
+	});
+
+	columns.forEach(column => {
+		var input = document.createElement('input');
+		input.type = 'hidden';
+		input.name = 'columns';
+		input.value = column;
+		form.appendChild(input);
+	});
+
+	var rows = [];
+	var tbodyRows = document.querySelectorAll('.table tbody tr');
+	tbodyRows.forEach(tr => {
+		if (!tr.classList.contains('no-data')) {
+			var rowData = [];
+			var cells = tr.querySelectorAll('td');
+			cells.forEach((td, index) => {
+
+				if (index === 2) {
+					var img = td.querySelector('img');
+					if (img) {
+						rowData.push(img.getAttribute('src'));
+					} else {
+						rowData.push('');
+					}
+				} else {
+					rowData.push(td.innerText.trim());
+				}
+			});
+
+			if (rowData.length > 0) {
+				rows.push(rowData.join('|'));
+			}
+		}
+	});
+
+	rows.forEach(row => {
+		var input = document.createElement('input');
+		input.type = 'hidden';
+		input.name = 'rows';
+		input.value = row;
+		form.appendChild(input);
+	});
+
+	form.submit();
+}
+
 </script>
 
 </html>
