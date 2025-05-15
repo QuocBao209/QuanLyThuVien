@@ -65,7 +65,7 @@ public class BookService {
 //        return new PageImpl<>(pagedBooks, pageable, books.size());
 //    }
     
-    public Page<Book> filterBooks(Set<String> categoryNames, String timeRange, int page, int size) {
+    public Page<Book> filterBooks(Set<String> categoryNames, String timeRange, String keyword, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         List<Book> books = bookRepository.findByIsDeletedFalse();
 
@@ -76,10 +76,18 @@ public class BookService {
                     .collect(Collectors.toList());
         }
 
-        // Lọc theo khoảng thời gian xuất bản (Chỉ 1 khoảng thay vì danh sách)
+        // Lọc theo khoảng thời gian xuất bản
         if (timeRange != null && !timeRange.isEmpty()) {
             books = books.stream()
                     .filter(book -> isWithinYearRange(book.getPublishYear(), timeRange))
+                    .collect(Collectors.toList());
+        }
+
+        // Lọc theo từ khóa (tìm kiếm trong tiêu đề sách)
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            String searchKeyword = keyword.trim().toLowerCase();
+            books = books.stream()
+                    .filter(book -> book.getBookName().toLowerCase().contains(searchKeyword))
                     .collect(Collectors.toList());
         }
 
@@ -90,7 +98,6 @@ public class BookService {
 
         return new PageImpl<>(pagedBooks, pageable, books.size());
     }
-
 
     private boolean isWithinYearRange(int year, String range) {
         String[] years = range.split("-");
@@ -118,10 +125,32 @@ public class BookService {
         return bookRepository.findByIsDeletedFalse(pageable);
     }
     
-    //Phân trang danh sách sách mới nhất (An)
-    public Page<Book> getLatestBooks(int page, int size) {
+    // Phân trang danh sách sách mới nhất với bộ lọc danh mục và từ khóa
+    public Page<Book> getLatestBooks(Set<String> categoryNames, String keyword, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("publishYear").descending());
-        return bookRepository.findByIsDeletedFalse(pageable);
+        List<Book> books = bookRepository.findByIsDeletedFalse();
+
+        // Lọc theo danh mục
+        if (categoryNames != null && !categoryNames.isEmpty()) {
+            books = books.stream()
+                    .filter(book -> categoryNames.contains(book.getCategory().getCategoryName()))
+                    .collect(Collectors.toList());
+        }
+        
+     // Lọc theo từ khóa (tìm kiếm trong tiêu đề sách)
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            String searchKeyword = keyword.trim().toLowerCase();
+            books = books.stream()
+                    .filter(book -> book.getBookName().toLowerCase().contains(searchKeyword))
+                    .collect(Collectors.toList());
+        }
+
+        // Chuyển danh sách đã lọc thành Page<Book>
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), books.size());
+        List<Book> pagedBooks = books.subList(start, end);
+
+        return new PageImpl<>(pagedBooks, pageable, books.size());
     }
     
     //Phân trang danh sách sách đề cử ( không lấy top 3) (An)

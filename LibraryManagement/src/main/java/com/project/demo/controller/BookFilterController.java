@@ -44,61 +44,62 @@ public class BookFilterController {
 	}
 	
 	@GetMapping("/book-filter")
-	public ModelAndView bookFilterPage(
-	        @RequestParam(value = "categoryName", required = false) Set<String> categoryNames,
-	        @RequestParam(value = "timeFilter", required = false) String timeRange,
-	        @RequestParam(defaultValue = "0") int page,
-	        @RequestParam(defaultValue = "20") int size,
-	        HttpSession session,
-	        HttpServletRequest request) {
+    public ModelAndView bookFilterPage(
+            @RequestParam(value = "categoryName", required = false) Set<String> categoryNames,
+            @RequestParam(value = "timeFilter", required = false) String timeRange,
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            HttpSession session,
+            HttpServletRequest request) {
 
-	    ModelAndView mav = new ModelAndView("bookFilter");
+        ModelAndView mav = new ModelAndView("bookFilter");
 
-	    // Lấy danh sách danh mục sách
-	    List<Category> categories = categoryService.getAllCategories();
+        // Lấy danh sách danh mục sách
+        List<Category> categories = categoryService.getAllCategories();
 
-	    // Lọc sách theo danh mục và thời gian
-	    Page<Book> bookPage = bookService.filterBooks(categoryNames, timeRange, page, size);
-	    
-	    // Kiểm tra nếu không có sách
+        // Lọc sách theo danh mục, thời gian, và từ khóa
+        Page<Book> bookPage = bookService.filterBooks(categoryNames, timeRange, keyword, page, size);
+        
+        // Kiểm tra nếu không có sách
         if (bookPage == null || bookPage.getContent().isEmpty()) {
             mav.addObject("noData", UserCodes.getErrorMessage("BOOK_NOT_FOUND"));
         }
 
-	    // Kiểm tra session user
-	    String username = (String) session.getAttribute("user");
-	    if (username != null) {
-	        Optional<User> userOptional = userService.getUserByUsername(username);
-	        if (userOptional.isPresent()) {
-	            User user = userOptional.get();
+        // Kiểm tra session user
+        String username = (String) session.getAttribute("user");
+        if (username != null) {
+            Optional<User> userOptional = userService.getUserByUsername(username);
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
 
-	            // Lấy danh sách thông báo của user
-	            List<Notification> notifications = notificationService.getNotificationsByUsername(username);
-	            
-	            // Sắp xếp thông báo từ mới nhất đến cũ nhất
-	            notifications.sort((n1, n2) -> n2.getCreatedAt().compareTo(n1.getCreatedAt()));
+                // Lấy danh sách thông báo của user
+                List<Notification> notifications = notificationService.getNotificationsByUsername(username);
+                
+                // Sắp xếp thông báo từ mới nhất đến cũ nhất
+                notifications.sort((n1, n2) -> n2.getCreatedAt().compareTo(n1.getCreatedAt()));
 
-	            // Đếm số lượng thông báo chưa đọc
-	            long unreadCount = notifications.stream().filter(n -> !n.isRead()).count();
+                // Đếm số lượng thông báo chưa đọc
+                long unreadCount = notifications.stream().filter(n -> !n.isRead()).count();
 
-	            // Gửi dữ liệu đến view
-	            mav.addObject("user", user);
-	            mav.addObject("notifications", notifications);
-	            mav.addObject("unreadCount", unreadCount);
-	        }
-	    }
+                // Gửi dữ liệu đến view
+                mav.addObject("user", user);
+                mav.addObject("notifications", notifications);
+                mav.addObject("unreadCount", unreadCount);
+            }
+        }
 
-	    // Thêm requestURI vào model
-	    mav.addObject("currentUrl", request.getRequestURI());
+        // Thêm requestURI vào model
+        mav.addObject("currentUrl", request.getRequestURI());
 
-	    // Thêm dữ liệu vào Model
-	    mav.addObject("bookPage", bookPage);
-	    mav.addObject("currentPage", page);
-	    mav.addObject("categories", categories);
-	    mav.addObject("categoryNames", categoryNames);
-	    mav.addObject("selectedTimeRange", timeRange);
+        // Thêm dữ liệu vào Model
+        mav.addObject("bookPage", bookPage);
+        mav.addObject("currentPage", page);
+        mav.addObject("categories", categories);
+        mav.addObject("categoryNames", categoryNames);
+        mav.addObject("selectedTimeRange", timeRange);
+        mav.addObject("keyword", keyword);
 
-	    return mav;
-	}
-
+        return mav;
+    }
 }

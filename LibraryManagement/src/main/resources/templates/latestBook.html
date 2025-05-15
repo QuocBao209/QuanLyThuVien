@@ -8,82 +8,92 @@
 	<title>Sách mới nhất</title>
 </head>
 <body>
-		<!-- Header -->
+	<!-- Header -->
 	<div th:replace="home :: header"></div>
 	
-	
-		<!-- Danh sách sách -->
-		<div class="book-container">
-			<h2>Danh sách sách mới nhất</h2>
-			<!-- Container chứa cả ô tìm kiếm và ô lọc -->
-    		<div class="search-filter-container">
-				<form th:action="@{/home/latest-book}" method="post" class="search-container">
-					<button type="submit" class="search-btn">🔍 Tìm kiếm</button>
-					<input type="text" name="keyword" placeholder="Nhập tên sách hoặc tên tác giả ...">
-				</form>
+	<!-- Danh sách sách -->
+	<div class="book-container">
+		<h2>Danh sách sách mới nhất</h2>
+		<!-- Container chứa cả ô tìm kiếm và ô lọc -->
+		<div class="search-filter-container">
+			<form th:action="@{/home/latest-book}" method="get" class="search-container">
+				<input type="text" name="keyword" th:value="${keyword}" placeholder="Nhập tên sách hoặc tên tác giả ...">
 				<div class="filter-container">
-				    <details class="filter-dropdown">
-				        <summary class="filter-btn">Chọn thể loại ▼</summary>
-				        <div class="filter-list">
-				            <label th:each="category : ${categories}">
-				                <input type="checkbox" th:value="${category}" class="category-checkbox">
-				                <span th:text="${category}"></span>
-				            </label>
-				        </div>
-				    </details>
+					<details class="filter-dropdown">
+						<summary class="filter-btn">Chọn thể loại ▼</summary>
+						<div class="filter-list">
+							<label>
+								<input type="radio" name="categoryName" value="" th:checked="${categoryName == null or categoryName == ''}">
+								<span>Tất cả</span>
+							</label>
+							<label th:each="category : ${categories}">
+								<input type="radio" name="categoryName" th:value="${category.categoryName}"
+									   th:checked="${categoryName != null and categoryName == category.categoryName}">
+								<span th:text="${category.categoryName}"></span>
+							</label>
+						</div>
+					</details>
 				</div>
-			</div>
+				<button type="submit" class="search-btn">🔍 Tìm kiếm</button>
+			</form>
+		</div>
 		<br>
 		<div class="book-list" th:if="${bookPage != null and not #lists.isEmpty(bookPage.content)}">
-			<div th:each="book : ${bookPage.content}" class="book-item" >
-				<img th:alt="${book.bookName}"  th:src="@{/images/book_images/{img}(img=${book.bookImage})}"width="80">
+			<div th:each="book : ${bookPage.content}" class="book-item">
+				<img th:alt="${book.bookName}" th:src="@{/images/book_images/{img}(img=${book.bookImage})}" width="80">
 				<h4 th:text="${book.bookName}"></h4>
 				<div class="button-container">
-	                    <form th:action="@{/home/book-detail/{id}(id=${book.bookId})}" method="get">
-	                        <button type="submit">Xem sách</button>
-	                    </form>
-	                </div>
-				 <div th:if="${bookPage == null or #lists.isEmpty(bookPage.content)}">
-	            	<p>Không có sách nào trong thư viện</p>
-	       		 </div>
+					<form th:action="@{/home/book-detail/{id}(id=${book.bookId})}" method="get">
+						<button type="submit">Xem sách</button>
+					</form>
+				</div>
 				<!-- Tooltip chứa thông tin sách -->
-			    <div class="book-info">
-			        <img th:alt="${book.bookName}" th:src="@{/images/book_images/{img}(img=${book.bookImage})}"width="80">
+				<div class="book-info">
+					<img th:alt="${book.bookName}" th:src="@{/images/book_images/{img}(img=${book.bookImage})}" width="80">
 					<h4 th:text="${book.bookName}"></h4>
 					<p>
-				    Tác giả: 
-				    <span th:each="author, iterStat : ${book.authors}">
-				        <span th:text="${author.authorName}"></span>
-				        <span th:if="${!iterStat.last}">, </span>
-				    </span>
+						Tác giả: 
+						<span th:each="author, iterStat : ${book.authors}">
+							<span th:text="${author.authorName}"></span>
+							<span th:if="${!iterStat.last}">, </span>
+						</span>
 					</p>
 					<p th:text="'Thể loại: ' + ${book.category}"></p>
 					<p th:text="'Năm xuất bản: ' + ${book.publishYear}"></p>
-			    </div>
+				</div>
 			</div>
 		</div>
+		<div th:if="${bookPage == null or #lists.isEmpty(bookPage.content)}">
+			<p>Không có sách nào trong thư viện</p>
+		</div>
 		<!-- Phân trang -->
-	        <div class="pagination" th:if="${bookPage.totalPages > 1}">
-	            <ul>
-	                <li th:if="${bookPage.hasPrevious()}">
-	                    <a th:href="@{/home/latest-book(page=${bookPage.number - 1})}">Trước</a>
-	                </li>
-	
-	                <li th:each="i : ${#numbers.sequence(0, bookPage.totalPages - 1)}"
-	                    th:classappend="${i == bookPage.number} ? 'active'">
-	                    <a th:href="@{/home/latest-book(page=${i})}" th:text="${i + 1}"></a>
-	                </li>
-	
-	                <li th:if="${bookPage.hasNext()}">
-	                    <a th:href="@{/home/latest-book(page=${bookPage.number + 1}, size=${bookPage.size})}">Sau</a>
-	                </li>
-	            </ul>
-	        </div>
+		<div class="pagination" th:if="${bookPage.totalPages > 1}">
+			<ul>
+				<li th:if="${bookPage.hasPrevious()}">
+					<a th:href="@{/home/book-filter(page=${bookPage.number - 1}, size=${bookPage.size}, categoryName=${categoryName}, keyword=${keyword})}">Trước</a>
+				</li>
+				<li th:each="i : ${#numbers.sequence(0, bookPage.totalPages - 1)}"
+					th:classappend="${i == bookPage.number} ? 'active'">
+					<a th:href="@{/home/book-filter(page=${i}, size=${bookPage.size}, categoryName=${categoryName}, keyword=${keyword})}" th:text="${i + 1}"></a>
+				</li>
+				<li th:if="${bookPage.hasNext()}">
+					<a th:href="@{/home/book-filter(page=${bookPage.number + 1}, size=${bookPage.size}, categoryName=${categoryName}, keyword=${keyword})}">Sau</a>
+				</li>
+			</ul>
+		</div>
 	</div>
 	
-	 <script th:src="@{/js/TooltipController.js}"></script>
-	 
-	 <script th:src="@{/js/notification.js}"></script>
+	<script th:src="@{/js/TooltipController.js}"></script>
+	<script th:src="@{/js/notification.js}"></script>
+	<script>
+		document.addEventListener('click', function(event) {
+		    const details = document.querySelector('.filter-dropdown');
+		    const isClickInside = details.contains(event.target);
+		    
+		    if (!isClickInside && details.open) {
+		        details.open = false; // Close the dropdown
+		    }
+		});
+	</script>
 </body>
-
 </html>

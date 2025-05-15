@@ -21,6 +21,7 @@ import com.project.demo.service.BookService;
 import com.project.demo.service.CategoryService;
 import com.project.demo.service.NotificationService;
 import com.project.demo.service.UserService;
+import com.project.demo.utils.UserCodes;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -43,14 +44,22 @@ public class LatestBookController {
 	 }
 	@GetMapping("/latest-book")
     public ModelAndView latestBookPage(
+    		@RequestParam(value = "categoryName", required = false) Set<String> categoryNames,
+	        @RequestParam(value = "timeFilter", required = false) String timeRange,
     		@RequestParam(defaultValue = "0") int page,
     		@RequestParam(defaultValue = "10") int size,
+    		@RequestParam(value = "keyword", required = false) String keyword,
     		HttpSession session,
             HttpServletRequest request){
         ModelAndView model = new ModelAndView("latestBook");
         
         List<Category> categories = categoryService.getAllCategories();
-        Page<Book> bookPage = bookService.getLatestBooks(page, size);
+        Page<Book> bookPage = bookService.getLatestBooks(categoryNames, keyword, page, size);
+        
+     // Kiểm tra nếu không có sách
+        if (bookPage == null || bookPage.getContent().isEmpty()) {
+        	model.addObject("noData", UserCodes.getErrorMessage("BOOK_NOT_FOUND"));
+        }
         
         String username = (String) session.getAttribute("user");
         if (username != null) {
@@ -74,10 +83,15 @@ public class LatestBookController {
 	         }
 	     }
         
-        model.addObject("categories", categories);
-        model.addObject("bookPage", bookPage);
-        model.addObject("currentPage", page);
-        model.addObject("currentUrl", request.getRequestURI()); // Lưu URL hiện tại để xử lý nếu cần
+        // Thêm requestURI vào model
+	    model.addObject("currentUrl", request.getRequestURI());
+
+	    // Thêm dữ liệu vào Model
+	    model.addObject("bookPage", bookPage);
+	    model.addObject("currentPage", page);
+	    model.addObject("categories", categories);
+	    model.addObject("categoryNames", categoryNames);
+	    model.addObject("selectedTimeRange", timeRange);
         
         return model;
     }
