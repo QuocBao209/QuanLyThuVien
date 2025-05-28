@@ -96,7 +96,7 @@ public class BookDetailController {
 	    return mav;
 	}
 
-	//Giới hạn mượn sách ( it me u dump dump bao)
+	//Giới hạn mượn sách 
 	@PostMapping("/submit-borrow/{id}")
 	public String submitBorrow(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttributes) {
 		String username = (String) session.getAttribute("user");
@@ -116,13 +116,6 @@ public class BookDetailController {
 				redirectAttributes.addFlashAttribute("noBooks", UserCodes.getErrorMessage("INVLID_BORROW_ID_2"));
 				return "redirect:/home/book-detail/" + id;
 			}
-
-//			// Kiểm tra số lượt mượn đang hoạt động của người dùng
-//			int activeBorrowsCount = borrowService.countActiveBorrowSessionsByUser(user.getUserId());
-//			if (activeBorrowsCount >= 3) {
-//				redirectAttributes.addFlashAttribute("limitBorrow", UserCodes.getErrorMessage("INVLID_BORROW_ID_1"));
-//				return "redirect:/home/book-detail/" + id + "?error=max_borrow_sessions_reached"; // Giới hạn số lần mượn
-//			}
 
 			// Tạo bản ghi mượn sách mới
 			Borrow_Return borrow = new Borrow_Return();

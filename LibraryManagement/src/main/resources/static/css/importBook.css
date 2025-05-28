@@ -15,7 +15,7 @@
 }
 
 input[type="file"] {
-    display: none; /* Ẩn input file mặc định */
+    display: none;
 }
 
 .custom-file-label {

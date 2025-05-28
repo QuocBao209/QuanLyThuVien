@@ -1,7 +1,7 @@
 success_code,message
 UPDATE_SUCCESS, Cập nhật thành công!
 BORROW_REQUEST_SENT, Yêu cầu mượn sách đã được gửi! Vui lòng chờ admin duyệt.
-RENEWAL_SUCCESS, Gia hạn thành công! Hạn trả sách mới:
+RENEWAL_SUCCESS, Gia hạn thành công!
 SUCCESS_CODE_2, Mã OTP đã được gửi đến email của bạn.
 PASSWORD_RESET_SUCCESS_2, Mật khẩu đã được đặt lại thành công!
 REGISTRATION_SUCCESS_2, Đăng ký thành công. Vui lòng đăng nhập.

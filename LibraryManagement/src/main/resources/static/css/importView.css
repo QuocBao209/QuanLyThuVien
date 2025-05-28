@@ -1,6 +1,6 @@
 /* Container chính */
 .option-container {
-    margin-left: 270px; /* Đảm bảo không bị che bởi sidebar */
+    margin-left: 270px; 
     padding: 20px;
     background: #F4F6F7;
     min-height: 100vh;

@@ -70,14 +70,14 @@
 		<div class="pagination" th:if="${bookPage.totalPages > 1}">
 			<ul>
 				<li th:if="${bookPage.hasPrevious()}">
-					<a th:href="@{/home/book-filter(page=${bookPage.number - 1}, size=${bookPage.size}, categoryName=${categoryName}, keyword=${keyword})}">Trước</a>
+					<a th:href="@{/home/latest-book(page=${bookPage.number - 1}, size=${bookPage.size}, categoryName=${categoryName}, keyword=${keyword})}">Trước</a>
 				</li>
 				<li th:each="i : ${#numbers.sequence(0, bookPage.totalPages - 1)}"
 					th:classappend="${i == bookPage.number} ? 'active'">
-					<a th:href="@{/home/book-filter(page=${i}, size=${bookPage.size}, categoryName=${categoryName}, keyword=${keyword})}" th:text="${i + 1}"></a>
+					<a th:href="@{/home/latest-book(page=${i}, size=${bookPage.size}, categoryName=${categoryName}, keyword=${keyword})}" th:text="${i + 1}"></a>
 				</li>
 				<li th:if="${bookPage.hasNext()}">
-					<a th:href="@{/home/book-filter(page=${bookPage.number + 1}, size=${bookPage.size}, categoryName=${categoryName}, keyword=${keyword})}">Sau</a>
+					<a th:href="@{/home/latest-book(page=${bookPage.number + 1}, size=${bookPage.size}, categoryName=${categoryName}, keyword=${keyword})}">Sau</a>
 				</li>
 			</ul>
 		</div>

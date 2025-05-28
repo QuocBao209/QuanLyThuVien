@@ -10,10 +10,11 @@
 <body>
 	<!-- Menu Bar -->
 	<div th:replace="home :: header"></div>
+	
 	<!-- Form chức thông tin tài khoản và lịch sử mượn / trả -->
 	<div class="main-container">
 		<!-- Form thông tin bên trái -->
-		<section class="left-container" th:object="${user}"> 	<!-- object : chọn user hiện tại -->
+		<section class="left-container" th:object="${user}"> 	
 			<h2>Thông tin cá nhân</h2>
 
 			<div class="info-group">
@@ -41,7 +42,7 @@
 			<form action="/user-logout" method="get">
 				<button class="logout-btn">Đăng xuất</button>
 			</form>
-			
+				
 			<!-- Hiển thị thông báo thành công hoặc lỗi -->
             <div th:if="${successMessage}" class="success-message" th:text="${successMessage}"></div>
             <div th:if="${errorUserNotFound}" class="error-message" th:text="${errorUserNotFound}"></div>
@@ -91,7 +92,7 @@
 							</div>
 						</div>
 
-						<button type="submit" class="save-btn">Lưu</button>
+						<button type="submit" class="save-btn">Lưu</button>			
 						<button type="button" class="close-btn" onclick="closePopup()">Hủy</button>
 					</form>
 				</div>
@@ -137,6 +138,11 @@
 				</div>
 			</form>
 			
+			<!-- Thông báo Mượn sách thành công -->
+			<div th:if="${message}" style="color: green">
+			    <p th:text="${message}"></p>
+			</div>
+			
 			<!-- Thông báo lỗi giới hạn mượn sách -->
 			<div th:if="${limitBorrow}" class="error-message">
 				<p th:text="${limitBorrow}"></p>
@@ -155,6 +161,11 @@
 			<!-- Thông báo Hủy sách không thành công -->
 			<div th:if="${deleteFailed}" style="color: red">
 			    <p th:text="${deleteFailed}"></p>
+			</div>
+			
+			<!-- Thông báo Gia hạn thành công -->
+			<div th:if="${renewSuccess}" style="color: green">
+			    <p th:text="${renewSuccess}"></p>
 			</div>
 
 			<!-- Bảng lịch sử -->

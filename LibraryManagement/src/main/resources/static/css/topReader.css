@@ -13,14 +13,14 @@ body {
     padding: 15px;
     border-radius: 5px;
     display: flex;
-    flex-direction: column; /* Display in column layout */
-    gap: 20px; /* Add gap between sections */
+    flex-direction: column; 
+    gap: 20px; 
 }
 
 /* Nhóm ô tìm kiếm */
 .toolbar .input-group {
     display: flex;
-    flex-direction: column; /* Stack the label and input vertically */
+    flex-direction: column; 
     gap: 10px;
 }
 
@@ -32,13 +32,13 @@ body {
 /* Nhóm ô Tháng và Năm */
 .toolbar .month-year-group {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* Create 4 columns for each month/year input */
+    grid-template-columns: repeat(4, 1fr); 
     gap: 15px;
 }
 
 .toolbar .month-year {
     display: flex;
-    flex-direction: column; /* Stack label and input vertically */
+    flex-direction: column; 
     gap: 5px;
 }
 
@@ -91,7 +91,7 @@ body {
 
 /* Thông báo lỗi */
 .error-msg {
-    color: #FFC107; /* Màu vàng cảnh báo */
+    color: #FFC107; 
     font-size: 14px;
     display: block;
     margin-top: 10px;

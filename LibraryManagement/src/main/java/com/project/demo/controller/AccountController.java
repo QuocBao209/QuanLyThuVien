@@ -113,10 +113,10 @@ public class AccountController {
     public String editAccount(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
         boolean hasError = false;
 
-        if (user.getUserId() == null) {
-            redirectAttributes.addFlashAttribute("errorUserId", UserCodes.getErrorMessage("INVALID_USER_ID"));
-            hasError = true;
-        }
+//        if (user.getUserId() == null) {
+//            redirectAttributes.addFlashAttribute("errorUserId", UserCodes.getErrorMessage("INVALID_USER_ID"));
+//            hasError = true;
+//        }
 
         if (user.getName() == null || !user.getName().matches("^[a-zA-ZÀ-Ỹà-ỹ\\s]+$")) {
             redirectAttributes.addFlashAttribute("errorName", UserCodes.getErrorMessage("INVALID_NAME_FORMAT_3"));

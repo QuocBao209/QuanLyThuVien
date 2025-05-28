@@ -21,25 +21,22 @@
 	padding: 20px;
 }
 
-/* Top books (3 sách đầu tiên) */
 .top-books {
     display: flex;
-    justify-content: center; /* Căn giữa toàn bộ */
-    align-items: flex-end; /* Căn theo đáy */
+    justify-content: center; 
+    align-items: flex-end; 
     gap: 10px;
     position: relative;
 }
 
-/* Tất cả các sách có kích thước bằng nhau */
 .top-books {
     display: flex;
-    justify-content: center; /* Căn giữa */
-    align-items: flex-end; /* Canh theo đáy */
+    justify-content: center;
+    align-items: flex-end; 
     gap: 20px;
     position: relative;
 }
 
-/* Giữ kích thước đồng đều cho các sách */
 .top-books .book-item {
     width: 200px;
     text-align: center;
@@ -50,21 +47,20 @@
     position: relative;
 }
 
-/* Tạo kiểu bậc thang */
 .top-books .book-item:nth-child(1) {
-    transform: translateY(0px); /* Cao nhất */
+    transform: translateY(0px); 
     z-index: 2;
     order:2;
 }
 
 .top-books .book-item:nth-child(2) {
-    transform: translateY(40px); /* Trung bình */
+    transform: translateY(40px); 
     z-index: 3;
     order:1;
 }
 
 .top-books .book-item:nth-child(3) {
-    transform: translateY(80px); /* Thấp nhất */
+    transform: translateY(80px);
     z-index: 1;
     order:3;
 }
@@ -104,7 +100,6 @@
     background: #cd7f32;
 }
 
-/* Căn chỉnh danh sách sách theo hàng ngang */
 .book-list {
     display: flex;
     flex-wrap: wrap;
@@ -140,9 +135,10 @@
     transform: scale(1.05);
     box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
 }
+
 /* Info (bảng thông tin) */
 .book-info {
-    position: absolute; /* Đặt tooltip theo vị trí của cha */
+    position: absolute; 
     background: white;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
     padding: 10px;
@@ -152,12 +148,12 @@
     width: 180px;
     word-wrap: break-word;
 }
-/* Căn chỉnh container chứa button */
+
 .button-container {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-top: auto; /* Đẩy button xuống dưới cùng */
+    margin-top: auto; 
 }
 
 /* Định dạng button */
