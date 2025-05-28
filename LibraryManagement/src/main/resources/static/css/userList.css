@@ -113,13 +113,13 @@ table th {
 
 /* Nút Khóa */
 .edit-btn {
-    background-color: #dc3545; /* Màu đỏ */
+    background-color: #dc3545; 
     color: white;
 }
 
 /* Nút Mở khóa */
 .unlock-btn {
-    background-color: #28a745; /* Màu xanh lá cây */
+    background-color: #28a745; 
     color: white;
 }
 

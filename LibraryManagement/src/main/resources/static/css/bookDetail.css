@@ -14,7 +14,7 @@
     width: 80%;
     height: 60vh;
     margin: 20px auto;
-    background: #D4E6F1; /* Màu nền xanh pastel nhẹ */
+    background: #D4E6F1; 
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -23,7 +23,7 @@
 /* Ảnh sách bên trái */
 .image {
     flex: 1;
-    max-width: 100%; /* Giới hạn tối đa ảnh chiếm 40% */
+    max-width: 100%; 
     display: flex;
     justify-content: center;
     text-align: center;
@@ -64,14 +64,14 @@
 }
 
 .error-message {
-    color: #ff0000; /* Màu đỏ đậm để nổi bật */
-    font-size: 14px; /* Tăng kích thước chữ một chút để dễ đọc */
-    font-weight: bold; /* Làm chữ đậm để thu hút sự chú ý */
-    margin-top: 10px; /* Tăng khoảng cách phía trên để tách biệt */
-    padding: 5px; /* Thêm padding để thông báo trông gọn gàng */
-    background-color: #ffe6e6; /* Nền đỏ nhạt để làm nổi bật */
-    border: 1px solid #ff4d4d; /* Viền đỏ để tạo khung */
-    border-radius: 4px; /* Bo góc nhẹ */
+    color: #ff0000; 
+    font-size: 14px; 
+    font-weight: bold; 
+    margin-top: 10px; 
+    padding: 5px; 
+    background-color: #ffe6e6; 
+    border: 1px solid #ff4d4d; 
+    border-radius: 4px; 
     width: 266px;
 }
 
@@ -183,7 +183,7 @@ button:hover {
 
 .page-btn {
     padding: 10px 15px;
-    background-color: #6C5B7B; /* Tím pastel */
+    background-color: #6C5B7B; 
     color: white;
     border: none;
     border-radius: 5px;
@@ -198,16 +198,16 @@ button:hover {
 .pagination span {
     font-size: 18px;
     font-weight: bold;
-    color: #355C7D; /* Đồng bộ màu xanh đậm */
+    color: #355C7D; 
 }
 
 .no-books-message {
     text-align: center;
     font-size: 18px;
     font-weight: bold;
-    color: #D35400; /* Cam nhẹ để nổi bật */
+    color: #D35400; 
     padding: 15px;
-    background-color: #FEF5E7; /* Nền nhẹ nhàng */
+    background-color: #FEF5E7; 
     border-radius: 8px;
     margin-top: 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);

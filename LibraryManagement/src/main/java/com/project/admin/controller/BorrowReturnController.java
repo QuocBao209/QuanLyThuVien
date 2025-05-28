@@ -89,7 +89,6 @@ public class BorrowReturnController {
             return showBorrowReturns(user.getUserId(), model);
         }
 
-        model.addAttribute("error", AdminCodes.getErrorMessage("BORROW_CONFIRM_FAILED"));
         return showBorrowReturns(borrowReturn.getUser().getUserId(), model);
     }
 

@@ -39,6 +39,11 @@
 		<div th:if="${successMessage}" style="color: green">
 		    <p th:text="${successMessage}"></p>
 		</div>
+		
+		<!-- Thông báo mượn thành công -->
+		<div th:if="${message}" style="color: green">
+		    <p th:text="${message}"></p>
+		</div>
 
         <table>
             <thead>

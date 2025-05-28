@@ -3,7 +3,7 @@ body {
 	font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background: #F8F9FA;  /* Màu nền sáng */
+    background: #F8F9FA;  
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -20,11 +20,11 @@ body {
     height: 40vh;
 
     /* Hiệu ứng nổi */
-    background: white;  /* Màu nền sáng hơn background */
-    border-radius: 10px; /* Bo góc */
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Bóng nhẹ */
-    width: 30%; /* Giới hạn chiều rộng */
-    margin-left: 270px; /* Căn giữa */
+    background: white;  
+    border-radius: 10px; 
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); 
+    width: 30%; 
+    margin-left: 270px; 
     margin-top: 170px;
 }
 

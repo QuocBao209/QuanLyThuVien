@@ -68,8 +68,6 @@ public class BorrowReturnController {
             borrowReturnRepository.save(borrowReturn);
 
             redirectAttributes.addFlashAttribute("message", UserCodes.getSuccessMessage("BORROW_REQUEST_SENT"));
-        } else {
-            redirectAttributes.addFlashAttribute("error", UserCodes.getErrorMessage("BORROW_NOT_FOUND"));
         }
 
         return "redirect:/home/account";
@@ -78,7 +76,6 @@ public class BorrowReturnController {
     @PostMapping("/delete-borrow")
     public String deleteBorrow(@RequestParam("borrowId") Long borrowId, RedirectAttributes redirectAttributes) {
         if (borrowId == null) {
-            redirectAttributes.addFlashAttribute("error", "Lỗi: ID mượn sách không hợp lệ.");
             return "redirect:/home/account";
         }
 
@@ -87,9 +84,8 @@ public class BorrowReturnController {
             borrowReturnRepository.delete(borrowReturn); // Xóa yêu cầu mượn khỏi DB 
 
             redirectAttributes.addFlashAttribute("deleteSuccess", UserCodes.getSuccessMessage("SUCCESS_DELETE"));
-        } else {
-            redirectAttributes.addFlashAttribute("deleteFailed", UserCodes.getErrorMessage("FAILED_DELETE"));
-        }
+        } 
+        
         return "redirect:/home/account"; // ⚡ Chuyển hướng về trang danh sách mượn
     }
     
@@ -99,12 +95,6 @@ public class BorrowReturnController {
     	Borrow_Return borrowReturn = borrowReturnRepository.findById(borrowId).orElse(null);
     	
     	if (!"borrowed".equals(borrowReturn.getStatus())) {
-    		redirectAttributes.addFlashAttribute("error",  UserCodes.getErrorMessage("INVALID_STATUS"));
-            return "redirect:/home/account";
-    	}
-    	
-    	if (borrowReturn.getRenewCount() >= 2) {
-    		redirectAttributes.addFlashAttribute("error",  UserCodes.getErrorMessage("RENEW_LIMIT_REACHED"));
             return "redirect:/home/account";
     	}
     	
@@ -114,7 +104,7 @@ public class BorrowReturnController {
     	// Lưu vào DB
         borrowReturnRepository.save(borrowReturn);
 
-        redirectAttributes.addFlashAttribute("message",  UserCodes.getSuccessMessage("RENEWAL_SUCCESS"));
+        redirectAttributes.addFlashAttribute("renewSuccess",  UserCodes.getSuccessMessage("RENEWAL_SUCCESS"));
         return "redirect:/home/account";
     }
 }
