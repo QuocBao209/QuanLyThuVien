@@ -64,14 +64,14 @@
 	                   th:value="${book.publishYear}" required>
 	        </div>
 	
-	        <!--
 	        <div class="input-group">
-	            <label>Ảnh bìa hiện tại:</label>
-	            <img th:src="@{/images/{imageName}(imageName=${book.imageName})}" alt="Ảnh bìa sách" width="150px">
-	        </div>
-	
-	        Sửa xong phần ảnh thì bỏ comment
-	         -->
+			    <label>Ảnh bìa hiện tại:</label>
+			    <div class="current-cover-wrapper">
+			        <img th:if="${book.bookImage != null}" 
+			             th:src="@{/images/book_images/{imageName}(imageName=${book.bookImage})}" 
+			             alt="Ảnh bìa sách" class="current-cover">
+			    </div>
+			</div>	
 	
 	        <div class="input-group">
 	            <label for="book-image">Thay đổi ảnh bìa:</label>

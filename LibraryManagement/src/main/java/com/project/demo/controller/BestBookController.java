@@ -72,9 +72,9 @@ public class BestBookController {
 	     model.addObject("topBooks", topBooks);
 	     model.addObject("bookPage", pagedBooks);
 	     model.addObject("currentPage", page);
-	     model.addObject("currentUrl", request.getRequestURI()); // Lưu URL hiện tại để xử lý nếu cần
+	     model.addObject("currentUrl", request.getRequestURI()); 
 
-	     return model; // Trả về view bestBooks.html
+	     return model; 
 	 }
 
 }

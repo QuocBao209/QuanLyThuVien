@@ -31,7 +31,7 @@ public class ForgotPasswordController {
     public String sendOTP(@RequestParam String email, Model model) {
         // Kiểm tra email có tồn tại trong hệ thống hay không
         if (!userService.emailExists(email)) {
-            model.addAttribute("error", AdminCodes.getErrorMessage("EMAIL_NOT_FOUND_2"));
+            model.addAttribute("error", AdminCodes.getErrorMessage("EMAIL_NOT_FOUND_1"));
             return "forgetPassword";
         }
 
@@ -55,13 +55,13 @@ public class ForgotPasswordController {
     public String resetPassword(@RequestParam String email, @RequestParam String otp,
                                 @RequestParam String newPassword, Model model) {
         if (!passwordResetService.verifyOTP(email, otp)) {
-            model.addAttribute("error",  UserCodes.getErrorMessage("INVALID_OTP_2"));
+            model.addAttribute("resetError",  UserCodes.getErrorMessage("INVALID_OTP_2"));
         } else if (userService.resetPassword(email, newPassword)) {
         	String role = userService.getUserRole(email);
-            model.addAttribute("message",  UserCodes.getSuccessMessage("PASSWORD_RESET_SUCCESS_2"));
+            model.addAttribute("resetMessage",  UserCodes.getSuccessMessage("PASSWORD_RESET_SUCCESS_2"));
             return role.equals("USER") ? "login" : "adminLogin";
         } else {
-            model.addAttribute("error", UserCodes.getErrorMessage("EMAIL_NOT_FOUND_2"));
+            model.addAttribute("resetError", UserCodes.getErrorMessage("EMAIL_NOT_FOUND_2"));
         }
 
         model.addAttribute("email", email);

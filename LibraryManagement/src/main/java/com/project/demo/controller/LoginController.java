@@ -47,7 +47,7 @@ public class LoginController {
 			}
 		} else {
 			System.out.println("Đăng nhập thất bại: " + username);
-			mav.setViewName("login"); // Giữ nguyên trang đăng nhập
+			mav.setViewName("login"); 
 			mav.addObject("error", UserCodes.getErrorMessage("INVALID_CREDENTIALS_2"));
 		}
 		return mav;

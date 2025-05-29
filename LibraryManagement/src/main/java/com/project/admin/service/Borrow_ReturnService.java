@@ -7,9 +7,7 @@ import com.project.admin.repository.Borrow_ReturnRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,37 +46,6 @@ public class Borrow_ReturnService {
     public List<Borrow_Return> getConfirmedBorrowReturns() {
         return borrowReturnRepository.findByUserConfirmDateIsNotNull();
     }
-
-//    // Phương thức từ BookBorrowStatsService
-//    public Map<String, Integer> getBorrowStatsByCategory(Integer month, Integer year) {
-//
-//        List<Borrow_Return> borrowReturns = getConfirmedBorrowReturns();
-//
-//        // Lọc theo thời gian nếu có month và year
-//        if (month != null && year != null) {
-//            Calendar calendar = Calendar.getInstance();
-//            calendar.set(year, month - 1, 1, 0, 0, 0); // Đầu tháng
-//            Calendar endCalendar = Calendar.getInstance();
-//            endCalendar.set(year, month, 1, 0, 0, 0); // Đầu tháng sau
-//
-//            borrowReturns = borrowReturns.stream()
-//                    .filter(br -> {
-//                        Calendar confirmCal = Calendar.getInstance();
-//                        confirmCal.setTime(br.getUserConfirmDate());
-//                        return !confirmCal.before(calendar) && confirmCal.before(endCalendar);
-//                    })
-//                    .collect(Collectors.toList());
-//        }
-//
-//        // Tính số lượng sách mượn theo thể loại
-//        Map<String, Integer> statsByCategory = new HashMap<>();
-//        for (Borrow_Return br : borrowReturns) {
-//            String categoryName = br.getBook().getCategory().getCategoryName();
-//            statsByCategory.put(categoryName, statsByCategory.getOrDefault(categoryName, 0) + 1);
-//        }
-//
-//        return statsByCategory;
-//    }
 
     public int getTotalBooks() {
 

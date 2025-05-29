@@ -96,8 +96,6 @@ public class UserService {
             userRepository.save(user);
         }
     }
-
-
     
     public List<User> getAllUsersByBorrowCount() {
         return userRepository.findByRoleOrderByBorrowCountDesc("USER");
@@ -113,7 +111,7 @@ public class UserService {
         return users.stream().skip(3).toList();
     }
 
- // Thống kê độc giả mượn theo khoảng thời gian từ Tháng/Năm đến Tháng/Năm
+    // Thống kê độc giả mượn theo khoảng thời gian từ Tháng/Năm đến Tháng/Năm
     public List<User> getAllUsersOrderByBorrowCount(String query) {
         return userRepository.findByRoleAndUserNameContainingOrderByBorrowCountDesc( query);
     }

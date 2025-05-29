@@ -7,47 +7,55 @@
     <link rel="stylesheet" th:href="@{/css/register.css}">
 </head>
 <body>
-	<h2>Đăng ký</h2>
-	
-	<form action="/admin-register" method="post">
-	    <div class="input-group">
-	        <label for="cmt">Chứng Minh Thư:</label>
-	        <input type="text" id="cmt" name="cmt" required="required">
-	    </div>
-	
-	    <div class="input-group">
-	        <label for="name">Họ và Tên:</label>
-	        <input type="text" id="name" name="name" required="required">
-	    </div>
-	
-	    <div class="input-group">
-	        <label for="phone">Số điện thoại:</label>
-	        <input type="text" id="phone" name="phone" required="required">
-	    </div>
-	
-	    <div class="input-group">
-	        <label for="email">Email:</label>
-	        <input type="email" id="email" name="email" required="required">
-	    </div>
-	
-	    <div class="input-group">
-	        <label for="username">Tên tài khoản:</label>
-	        <input type="text" id="username" name="username" required="required">
-	    </div>
-	
-	    <div class="input-group">
-	        <label for="password">Mật khẩu:</label>
-	        <input type="password" id="password" name="password" required="required">
-	    </div>
-	
-	    <div class="input-group">
-	        <button type="submit">Đăng ký</button>
-	    </div>
-	</form>
-	
-	<!-- Hiển thị thông báo đăng ký thành công -->
-	<div th:if="${message != null}">
-	    <p th:text="${message}"></p>
-	</div>
+    <h2>Đăng ký</h2>
+
+    <form action="/admin-register" method="post">
+        <div class="input-group">
+            <label for="cmt">Chứng Minh Thư:</label>
+            <input type="text" id="cmt" name="cmt" required>
+            <p class="error-message" th:if="${errorCMT != null}" th:text="${errorCMT}"></p>
+        </div>
+
+        <div class="input-group">
+            <label for="name">Họ và Tên:</label>
+            <input type="text" id="name" name="name" required>
+            <p class="error-message" th:if="${errorName != null}" th:text="${errorName}"></p>
+        </div>
+
+        <div class="input-group">
+            <label for="phone">Số điện thoại:</label>
+            <input type="text" id="phone" name="phone" required>
+            <p class="error-message" th:if="${errorPhone != null}" th:text="${errorPhone}"></p>
+        </div>
+
+        <div class="input-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+
+        <div class="input-group">
+            <label for="username">Tên tài khoản:</label>
+            <input type="text" id="username" name="username" required>
+            <p class="error-message" th:if="${errorUsername != null}" th:text="${errorUsername}"></p>
+        </div>
+
+        <div class="input-group">
+            <label for="password">Mật khẩu:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+
+        <div class="input-group">
+            <button type="submit">Đăng ký</button>
+        </div>
+    </form>
+
+    <!-- Thông báo chung -->
+    <div th:if="${successMessage != null}">
+        <p class="success-message" th:text="${successMessage}"></p>
+    </div>
+
+    <div th:if="${errorMessage != null}">
+        <p class="error-message" th:text="${errorMessage}"></p>
+    </div>
 </body>
 </html>

@@ -74,7 +74,7 @@ public class RegisterController {
         userService.registerUser(newUser);
 
         modelAndView.setViewName("adminLogin");
-        //modelAndView.addObject("successMessage", AdminCodes.getSuccessMessage("REGISTER_SUCCESS_1"));
+        modelAndView.addObject("successMessage", AdminCodes.getSuccessMessage("REGISTER_SUCCESS_1"));
         return modelAndView;
     }
 

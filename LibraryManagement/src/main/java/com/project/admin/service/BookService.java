@@ -4,20 +4,16 @@ import com.project.admin.entity.Author;
 import com.project.admin.entity.Book;
 import com.project.admin.entity.Category;
 import com.project.admin.repository.BookRepository;
-import com.project.admin.repository.CategoryRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class BookService {
     @Autowired
-    private BookRepository bookRepository;
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private BookRepository bookRepository;;
 
     public Optional<Book> findByBookNameAndAuthors(String bookName, List<Author> authors, Category category, int publishYear) {
         return bookRepository.findByIsDeletedFalse().stream()
@@ -279,67 +275,4 @@ public class BookService {
             .sum();
         return totalAvailable < 0 ? 0 : totalAvailable;
     }
-    
-// // Phương thức mới: getBooksForStatistics với startDate và endDate kiểu Date
-//    public List<Book> getBooksForStatistics(String query, Date startDate, Date endDate, String categoryId, String statisticType) {
-//        // Bước 1: Lấy tất cả sách chưa bị xóa
-//        List<Book> books = bookRepository.findByIsDeletedFalse();
-//
-//        // Bước 2: Lọc theo query (nếu có)
-//        if (query != null && !query.trim().isEmpty()) {
-//            String keyword = query.trim().toLowerCase();
-//            books = books.stream()
-//                    .filter(book -> 
-//                            book.getBookName().toLowerCase().contains(keyword) ||
-//                            book.getAuthors().stream()
-//                                    .anyMatch(author -> author.getAuthorName().toLowerCase().contains(keyword)))
-//                    .collect(Collectors.toList());
-//        }
-//
-//        // Bước 3: Lọc theo categoryId (nếu có)
-//        if (categoryId != null && !categoryId.trim().isEmpty()) {
-//            books = books.stream()
-//                    .filter(book -> book.getCategory() != null && categoryId.equals(String.valueOf(book.getCategory().getCategoryId())))
-//                    .collect(Collectors.toList());
-//        }
-//
-//        // Bước 4: Kiểm tra và chuẩn hóa endDate
-//        if (startDate == null || endDate == null) {
-//            throw new IllegalArgumentException("startDate và endDate không được null");
-//        }
-//        // Tạo một bản sao của endDate và điều chỉnh thành ngày cuối cùng của tháng
-//        Calendar cal = Calendar.getInstance();
-//        cal.setTime(endDate);
-//        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-//        Date finalEndDate = cal.getTime(); // Biến này là effectively final
-//
-//        // Bước 5: Tính toán số liệu thống kê dựa trên khoảng thời gian
-//        for (Book book : books) {
-//            // Tính borrowCount: Số bản ghi mượn trong khoảng thời gian với status = "borrowed"
-//            long borrowCount = book.getBorrowReturns().stream()
-//                    .filter(br -> br.getStartDate() != null && 
-//                                  !br.getStartDate().before(startDate) && 
-//                                  !br.getStartDate().after(finalEndDate) && 
-//                                  "borrowed".equals(br.getStatus()))
-//                    .count();
-//            book.setBorrowCount((int) borrowCount);
-//
-//            // Tính isDamaged: Số bản ghi hư hại trong khoảng thời gian với status = "damaged"
-//            long damagedCount = book.getBorrowReturns().stream()
-//                    .filter(br -> br.getStartDate() != null && 
-//                                  !br.getStartDate().before(startDate) && 
-//                                  !br.getStartDate().after(finalEndDate) && 
-//                                  "damaged".equals(br.getStatus()))
-//                    .count();
-//            book.setIsDamaged((int) damagedCount);
-//        }
-//
-//        // Bước 6: Nếu statisticType yêu cầu thêm xử lý, có thể mở rộng ở đây
-//        if ("book-borrow-stats".equals(statisticType)) {
-//            // Hiện tại đã tính borrowCount và isDamaged, có thể thêm logic khác nếu cần
-//        }
-//
-//        return books;
-//    }
-
 }

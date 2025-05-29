@@ -219,7 +219,6 @@ public class StatisticsController {
                                     @RequestParam(required = false) String selected,
                                     Model model) {
 
-
         // Kiểm tra tính đầy đủ của Tháng và Năm
         if ((fromMonth != null && fromYear == null) || (toMonth != null && toYear == null)) {
             model.addAttribute("errorMsg", AdminCodes.getErrorMessage("INVALID_DATE_COMPLETENESS"));
