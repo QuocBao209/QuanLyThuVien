@@ -16,13 +16,11 @@ public class RegisterController {
     @Autowired
     private UserService userService;
 
-    // Hiển thị trang đăng ký
     @GetMapping("/register")
     public ModelAndView showRegisterPage() {
         return new ModelAndView("register");
     }
 
-    // Xử lý đăng ký người dùng mới
     @PostMapping("/register")
     public ModelAndView processRegister(@RequestParam("cmt") String cmt,
                                         @RequestParam("name") String name,
@@ -30,41 +28,42 @@ public class RegisterController {
                                         @RequestParam("email") String email,
                                         @RequestParam("username") String username,
                                         @RequestParam("password") String password) {
-        ModelAndView modelAndView = new ModelAndView();
+        ModelAndView modelAndView = new ModelAndView("register");
 
-        if (userService.existsByUsername(username)) {
-            modelAndView.addObject("error", UserCodes.getErrorMessage("INVALID_NAME_FORMAT_2"));
-            modelAndView.setViewName("register");
-            return modelAndView;
+        boolean hasError = false;
+
+        // Kiểm tra CMT
+        if (!cmt.matches("\\d{12}")) {
+            modelAndView.addObject("errorCMT", UserCodes.getErrorMessage("INVALID_CMT_FORMAT_2"));
+            hasError = true;
         }
+
         // Kiểm tra tên không chứa số
         if (!name.matches("^[a-zA-ZÀ-Ỹà-ỹ\\s]+$")) {
-            modelAndView.addObject("error", UserCodes.getErrorMessage("INVALID_NAME_FORMAT_2"));
-            return modelAndView;
+            modelAndView.addObject("errorName", UserCodes.getErrorMessage("INVALID_NAME_FORMAT_2"));
+            hasError = true;
         }
 
-        // Kiểm tra định dạng số điện thoại (10 số)
+        // Kiểm tra số điện thoại
         if (!phone.matches("\\d{10}")) {
-            modelAndView.addObject("error", UserCodes.getErrorMessage("INVALID_PHONE_FORMAT_2"));
+            modelAndView.addObject("errorPhone", UserCodes.getErrorMessage("INVALID_PHONE_FORMAT_2"));
+            hasError = true;
+        }
+
+        // Kiểm tra username tồn tại
+        if (userService.existsByUsername(username)) {
+            modelAndView.addObject("errorUsername", UserCodes.getErrorMessage("USERNAME_EXISTS_2"));
+            hasError = true;
+        }
+
+        if (hasError) {
             return modelAndView;
         }
 
-        // Kiểm tra định dạng CMT (12 số)
-        if (!cmt.matches("\\d{12}")) {
-            modelAndView.addObject("error", UserCodes.getErrorMessage("INVALID_CMT_FORMAT_2"));
-            return modelAndView;
-        }
-
-        // Viết hoa chữ cái đầu của mỗi từ trong tên
+        // Viết hoa chữ cái đầu tên
         name = capitalizeEachWord(name);
 
-        // Kiểm tra username có tồn tại không
-        if (userService.existsByUsername(username)) {
-            modelAndView.addObject("error", UserCodes.getErrorMessage("USERNAME_EXISTS_2"));
-            return modelAndView;
-        }
-
-
+        // Tạo user mới
         User newUser = new User();
         newUser.setCmt(cmt);
         newUser.setName(name);
@@ -78,8 +77,7 @@ public class RegisterController {
         userService.registerUser(newUser);
 
         modelAndView.setViewName("login");
-        modelAndView.addObject("message", UserCodes.getSuccessMessage("REGISTER_SUCCESS_2"));
-
+        modelAndView.addObject("successMessage", UserCodes.getSuccessMessage("REGISTER_SUCCESS_2"));
         return modelAndView;
     }
 
