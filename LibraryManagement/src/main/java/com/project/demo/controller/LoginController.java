@@ -47,7 +47,7 @@ public class LoginController {
 			}
 		} else {
 			System.out.println("Đăng nhập thất bại: " + username);
-			mav.setViewName("login"); 
+			mav.setViewName("login");
 			mav.addObject("error", UserCodes.getErrorMessage("INVALID_CREDENTIALS_2"));
 		}
 		return mav;
@@ -56,7 +56,7 @@ public class LoginController {
 	// Đăng xuất tài khoản
 	@GetMapping("/user-logout")
 	public String logout(HttpSession session) {
-		session.invalidate(); // Xóa toàn bộ session
+		session.invalidate();
 		return "redirect:/home";
 	}
 }

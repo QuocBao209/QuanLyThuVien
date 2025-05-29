@@ -31,10 +31,11 @@ public class BookService {
     }
 
 
-    // Lấy danh sách tất cả Book 
+    // Lấy danh sách tất cả Book
     public List<Book> getBooks() {
         return bookRepository.findByIsDeletedFalse();
     }
+
     
     public Page<Book> filterBooks(Set<String> categoryNames, String timeRange, String keyword, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -85,13 +86,13 @@ public class BookService {
         bookRepository.saveAll(books);
     }
 
-    // Phân trang danh sách theo tác giả ở bookDetail 
+    // Phân trang danh sách theo tác giả ở bookDetail
     public Page<Book> getBooksByAuthors(List<Author> authors, Long excludeBookId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return bookRepository.findBooksByAuthors(authors, excludeBookId, pageable);
     }
     
-    // Phân trang danh sách tất cả sách ở bookFilter 
+    // Phân trang danh sách tất cả sách ở bookFilter
     public Page<Book> getAllBooks(Pageable pageable) {
         return bookRepository.findByIsDeletedFalse(pageable);
     }
@@ -128,16 +129,18 @@ public class BookService {
     public Page<Book> getPagedBooksSortedByBorrowCountExcludingTop3(int page, int size) {
         List<Book> top3Books = getTop3Books(); // Lấy danh sách top 3
         
-        Page<Book> pagedBooks = bookRepository.findBooksSortedByBorrowCount(PageRequest.of(page, size + 3)); // Lấy thêm 3 để tránh mất sách khi lọc
+        Page<Book> pagedBooks = bookRepository.findBooksSortedByBorrowCount(PageRequest.of(page, size + 3));
 
         List<Book> filteredBooks = pagedBooks.stream()
             .filter(book -> !top3Books.contains(book))
             .toList();
 
-        long totalBooksExcludingTop3 = bookRepository.count() - top3Books.size(); // Đếm tổng số sách trừ top 3
+        long totalBooksExcludingTop3 = bookRepository.count() - top3Books.size();
 
         return new PageImpl<>(filteredBooks, PageRequest.of(page, size), totalBooksExcludingTop3);
     }
+
+
     //Top 3 sách đề cử
     public List<Book> getTop3Books() {
         return bookRepository.findBooksSortedByBorrowCount(PageRequest.of(0, 3)).getContent();

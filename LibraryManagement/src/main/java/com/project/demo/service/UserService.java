@@ -51,7 +51,7 @@ public class UserService {
         if (userOptional.isPresent() && BCryptUtil.checkPassword(password, userOptional.get().getPassword())) {
             return userOptional; // Trả về user nếu xác thực thành công
         }
-        return Optional.empty(); // Trả về Optional rỗng nếu không hợp lệ
+        return Optional.empty();
     }
 
     // Kiểm tra xem username đã tồn tại trong database chưa

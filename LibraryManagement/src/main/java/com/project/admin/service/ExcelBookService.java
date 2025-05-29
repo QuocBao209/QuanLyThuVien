@@ -100,8 +100,6 @@ public class ExcelBookService {
 
         // Lưu sách vào database
         bookService.transferData(bookList);
-
-        // Gọi phương thức nhập sách với userId
         importService.importBooks(importDetails, importDate, userId);
 
         return bookList.size();

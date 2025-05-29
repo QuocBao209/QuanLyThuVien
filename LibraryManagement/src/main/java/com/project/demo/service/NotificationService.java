@@ -16,12 +16,12 @@ public class NotificationService {
         return notificationRepository.findNotificationsByUsername(username);
     }
 
-    // Chuyển dữ liệu thông báo vào database
+
     public void transferData(List<Notification> notifications) {
         notificationRepository.saveAll(notifications);
     }
 
-    // Lấy tất cả thông báo
+
     public List<Notification> getAllNotifications() {
         return notificationRepository.findAll();
     }

@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpSession;
 import org.apache.commons.io.IOUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -324,12 +325,8 @@ public class BookController {
             bookService.saveBook(book);
             modelAndView.addObject("successMessage", AdminCodes.getSuccessMessage("BOOK_UPDATED_SUCCESS"));
 
-        } catch (IllegalArgumentException e) {
-            modelAndView.addObject("errorMessage", e.getMessage());
         } catch (IOException e) {
             modelAndView.addObject("errorMessage", AdminCodes.getErrorMessage("IMAGE_PROCESS_ERROR"));
-        } catch (Exception e) {
-            modelAndView.addObject("errorMessage", "Lỗi không xác định: " + e.getMessage());
         }
 
         modelAndView.addObject("book", bookService.getBookById(id));
