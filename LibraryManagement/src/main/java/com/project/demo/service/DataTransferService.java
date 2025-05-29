@@ -31,7 +31,5 @@ public class DataTransferService {
         categoryService.transferData(categories);
         borrowReturnService.transferData(borrowReturns);
         notificationService.transferData(notifications);
-
-        System.out.println("Dữ liệu đã được lấy và lưu lại thành công!");
     }
 }

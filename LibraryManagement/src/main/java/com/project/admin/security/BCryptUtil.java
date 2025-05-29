@@ -4,7 +4,6 @@ import org.mindrot.jbcrypt.BCrypt;
 public class BCryptUtil {
 
     private BCryptUtil() {
-        // Chặn tạo instance
     }
 
     // Mã hóa mật khẩu

@@ -55,6 +55,18 @@ public class RegisterController {
             return modelAndView;
         }
 
+        // Kiểm tra định dạng email
+        if (!email.matches("^[\\w.-]+@[\\w.-]+\\.\\w{2,}$")) {
+            modelAndView.addObject("error", UserCodes.getErrorMessage("INVALID_EMAIL_FORMAT_2"));
+            return modelAndView;
+        }
+
+        // Kiểm tra email đã tồn tại chưa
+        if (userService.emailExists(email)) {
+            modelAndView.addObject("error", UserCodes.getErrorMessage("EMAIL_EXISTS_2"));
+            return modelAndView;
+        }
+
         // Viết hoa chữ cái đầu của mỗi từ trong tên
         name = capitalizeEachWord(name);
 

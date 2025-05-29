@@ -4,11 +4,10 @@ import com.project.admin.entity.Book;
 import com.project.admin.entity.Borrow_Return;
 import com.project.admin.entity.Notification;
 import com.project.admin.entity.User;
-import com.project.admin.service.BookService;
-import com.project.admin.service.Borrow_ReturnService;
-import com.project.admin.service.NotificationService;
-import com.project.admin.service.UserService;
+import com.project.admin.service.*;
 import com.project.admin.utils.AdminCodes;
+import jakarta.mail.MessagingException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -29,7 +29,8 @@ public class BorrowReturnController {
     private final NotificationService notificationService;
     private final BookService bookService;
     private final UserService userService;
-
+    @Autowired
+    private EmailService emailService;
     public BorrowReturnController(Borrow_ReturnService borrowReturnService, NotificationService notificationService, BookService bookService, UserService userService) {
         this.borrowReturnService = borrowReturnService;
         this.notificationService = notificationService;
@@ -40,9 +41,6 @@ public class BorrowReturnController {
     @PostMapping("/borrow_return_view")
     public String showBorrowReturns(@RequestParam("userId") Long userId, Model model) {
         User user = userService.findById(userId).orElse(null);
-        if (user == null) {
-            return "error";
-        }
 
         List<Borrow_Return> borrowReturns = borrowReturnService.findByUser_UserId(userId); 
 
@@ -104,7 +102,7 @@ public class BorrowReturnController {
 
         LocalDate now = LocalDate.now();
         LocalDate startDate = new java.sql.Date(borrowReturn.getStartDate().getTime()).toLocalDate();
-        long daysBorrowed = java.time.temporal.ChronoUnit.DAYS.between(startDate, now);
+        long daysBorrowed = ChronoUnit.DAYS.between(startDate, now);
 
         borrowReturn.setEndDate(java.util.Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
@@ -113,11 +111,13 @@ public class BorrowReturnController {
 
         String statusMessage;
 
+        boolean violated = false;
+
         if (daysBorrowed > 15) {
             borrowReturn.setStatus("outdate");
             user.setViolationCount(user.getViolationCount() + 1);
+            violated = true;
             statusMessage = "Bạn đã trả sách " + book.getBookName() + " quá hạn (" + daysBorrowed + " ngày).";
-            userService.checkAndLockUser(user.getUserId());
         } else {
             borrowReturn.setStatus("returned");
             statusMessage = "Bạn đã trả sách " + book.getBookName() + " thành công!";
@@ -126,8 +126,8 @@ public class BorrowReturnController {
         if ("damaged".equals(bookCondition)) {
             book.setIsDamaged(book.getIsDamaged() + 1);
             user.setViolationCount(user.getViolationCount() + 1);
+            violated = true;
             statusMessage += " Tuy nhiên, sách bị hư hỏng hoặc mất!";
-            userService.checkAndLockUser(user.getUserId());
         } else {
             book.setAmount(book.getAmount() + 1);
         }
@@ -135,6 +135,24 @@ public class BorrowReturnController {
         borrowReturnService.save(borrowReturn);
         bookService.save(book);
         userService.save(user);
+
+        if (violated) {
+            userService.checkAndLockUser(user.getUserId());
+
+            if (user.getViolationCount() > 3) {
+                try {
+                    emailService.sendEmail(
+                            user.getEmail(),
+                            "Tài khoản của bạn đã bị khóa",
+                            "<p>Chào " + user.getName() + ",</p>" +
+                                    "<p>Tài khoản của bạn đã bị khóa do vi phạm quy định quá số lần cho phép.</p>" +
+                                    "<p>Vui lòng liên hệ quản trị viên để biết thêm chi tiết.</p>"
+                    );
+                } catch (MessagingException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
         Notification notification = new Notification();
         notification.setUser(user);

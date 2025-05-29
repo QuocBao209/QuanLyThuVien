@@ -37,7 +37,7 @@ public class LoginController {
 		if (userOptional.isPresent()) {
 			User user = userOptional.get();
 
-			session.setAttribute("userId", user.getUserId()); // Lưu userId vào session
+			session.setAttribute("userId", user.getUserId());
 			session.setAttribute("username", user.getUsername());
 			session.setAttribute("role", user.getRole());
 

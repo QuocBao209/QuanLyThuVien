@@ -94,7 +94,7 @@ public class BookDetailController {
 	    return mav;
 	}
 
-	//Giới hạn mượn sách 
+	//Giới hạn mượn sách
 	@PostMapping("/submit-borrow/{id}")
 	public String submitBorrow(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttributes) {
 		String username = (String) session.getAttribute("user");
@@ -131,7 +131,7 @@ public class BookDetailController {
 			borrowService.saveBorrow(borrow);
 		}
 
-		return "redirect:/home/account"; 
+		return "redirect:/home/account";
 	}
 
 

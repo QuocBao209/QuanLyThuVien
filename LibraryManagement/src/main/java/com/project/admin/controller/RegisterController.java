@@ -15,8 +15,7 @@ public class RegisterController {
 
     @Autowired
     private UserService userService;
-    
-    // Xử lý đăng ký Admin 
+
     // Hiển thị trang đăng ký
     @GetMapping("/admin-register")
     public ModelAndView showAdminRegisterPage() {
@@ -40,17 +39,27 @@ public class RegisterController {
         }
 
         // Kiểm tra định dạng số điện thoại (10 số)
-        if (!phone.matches("\\d{10}")) {
+        if (!phone.matches("\\d{10}") ) {
             modelAndView.addObject("errorPhone", AdminCodes.getErrorMessage("INVALID_PHONE_FORMAT_1"));
             return modelAndView;
         }
 
         // Kiểm tra định dạng CMT (12 số)
-        if (!cmt.matches("\\d{12}")) {
+        if (!cmt.matches("\\d{12}") ) {
             modelAndView.addObject("errorCMT", AdminCodes.getErrorMessage("INVALID_CMT_FORMAT_1"));
             return modelAndView;
         }
 
+        if (!email.matches("^[\\w.-]+@[\\w.-]+\\.\\w{2,}$")) {
+            modelAndView.addObject("error", AdminCodes.getErrorMessage("INVALID_EMAIL_FORMAT_1"));
+            return modelAndView;
+        }
+
+        // Kiểm tra email đã tồn tại chưa
+        if (userService.existsByEmail(email)) {
+            modelAndView.addObject("error", AdminCodes.getErrorMessage("EMAIL_EXISTS_1"));
+            return modelAndView;
+        }
         // Viết hoa chữ cái đầu của mỗi từ trong tên
         name = capitalizeEachWord(name);
 

@@ -8,12 +8,15 @@ import com.project.admin.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import java.util.*;
+
 
 @Service
 public class BookService {
     @Autowired
-    private BookRepository bookRepository;;
+    private BookRepository bookRepository;
+
 
     public Optional<Book> findByBookNameAndAuthors(String bookName, List<Author> authors, Category category, int publishYear) {
         return bookRepository.findByIsDeletedFalse().stream()
@@ -149,15 +152,15 @@ public class BookService {
         if (fromMonth != null && fromYear != null && toMonth != null && toYear != null && categoryId != null) {
             return bookRepository.findBorrowedBooksByDateRangeAndCategory(query, fromMonth, fromYear, toMonth, toYear, categoryId);
         }
-        
+
         if (fromMonth == null && fromYear != null && toMonth == null && toYear == null) {
             return bookRepository.findBorrowedBooksByYearAndCategory(query, fromYear, categoryId);
         }
-        
+
         if (fromMonth != null && fromYear != null && toMonth == null && toYear == null) {
             return bookRepository.findBorrowedBooksByMonthAndYearAndCategory(query, fromMonth, fromYear, categoryId);
         }
-        
+
         return bookRepository.findAllBorrowedBooks(query);
     }
 

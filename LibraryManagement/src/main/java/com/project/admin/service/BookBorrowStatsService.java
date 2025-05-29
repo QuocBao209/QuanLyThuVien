@@ -66,7 +66,7 @@ public class BookBorrowStatsService {
 
     //Lấy sách bị hư hại
     public List<Borrow_Return> getDamagedBooks() {
-        return borrowReturnRepository.findDamagedBooks(); 
+        return borrowReturnRepository.findDamagedBooks();
     }
 
 }
