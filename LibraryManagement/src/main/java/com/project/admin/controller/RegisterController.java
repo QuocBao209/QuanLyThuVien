@@ -51,15 +51,16 @@ public class RegisterController {
         }
 
         if (!email.matches("^[\\w.-]+@[\\w.-]+\\.\\w{2,}$")) {
-            modelAndView.addObject("error", AdminCodes.getErrorMessage("INVALID_EMAIL_FORMAT_1"));
+            modelAndView.addObject("errorEmail", AdminCodes.getErrorMessage("INVALID_EMAIL_FORMAT_1"));
             return modelAndView;
         }
 
         // Kiểm tra email đã tồn tại chưa
         if (userService.existsByEmail(email)) {
-            modelAndView.addObject("error", AdminCodes.getErrorMessage("EMAIL_EXISTS_1"));
+            modelAndView.addObject("errorEmail", AdminCodes.getErrorMessage("EMAIL_EXISTS_1"));
             return modelAndView;
         }
+        
         // Viết hoa chữ cái đầu của mỗi từ trong tên
         name = capitalizeEachWord(name);
 

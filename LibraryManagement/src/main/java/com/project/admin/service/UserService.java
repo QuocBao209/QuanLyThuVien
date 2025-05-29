@@ -86,16 +86,6 @@ public class UserService {
         }
         return false;
     }
-
-    // Cập nhật trạng thái của độc giả
-    public void updateStatus(Long userId, String newStatus) {
-        Optional<User> userOptional = userRepository.findById(userId);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            user.setStatus(newStatus);
-            userRepository.save(user);
-        }
-    }
     
     public List<User> getAllUsersByBorrowCount() {
         return userRepository.findByRoleOrderByBorrowCountDesc("USER");

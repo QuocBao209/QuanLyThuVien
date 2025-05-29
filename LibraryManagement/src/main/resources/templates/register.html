@@ -12,30 +12,36 @@
     <form action="/register" method="post">
         <div class="input-group">
             <label for="cmt">Chứng Minh Thư:</label>
-            <input type="text" id="cmt" name="cmt" required>
+            <input type="text" id="cmt" name="cmt" required
+                   th:value="${cmt}">
             <p class="error-message" th:if="${errorCMT != null}" th:text="${errorCMT}"></p>
         </div>
 
         <div class="input-group">
             <label for="name">Họ và Tên:</label>
-            <input type="text" id="name" name="name" required>
+            <input type="text" id="name" name="name" required
+                   th:value="${name}">
             <p class="error-message" th:if="${errorName != null}" th:text="${errorName}"></p>
         </div>
 
         <div class="input-group">
             <label for="phone">Số điện thoại:</label>
-            <input type="text" id="phone" name="phone" required>
+            <input type="text" id="phone" name="phone" required
+                   th:value="${phone}">
             <p class="error-message" th:if="${errorPhone != null}" th:text="${errorPhone}"></p>
         </div>
 
         <div class="input-group">
             <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
+            <input type="text" id="email" name="email" required
+                   th:value="${email}">
+            <p class="error-message" th:if="${errorEmail != null}" th:text="${errorEmail}"></p>
         </div>
 
         <div class="input-group">
             <label for="username">Tên tài khoản:</label>
-            <input type="text" id="username" name="username" required>
+            <input type="text" id="username" name="username" required
+                   th:value="${username}">
             <p class="error-message" th:if="${errorUsername != null}" th:text="${errorUsername}"></p>
         </div>
 
@@ -47,15 +53,11 @@
         <div class="input-group">
             <button type="submit">Đăng ký</button>
         </div>
+
+        <!-- Thông báo thành công chung -->
+        <div th:if="${successMessage != null}">
+            <p class="success-message" th:text="${successMessage}"></p>
+        </div>
     </form>
-
-    <!-- Thông báo chung -->
-    <div th:if="${successMessage != null}">
-        <p class="success-message" th:text="${successMessage}"></p>
-    </div>
-
-    <div th:if="${errorMessage != null}">
-        <p class="error-message" th:text="${errorMessage}"></p>
-    </div>
 </body>
 </html>
