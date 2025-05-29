@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class BookBorrowStatsService {
@@ -67,7 +66,7 @@ public class BookBorrowStatsService {
 
     //Lấy sách bị hư hại
     public List<Borrow_Return> getDamagedBooks() {
-        return borrowReturnRepository.findDamagedBooks(); // Phương thức đếm sách bị hư hỏng
+        return borrowReturnRepository.findDamagedBooks(); 
     }
 
 }

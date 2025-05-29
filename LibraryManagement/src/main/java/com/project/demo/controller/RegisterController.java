@@ -1,6 +1,5 @@
 package com.project.demo.controller;
 
-import com.project.admin.utils.AdminCodes;
 import com.project.demo.entity.User;
 import com.project.demo.service.UserService;
 import com.project.demo.utils.UserCodes;

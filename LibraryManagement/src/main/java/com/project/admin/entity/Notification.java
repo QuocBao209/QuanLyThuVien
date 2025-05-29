@@ -1,6 +1,5 @@
 package com.project.admin.entity;
 
-import com.project.admin.entity.User;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;

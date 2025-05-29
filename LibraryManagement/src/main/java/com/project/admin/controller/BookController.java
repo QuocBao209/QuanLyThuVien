@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpSession;
 import org.apache.commons.io.IOUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -409,10 +408,8 @@ public class BookController {
             try {
                 List<ImportDetail> importDetails;
                 if (importDate != null && !importDate.trim().isEmpty()) {
-                    // Chuyển đổi importDate từ String (dd/MM/yyyy) sang LocalDate
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                     LocalDate parsedDate = LocalDate.parse(importDate, formatter);
-                    // Tìm kiếm ImportDetail theo keyword và importDate
                     importDetails = importService.searchByBookOrAuthorAndDate(keyword, parsedDate);
                 } else {
                     // Nếu không có importDate, trả về danh sách rỗng và thông báo lỗi

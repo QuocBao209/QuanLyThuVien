@@ -1,7 +1,5 @@
 package com.project.demo.controller;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -133,7 +131,7 @@ public class BookDetailController {
 			borrowService.saveBorrow(borrow);
 		}
 
-		return "redirect:/home/account"; // Chuyển hướng về trang tài khoản sau khi mượn
+		return "redirect:/home/account"; 
 	}
 
 

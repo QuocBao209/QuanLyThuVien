@@ -292,7 +292,7 @@ table tr:hover {
     font-weight: bold;
 }
 
-/* Nút "Xác nhận mượn" màu xanh lá */
+/* Nút "Xác nhận mượn" */
 .confirm-btn {
     display: inline-block;
     background: #28a745;
@@ -307,7 +307,7 @@ table tr:hover {
 .confirm-btn:hover {
     background: #218838;
 }
-/* Nút "Hủy mượn" màu đỏ */
+/* Nút "Hủy mượn" */
 .delete-btn {
     display: inline-block;
     background: #ff0000;
@@ -322,7 +322,7 @@ table tr:hover {
 .delete-btn:hover {
     background: #cc0000;
 }
-/* Nút "Gia hạn" màu vàng */
+/* Nút "Gia hạn" */
 .renew-btn {
     display: inline-block;
     background: #ffc107;
@@ -338,7 +338,6 @@ table tr:hover {
     background: #e0a800;
 }
 
-/* Căn lề cho dòng chữ "Đã gia hạn ..." */
 td.renewal-status {
     text-align: center;
     font-weight: bold;

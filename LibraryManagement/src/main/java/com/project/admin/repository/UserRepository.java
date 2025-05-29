@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
     Optional<User> findByEmail(String email);
-    List<User> findAllByRole(String role); // Sửa lại
+    List<User> findAllByRole(String role); 
     List<User> findByRoleAndNameContainingOrRoleAndEmailContaining(String role1, String name, String role2, String email);
 
     // top user mượn sách nhiều nhất
@@ -29,7 +29,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByEmail(String email);
 
- // Lấy tất cả danh sách khi không nhập Tháng/Năm
+    // Lấy tất cả danh sách khi không nhập Tháng/Năm
     @Query("SELECT DISTINCT u FROM User u " +
     	       "JOIN Borrow_Return br ON u.id = br.user.id " +
     	       "WHERE u.role = 'USER' " +
@@ -38,7 +38,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByRoleAndUserNameContainingOrderByBorrowCountDesc( String query);
 
     
- // Thống kê độc giả mượn theo khoảng thời gian từ Tháng/Năm đến Tháng/Năm
+    // Thống kê độc giả mượn theo khoảng thời gian từ Tháng/Năm đến Tháng/Năm
     @Query("SELECT u FROM User u JOIN Borrow_Return br ON u.id = br.user.id " +
            "WHERE (:query IS NULL OR u.name LIKE %:query%) " +
            "AND (YEAR(br.startDate) > :fromYear OR (YEAR(br.startDate) = :fromYear AND MONTH(br.startDate) >= :fromMonth)) " +

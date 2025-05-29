@@ -36,7 +36,7 @@
 				<th>Thể loại</th>
 				<th>Số lượng</th>
 				<th>Số lượng mượn</th>
-				<th>Số lượng hư hại</th> <!-- Cột mới -->
+				<th>Số lượng hư hại</th> 
 				<th>Sửa</th>
 				<th>Xóa</th>
 			</tr>
@@ -57,7 +57,7 @@
 				<td th:text="${book.category.categoryName}"></td>
 				<td th:text="${book.amount}"></td>
 				<td th:text="${book.borrowCount}"></td>
-				<td th:text="${book.isDamaged}"></td> <!-- Hiển thị số lượng sách hư hại -->
+				<td th:text="${book.isDamaged}"></td> 
 				<td>
 					<form th:action="@{/admin/edit-book/{id}(id=${book.bookId})}" method="post">
 						<button type="submit" class="btn btn-edit">Sửa</button>

@@ -49,7 +49,6 @@ public class LoginController {
 		return mav;
 	}
 
-
 	// Đăng xuất tài khoản admin, xóa session
     @GetMapping("logout")
     public String logoutAdmin(HttpSession session) {

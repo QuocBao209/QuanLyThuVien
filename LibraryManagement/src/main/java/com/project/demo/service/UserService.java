@@ -3,7 +3,6 @@ package com.project.demo.service;
 import com.project.demo.entity.User;
 import com.project.demo.repository.UserRepository;
 import com.project.demo.security.BCryptUtil;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -76,7 +75,7 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
-    // Xác định role tài khoản theo email (Bảo)
+    // Xác định role tài khoản theo email 
     public String getUserRole(String email) {
     	return userRepository.findByEmail(email)
     			.map(User::getRole)

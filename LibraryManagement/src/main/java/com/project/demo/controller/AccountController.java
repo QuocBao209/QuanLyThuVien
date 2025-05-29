@@ -18,10 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/home")
@@ -87,36 +85,9 @@ public class AccountController {
         return mav;
     }
 
-
-    // Sắp xếp thứ tự theo trạng thái mượn / trả
-    private List<Borrow_Return> getSortedBorrowReturns(User user) {
-        return borrowService.getBorrowsByUser(user)
-            .stream()
-            .sorted(Comparator
-                .comparing((Borrow_Return br) -> br.getUserConfirmDate() == null ? 0 : 1)
-                .thenComparing(br -> getStatusOrder(br.getStatus()))
-            )
-            .collect(Collectors.toList());
-    }
-
-    private int getStatusOrder(String status) {
-        switch (status) {
-            case "pending": return 1;
-            case "borrowed": return 2;
-            case "returned": return 3;
-            case "outdate": return 4;
-            default: return 5;
-        }
-    }
-
     @PostMapping("/edit-account")
     public String editAccount(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
         boolean hasError = false;
-
-//        if (user.getUserId() == null) {
-//            redirectAttributes.addFlashAttribute("errorUserId", UserCodes.getErrorMessage("INVALID_USER_ID"));
-//            hasError = true;
-//        }
 
         if (user.getName() == null || !user.getName().matches("^[a-zA-ZÀ-Ỹà-ỹ\\s]+$")) {
             redirectAttributes.addFlashAttribute("errorName", UserCodes.getErrorMessage("INVALID_NAME_FORMAT_3"));
