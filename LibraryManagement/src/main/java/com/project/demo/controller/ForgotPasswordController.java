@@ -50,7 +50,6 @@ public class ForgotPasswordController {
         return "forgetPassword";
     }
 
-
     @PostMapping("/reset-password")
     public String resetPassword(@RequestParam String email, @RequestParam String otp,
                                 @RequestParam String newPassword, Model model) {

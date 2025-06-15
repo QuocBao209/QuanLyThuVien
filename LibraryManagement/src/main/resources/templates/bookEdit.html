@@ -44,6 +44,7 @@
 			        </th:block>
 			    </div>
 			    <button type="button" id="add-author">Thêm tác giả</button>
+			    
 			</div>
 	
 	        <div class="input-group">
@@ -87,22 +88,25 @@
 
 <script>
 document.getElementById('add-author').addEventListener('click', function() {
-    let container = document.getElementById('author-container');
-    let newField = document.createElement('div');
-    newField.classList.add('author-field');
-    newField.innerHTML = `
-        <input type="text" name="authors[]" placeholder="Nhập tên tác giả" required>
-        <button type="button" class="remove-author" onclick="removeAuthor(this)">Xóa</button>
-    `;
-    container.appendChild(newField);
+	let container = document.getElementById('author-container');
+	if (container.children.length >= 5) {
+		alert("Bạn chỉ có thể thêm tối đa 5 tác giả!");
+		return;
+	}
+	let newField = document.createElement('div');
+	newField.classList.add('author-field');
+	newField.innerHTML = `
+    <input type="text" name="authors" placeholder="Nhập tên tác giả" required>
+    <button type="button" class="remove-author" onclick="removeAuthor(this)">Xóa</button>
+`;
+	container.appendChild(newField);
 });
 
 function removeAuthor(button) {
-    let container = document.getElementById('author-container');
-    if (container.children.length > 1) {
-        button.parentElement.remove();
-    }
+	let container = document.getElementById('author-container');
+	if (container.children.length > 1) {
+		button.parentElement.remove();
+	}
 }
-
 </script>
 </html>

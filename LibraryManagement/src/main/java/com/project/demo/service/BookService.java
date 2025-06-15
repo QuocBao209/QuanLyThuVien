@@ -72,11 +72,15 @@ public class BookService {
     }
 
     private boolean isWithinYearRange(int year, String range) {
-        String[] years = range.split("-");
-        if (years.length == 2) {
-            int startYear = Integer.parseInt(years[0]);
-            int endYear = Integer.parseInt(years[1]);
-            return year >= startYear && year <= endYear;
+        try {
+            String[] years = range.split("-");
+            if (years.length == 2) {
+                int startYear = Integer.parseInt(years[0].trim());
+                int endYear = Integer.parseInt(years[1].trim());
+                return year >= startYear && year <= endYear;
+            }
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid time range format: " + range);
         }
         return false;
     }
