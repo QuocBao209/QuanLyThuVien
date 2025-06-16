@@ -43,6 +43,9 @@ public class BorrowReturnController {
         User user = userService.findById(userId).orElse(null);
 
         List<Borrow_Return> borrowReturns = borrowReturnService.findByUser_UserId(userId); 
+        if (borrowReturns.isEmpty()) {
+        	model.addAttribute("errorMessage", AdminCodes.getErrorMessage("NO_BORROW_RETURN"));
+        }
 
         borrowReturns.sort(Comparator.comparingInt(b -> {
             switch (b.getStatus()) {

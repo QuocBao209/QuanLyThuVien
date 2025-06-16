@@ -25,3 +25,4 @@ MISSING_IMPORT_DATE, Không tìm thấy ngày nhập hàng.
 INVALID_DATE_FORMAT, Định dạng ngày không hợp lệ. Vui lòng sử dụng định dạng dd/MM/yyyy.
 IMPORT_RECEIPT_NOT_FOUND, Không tìm thấy hóa đơn nhập hàng phù hợp.
 BOOK_BEING_BORROWED, Sách đang được mượn. Không được xóa!
+NO_BORROW_RETURN, Không có thông tin!
