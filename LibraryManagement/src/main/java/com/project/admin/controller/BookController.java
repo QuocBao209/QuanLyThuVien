@@ -335,10 +335,23 @@ public class BookController {
 
     // Xóa sách theo id
     @PostMapping("/delete-book/{id}")
-    public ModelAndView deleteBook(@PathVariable Long id) {
-        bookService.deleteBook(id);
+    public ModelAndView deleteBook(@PathVariable Long id, Model model) {
+        Book book = bookService.getBookById(id);
+
         ModelAndView modelAndView = new ModelAndView("bookList");
         modelAndView.addObject("books", bookService.getBooks());
+
+        // Kiểm tra nếu sách đang được mượn
+        if (book.getBorrowedRecordsCount() > 0) {
+            model.addAttribute("errorMessage", AdminCodes.getErrorMessage("BOOK_BEING_BORROWED"));
+            return modelAndView;
+        }
+
+        // Thực hiện xóa mềm
+        book.setDeleted(true);
+        bookService.saveBook(book);
+
+        model.addAttribute("successMessage", AdminCodes.getSuccessMessage("BOOK_DELETE_SUCCESS"));
         return modelAndView;
     }
 

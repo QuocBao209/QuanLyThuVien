@@ -113,7 +113,8 @@ public class BorrowReturnController {
 
         boolean violated = false;
 
-        if (daysBorrowed > 15) {
+        // Mượn tối đa 2 tuần
+        if (daysBorrowed > 14) {
             borrowReturn.setStatus("outdate");
             user.setViolationCount(user.getViolationCount() + 1);
             violated = true;
@@ -157,7 +158,7 @@ public class BorrowReturnController {
         Notification notification = new Notification();
         notification.setUser(user);
         notification.setMessage(statusMessage);
-        notification.setType(daysBorrowed > 15 ? "return_outdate" : "return_success");
+        notification.setType(daysBorrowed > 14 ? "return_outdate" : "return_success");
         notification.setCreatedAt(LocalDateTime.now());
         notification.setRead(false);
         notificationService.save(notification);

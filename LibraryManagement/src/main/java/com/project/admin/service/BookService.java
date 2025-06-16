@@ -59,7 +59,7 @@ public class BookService {
     }
 
     public List<Book> getBooks() {
-        return bookRepository.findByIsDeletedFalse();
+        return bookRepository.findAll();
     }
 
     public void transferData(List<Book> books) {

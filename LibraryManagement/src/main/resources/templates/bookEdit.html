@@ -13,6 +13,10 @@
 	<div th:if="${errorMessage}" class="error-message">
 	    <p th:text="${errorMessage}"></p>
 	</div>
+	
+	<div th:if="${successMessage}" class="success-message">
+	    <p th:text="${successMessage}"></p>
+	</div>
 
 	<!-- Sidebar -->
 	<div th:replace="admin :: sidebar"></div>

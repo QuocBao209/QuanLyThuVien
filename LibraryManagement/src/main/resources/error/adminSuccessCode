@@ -4,3 +4,6 @@ BORROW_CONFIRM_SUCCESS, Xác nhận mượn sách thành công.
 RETURN_CONFIRM_SUCCESS, Xác nhận trả sách thành công.
 SUCCESS_CODE_1, Mã OTP đã được gửi đến email của bạn.
 PASSWORD_RESET_SUCCESS_1, Mật khẩu đã được đặt lại thành công!
+BOOK_DELETE_SUCCESS, Xóa thành công.
+BOOK_UPDATED_SUCCESS, Sửa thành công.
+BOOK_RESTORE_SUCCESS, Khôi phục thành công.
